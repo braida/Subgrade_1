@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📢 CNN Sentiment Insights</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      max-width: 960px;
+      background-color: #f4f7fa;
+    }
+    h1 {
+      font-size: 36px;
+      color: #333;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+    }
+    th {
+      background-color: #007acc;
+      color: white;
+    }
+    tr.positive {
+      background-color: #d4edda;
+    }
+    tr.negative {
+      background-color: #f8d7da;
+    }
+    tr.neutral {
+      background-color: #fff3cd;
+    }
+    .section-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .section {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📢 CNN Sentiment Insights</h1>
+
+  <div class="section">
+    <div class="section-header">Top 10 Positive Titles from CNN RSS</div>
+    <table id="cnnTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Score</th>
+          <th>Emotion</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="cnnTableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    async function fetchCNNData() {
+      const tableBody = document.getElementById("cnnTableBody");
+      tableBody.innerHTML = '<tr><td colspan="5">🔄 Loading CNN data...</td></tr>';
+
+      try {
+        const response = await fetch('http://localhost:3001/cnn/rss');
+        const data = await response.json();
+        tableBody.innerHTML = '';
+
+        data.forEach((item, i) => {
+          const row = document.createElement("tr");
+          row.classList.add(item.emotion.toLowerCase());
+          row.innerHTML = `
+            <td>${i + 1}</td>
+            <td><a href="${item.link}" target="_blank">${item.title}</a></td>
+            <td>${item.sentimentScore.toFixed(2)}</td>
+            <td>${item.emotion}</td>
+            <td>${new Date(item.pubDate).toLocaleDateString()}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (e) {
+        console.error("Error fetching CNN RSS:", e);
+        tableBody.innerHTML = '<tr><td colspan="5">❌ Unable to load CNN RSS feed.</td></tr>';
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchCNNData);
+  </script>
+</body>
+</html>
