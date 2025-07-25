@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 const parser = new Parser();
 app.use(cors());
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 const positiveWords = [/* même liste que dans ton JS client */];
 const negativeWords = [/* idem */];
