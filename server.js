@@ -4,13 +4,26 @@ const cors = require('cors');
 
 const app = express();
 const parser = new Parser();
-app.use(cors());
 const PORT = process.env.PORT || 3001;
 
-const positiveWords = [/* même liste que dans ton JS client */];
-const negativeWords = [/* idem */];
+app.use(cors());
+
+const positiveWords = [
+  'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
+  'amazing', 'proud', 'confident', 'hopeful', 'great', 'cheerful', 'uplifted',
+  'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
+];
+
+const negativeWords = [
+  'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
+  'scared', 'tired', 'lonely', 'miserable', 'worthless', 'failure', 'afraid',
+  'numb', 'crying', 'helpless', 'guilt', 'ashamed', 'stressed',
+  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning'
+];
+
 const contrastWords = ['but', 'however', 'although'];
 const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate myself", "suicide", "trauma"];
+
 const NEGATIVE_WEIGHT = 2;
 const PHRASE_PENALTY_PER_MATCH = 3;
 
@@ -47,29 +60,38 @@ function getSentimentScore(text) {
 
   const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
   const totalWeighted = positiveCount + weightedNegatives;
-  if (totalWeighted === 0) return 0;
 
+  if (totalWeighted === 0) return 0;
   return (positiveCount - weightedNegatives) / totalWeighted;
 }
 
 app.get('/cnn/rss', async (req, res) => {
-  const feed = await parser.parseURL('http://rss.cnn.com/rss/edition.rss');
-  const results = feed.items.map(item => {
-    const score = getSentimentScore(item.title);
-    const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
-    return {
-      title: item.title,
-      link: item.link,
-      pubDate: item.pubDate,
-      sentimentScore: score,
-      emotion
-    };
-  });
+  try {
+    const feed = await parser.parseURL('http://rss.cnn.com/rss/edition.rss');
+    const results = feed.items.map(item => {
+      const score = getSentimentScore(item.title);
+      const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
+      return {
+        title: item.title,
+        link: item.link,
+        pubDate: item.pubDate,
+        sentimentScore: score,
+        emotion
+      };
+    });
 
-  results.sort((a, b) => b.sentimentScore - a.sentimentScore);
-  res.json(results.slice(0, 10));
+    results.sort((a, b) => b.sentimentScore - a.sentimentScore);
+    res.json(results.slice(0, 10));
+  } catch (error) {
+    console.error('Failed to fetch or process RSS feed:', error);
+    res.status(500).json({ error: 'Failed to load CNN RSS data' });
+  }
+});
+
+app.get('/', (req, res) => {
+  res.send('✅ CNN RSS Sentiment API is running.');
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ RSS backend running at http://localhost:${PORT}`);
+  console.log(`✅ Server is running on port ${PORT}`);
 });
