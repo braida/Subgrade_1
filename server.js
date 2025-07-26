@@ -31,7 +31,7 @@ const negativePhrases = ["Ghislane Maxwell","Epstein","pro israel", "pro-israeli
 
 const NEGATIVE_WEIGHT = 1.2;
 const PHRASE_PENALTY_PER_MATCH = 1.2;
-const CONTRAST_PENALTY_FACTOR = 0.5;
+const CONTRAST_PENALTY_FACTOR = 0.2;
 
 function getSentimentScore(text) {
   let positiveCount = 0;
