@@ -26,8 +26,8 @@ const negativeWords = [
   'blockage', 'controversial'
 ];
 
-const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'];
-const negativePhrases = ["ghislane maxwell","epstein","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
+const contrastWords = ['epstein','shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'];
+const negativePhrases = ["Ghislane Maxwell","Epstein","ghislane maxwell","epstein","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
 
 const NEGATIVE_WEIGHT = 1.2;
 const PHRASE_PENALTY_PER_MATCH = 1.2;
