@@ -85,17 +85,37 @@
         tableBody.innerHTML = '';
 
         data.forEach((item, i) => {
-          const row = document.createElement("tr");
-          row.classList.add(item.emotion.toLowerCase());
-          row.innerHTML = `
-            <td>${i + 1}</td>
-            <td><a href="${item.link}" target="_blank">${item.title}</a></td>
-            <td>${item.sentimentScore.toFixed(2)}</td>
-            <td>${item.emotion}</td>
-            <td>${new Date(item.pubDate).toLocaleDateString()}</td>
-          `;
-          tableBody.appendChild(row);
-        });
+  const row = document.createElement("tr");
+  row.classList.add(item.emotion.toLowerCase());
+
+  const previewId = `preview-${i}`;
+  row.innerHTML = `
+    <td>${i + 1}</td>
+    <td>
+      <a href="${item.link}" target="_blank">${item.title}</a><br/>
+      <button onclick="togglePreview('${previewId}')" class="btn-preview">🔍 Preview</button>
+    </td>
+    <td>${item.sentimentScore.toFixed(2)}</td>
+    <td>${item.emotion}</td>
+    <td>${new Date(item.pubDate).toLocaleDateString()}</td>
+  `;
+
+  const previewRow = document.createElement("tr");
+  previewRow.classList.add("preview-row");
+  previewRow.style.display = "none";
+  previewRow.innerHTML = `
+    <td colspan="5" id="${previewId}">
+      <div class="preview-content">
+        <strong>Summary:</strong><br/>
+        ${item.description || 'No summary available.'}
+      </div>
+    </td>
+  `;
+
+  tableBody.appendChild(row);
+  tableBody.appendChild(previewRow);
+});
+
       } catch (e) {
         console.error("Error fetching BBC RSS:", e);
         tableBody.innerHTML = '<tr><td colspan="5">❌ Unable to load BBC RSS feed.</td></tr>';
