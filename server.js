@@ -59,10 +59,13 @@ function getSentimentScore(text) {
   }
 
   let phrasePenalty = 0;
-  for (const phrase of negativePhrases) {
-    if (lowerText.includes(phrase)) phrasePenalty += PHRASE_PENALTY_PER_MATCH;
-  }
 
+for (const phrase of negativePhrases) {
+  if (lowerText.includes(phrase.toLowerCase())) {
+    phrasePenalty += PHRASE_PENALTY_PER_MATCH;
+  }
+}
+    
   const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
   const totalWeighted = positiveCount + weightedNegatives;
   return totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
