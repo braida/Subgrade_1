@@ -155,7 +155,14 @@
       }
     }
 
-    window.addEventListener("DOMContentLoaded", fetchCNNData);
+window.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("applyButton").addEventListener("click", applyDateRange);
+  fetchBBCData(); // call backend API
+});
+
+
+    
+    
   </script>
 </body>
 </html>
