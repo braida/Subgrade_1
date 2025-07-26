@@ -1,15 +1,12 @@
-# Exported from Render on 2025-07-26T01:14:54Z
 services:
-- type: web
-  name: cnn-sentiment-api
-  runtime: node
-  repo: https://github.com/braida/Subgrade_1
-  plan: free
-  envVars:
-  - key: NODE_ENV
-    sync: false
-  region: oregon
-  buildCommand: npm install
-  startCommand: node server.js
-  autoDeployTrigger: commit
-version: "1"
+  - type: web
+    name: bbc-sentiment-api
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
