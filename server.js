@@ -1,5 +1,4 @@
 
-
 const express = require('express');
 const Parser = require('rss-parser');
 const cors = require('cors');
@@ -10,14 +9,14 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({ origin: '*' }));
 
-// Sentiment keywords
 const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life',
-'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
+  'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
   'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine','Pro-Palestinian'
 ];
+
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
   'scared', 'tired', 'lonely', 'miserable', 'worthless', 'failure', 'afraid',
@@ -25,13 +24,14 @@ const negativeWords = [
   'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning','war','idf','israel',
   'crisis', 'fails', 'scandal', 'decline', 'warns', 'crash', 'struggles', 'loss', 'falls', 'controversy', 'outrage', 'disaster', 'accused', 'backlash', 'threat',
   'blockage', 'controversial'
-  
 ];
-const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'
-  ];
-const negativePhrases = ["Ghislane Maxwell","Epstein", "pro-trump","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
+
+const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'];
+const negativePhrases = ["pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
+
 const NEGATIVE_WEIGHT = 1;
-const PHRASE_PENALTY_PER_MATCH = 2;
+const PHRASE_PENALTY_PER_MATCH = 1.2;
+const CONTRAST_PENALTY_FACTOR = 0.5;
 
 function getSentimentScore(text) {
   let positiveCount = 0;
@@ -51,7 +51,7 @@ function getSentimentScore(text) {
       const before = lowerText.slice(0, contrastIndex);
       for (const word of positiveWords) {
         if (before.includes(word)) {
-          positiveCount = Math.max(positiveCount - 2, 0);
+          positiveCount = Math.ceil(positiveCount * CONTRAST_PENALTY_FACTOR);
           break;
         }
       }
@@ -68,29 +68,18 @@ function getSentimentScore(text) {
   return totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
 }
 
-// Only use items from the last 7 days
-
 function isRecent(pubDate) {
   if (!pubDate) return false;
-
-  const parsed = new Date(pubDate);
-  if (isNaN(parsed)) return false;
-
+  const parsedDate = new Date(pubDate);
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  return parsed >= sevenDaysAgo && parsed <= now;
+  return !isNaN(parsedDate.getTime()) && parsedDate >= sevenDaysAgo && parsedDate <= now;
 }
 
-// 🚀 BBC Endpoint
 app.get('/bbc/rss', async (req, res) => {
   try {
     const feed = await parser.parseURL('http://feeds.bbci.co.uk/news/world/rss.xml');
-
-    const items = feed.items
-  .filter(item => isRecent(item.pubDate))
-  .slice(0, 100);
-
-
+    const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 100);
     const results = items.map(item => {
       const score = getSentimentScore(item.title || '');
       const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
@@ -103,8 +92,6 @@ app.get('/bbc/rss', async (req, res) => {
         emotion
       };
     });
-    
-
 
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
@@ -121,4 +108,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
 });
-        
