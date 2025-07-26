@@ -1,4 +1,4 @@
-
+const path = require('path');
 const express = require('express');
 const Parser = require('rss-parser');
 const cors = require('cors');
@@ -111,9 +111,15 @@ const results = items.map(item => {
   }
 });
 
+
+// Serve static files (e.g., index.html)
+app.use(express.static(__dirname))
+// Serve index.html at root
 app.get('/', (req, res) => {
-  res.send('✅ BBC World News Sentiment API is running.');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
