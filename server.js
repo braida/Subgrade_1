@@ -31,7 +31,7 @@ const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', '
   ];
 const negativePhrases = ["Ghislane Maxwell","Epstein", "pro-trump","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
 const NEGATIVE_WEIGHT = 1;
-const PHRASE_PENALTY_PER_MATCH = 1.2;
+const PHRASE_PENALTY_PER_MATCH = 2;
 
 function getSentimentScore(text) {
   let positiveCount = 0;
