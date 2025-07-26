@@ -80,7 +80,7 @@
       tableBody.innerHTML = '<tr><td colspan="5">🔄 Loading CNN data...</td></tr>';
 
       try {
-        const response = await fetch('https://subgrade.onrender.com/cnn/rss');
+        const response = await fetch('https://subgrade.onrender.com/cnn/rss'); // 👈 Live Render API
         const data = await response.json();
         tableBody.innerHTML = '';
 
