@@ -123,13 +123,7 @@ app.get('/bbc/rss', async (req, res) => {
   }
 });
 
-    results.sort((a, b) => b.sentimentScore - a.sentimentScore);
-    res.json(results.slice(0, 10));
-  } catch (error) {
-    console.error('❌ Failed to fetch or parse RSS:', error);
-    res.status(500).json({ error: 'Failed to load RSS feed' });
-  }
-});
+    
 
 // Serve static files (e.g., index.html)
 app.use(express.static(__dirname));
