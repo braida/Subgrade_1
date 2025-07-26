@@ -16,7 +16,7 @@ const positiveWords = [
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
 'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
-  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed'
+  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine'
 ];
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
@@ -29,7 +29,7 @@ const negativeWords = [
 ];
 const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'
   ];
-const negativePhrases = ["aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
+const negativePhrases = ["pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
 const NEGATIVE_WEIGHT = 1;
 const PHRASE_PENALTY_PER_MATCH = 1.2;
 
