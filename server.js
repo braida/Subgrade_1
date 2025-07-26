@@ -82,7 +82,7 @@ function getSentimentScore(text) {
   console.log({ text, positiveCount, negativeCount, phrasePenalty, score });
 
   return score;
-}
+
 
 
     
@@ -117,10 +117,7 @@ const results = items.map(item => {
     sentimentScore: parseFloat(score.toFixed(4)), // <-- FIXED HERE
     emotion
   };
-});
-
-       
-       
+});      
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
   } catch (error) {
@@ -129,16 +126,15 @@ const results = items.map(item => {
   }
 });
 
-
 // Serve static files (e.g., index.html)
-app.use(express.static(__dirname))
+app.use(express.static(__dirname)); // ✅ semicolon added
+
 // Serve index.html at root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-
-
+// ✅ Start the server
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
 });
