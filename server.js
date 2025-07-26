@@ -29,7 +29,7 @@ const negativeWords = [
 ];
 const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'
   ];
-const negativePhrases = ["aid block","don't", "can't", "won't", "shouldn't", "give up", "hate", "suicide", "trauma"];
+const negativePhrases = ["aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
 const NEGATIVE_WEIGHT = 1;
 const PHRASE_PENALTY_PER_MATCH = 1.2;
 
