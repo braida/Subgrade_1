@@ -14,7 +14,7 @@ const positiveWords = [
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life',
   'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
-  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine','Pro-Palestinian'
+  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine','Pro-Palestinian','pro-palestinian'
 ];
 
 const negativeWords = [
@@ -27,7 +27,7 @@ const negativeWords = [
 ];
 
 const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'];
-const negativePhrases = ["Ghislane Maxwell","Epstein","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
+const negativePhrases = ["ghislane maxwell","epstein","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
 
 const NEGATIVE_WEIGHT = 1.2;
 const PHRASE_PENALTY_PER_MATCH = 1.2;
@@ -61,10 +61,12 @@ function getSentimentScore(text) {
   let phrasePenalty = 0;
 
 for (const phrase of negativePhrases) {
-  if (lowerText.includes(phrase.toLowerCase())) {
+  const pattern = new RegExp(`\\b${phrase.toLowerCase()}\\b`, 'i');
+  if (pattern.test(lowerText)) {
     phrasePenalty += PHRASE_PENALTY_PER_MATCH;
   }
 }
+
     
   const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
   const totalWeighted = positiveCount + weightedNegatives;
