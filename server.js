@@ -27,8 +27,8 @@ const negativeWords = [
 const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'
   ];
 const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate", "suicide", "trauma"];
-const NEGATIVE_WEIGHT = 2;
-const PHRASE_PENALTY_PER_MATCH = 3;
+const NEGATIVE_WEIGHT = 1.5;
+const PHRASE_PENALTY_PER_MATCH = 1.7;
 
 function getSentimentScore(text) {
   let positiveCount = 0;
