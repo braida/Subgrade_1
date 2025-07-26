@@ -53,6 +53,23 @@
     .section {
       margin-top: 40px;
     }
+    .preview-row {
+  background-color: #eef6ff;
+}
+.btn-preview {
+  margin-top: 5px;
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-preview:hover {
+  background-color: #005c8c;
+}
+
   </style>
 </head>
 <body>
@@ -75,6 +92,13 @@
   </div>
 
   <script>
+    
+  function togglePreview(id) {
+    const el = document.getElementById(id).parentElement.parentElement;
+    el.style.display = el.style.display === "none" ? "table-row" : "none";
+  }
+
+
     async function fetchCNNData() {
       const tableBody = document.getElementById("cnnTableBody");
       tableBody.innerHTML = '<tr><td colspan="5">🔄 Loading BBC data...</td></tr>';
