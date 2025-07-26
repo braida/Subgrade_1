@@ -16,6 +16,7 @@
       color: #333;
       text-align: center;
     }
+    
     table {
       width: 100%;
       border-collapse: collapse;
@@ -83,11 +84,17 @@
 
   <div class="section">
     <div class="section-header">Top 10 Positive Titles from BBC RSS</div>
+    <div id="loader" style="text-align:center; margin-top:20px;">
+  <p>🔄 Loading news data...</p>
+</div>
+
     <table id="cnnTable">
       <thead>
+        
         <tr>
           <th>#</th>
           <th>Title</th>
+          <th>Source</th>
           <th>Score</th>
           <th>Emotion</th>
           <th>Date</th>
@@ -97,66 +104,77 @@
     </table>
   </div>
 
-  <script>
+ <script>
+function togglePreview(index) {
+  const previewRow = document.querySelector(`#preview-row-${index}`);
+  if (!previewRow) return;
+
+  const isVisible = previewRow.classList.contains("visible");
+  previewRow.classList.toggle("visible", !isVisible);
+  previewRow.style.display = isVisible ? "none" : "table-row";
+}
+
+async function fetchBBCData() {
+  const tableBody = document.getElementById("cnnTableBody");
+  const loader = document.getElementById("loader");
+
+  // Show loader and clear table
+  loader.style.display = "block";
+  tableBody.innerHTML = '';
+
+  try {
+    const response = await fetch('/bbc/rss');
+    const data = await response.json();
     
-  function togglePreview(index) {
-    const previewRow = document.querySelector(`#preview-row-${index}`);
-    if (!previewRow) return;
+    loader.style.display = "none";
 
-    const isVisible = previewRow.classList.contains("visible");
-    previewRow.classList.toggle("visible", !isVisible);
-    previewRow.style.display = isVisible ? "none" : "table-row";
-  }
-
-    async function fetchBBCData() {
-      const tableBody = document.getElementById("cnnTableBody");
-      tableBody.innerHTML = '<tr><td colspan="5">🔄 Loading BBC data...</td></tr>';
-
-      try {
-        const response = await fetch('/bbc/rss');
-        const data = await response.json();
-        tableBody.innerHTML = '';
-
-        data.forEach((item, i) => {
-  const row = document.createElement("tr");
-  row.classList.add(item.emotion.toLowerCase());
-
-  row.innerHTML = `
-    <td>${i + 1}</td>
-    <td>
-      <a href="${item.link}" target="_blank">${item.title}</a><br/>
-      <button class="btn-preview" onclick="togglePreview(${i})">🔍 Preview</button>
-    </td>
-    <td>${item.sentimentScore.toFixed(2)}</td>
-    <td>${item.emotion}</td>
-    <td>${new Date(item.pubDate).toLocaleDateString()}</td>
-  `;
-
-  const previewRow = document.createElement("tr");
-  previewRow.id = `preview-row-${i}`;
-  previewRow.style.display = "none";
-  previewRow.classList.add("preview-row");
-  previewRow.innerHTML = `
-    <td colspan="5">
-      <div class="preview-content">
-        <strong>Summary:</strong><br/>
-        ${item.description || 'No summary available.'}
-      </div>
-    </td>
-  `;
-
-  tableBody.appendChild(row);
-  tableBody.appendChild(previewRow);
-});
-
-      } catch (e) {
-        console.error("Error fetching BBC RSS:", e);
-        tableBody.innerHTML = '<tr><td colspan="5">❌ Unable to load BBC RSS feed.</td></tr>';
-      }
+    if (!data || data.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="6">❌ No news available.</td></tr>';
+      return;
     }
 
+    data.forEach((item, i) => {
+      const row = document.createElement("tr");
+      row.classList.add(item.emotion.toLowerCase());
+
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td>
+          <a href="${item.link}" target="_blank">${item.title}</a><br/>
+          <button class="btn-preview" onclick="togglePreview(${i})">🔍 Preview</button>
+        </td>
+        <td>${item.source || 'Unknown'}</td>
+        <td>${item.sentimentScore.toFixed(2)}</td>
+        <td>${item.emotion}</td>
+        <td>${new Date(item.pubDate).toLocaleDateString()}</td>
+      `;
+
+      const previewRow = document.createElement("tr");
+      previewRow.id = `preview-row-${i}`;
+      previewRow.style.display = "none";
+      previewRow.classList.add("preview-row");
+      previewRow.innerHTML = `
+        <td colspan="6">
+          <div class="preview-content">
+            <strong>Summary:</strong><br/>
+            ${item.description || 'No summary available.'}
+          </div>
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+      tableBody.appendChild(previewRow);
+    });
+
+  } catch (e) {
+    console.error("Error fetching news:", e);
+    loader.style.display = "none";
+    tableBody.innerHTML = '<tr><td colspan="6">❌ Unable to load news.</td></tr>';
+  }
+}
+
 window.addEventListener("DOMContentLoaded", fetchBBCData);
-  
-  </script>
+</script>
+
 </body>
 </html>
