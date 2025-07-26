@@ -72,6 +72,8 @@ for (const phrase of negativePhrases) {
   const totalWeighted = positiveCount + weightedNegatives;
   return totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
 }
+console.log({ text, positiveCount, negativeCount, phrasePenalty, score });
+
 
 function isRecent(pubDate) {
   if (!pubDate) return false;
