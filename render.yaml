@@ -3,8 +3,8 @@ services:
     name: cnn-sentiment-api
     env: node
     plan: free
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && node server.js
+    buildCommand: npm install
+    startCommand: node server.js
     autoDeploy: true
     envVars:
       - key: NODE_ENV
