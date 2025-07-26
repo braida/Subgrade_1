@@ -1,6 +1,5 @@
 
 
-
 const express = require('express');
 const Parser = require('rss-parser');
 const cors = require('cors');
@@ -11,10 +10,12 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({ origin: '*' }));
 
-const positiveWords =  [
+// Sentiment keywords
+const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
+
 ];
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
@@ -22,10 +23,8 @@ const negativeWords = [
   'numb', 'crying', 'helpless', 'guilt', 'ashamed', 'stressed',
   'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning','war','idf','israel'
 ];
-
 const contrastWords = ['but', 'however', 'although'];
 const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate myself", "suicide", "trauma"];
-
 const NEGATIVE_WEIGHT = 2;
 const PHRASE_PENALTY_PER_MATCH = 3;
 
@@ -37,7 +36,6 @@ function getSentimentScore(text) {
   positiveWords.forEach(word => {
     if (lowerText.includes(word)) positiveCount++;
   });
-
   negativeWords.forEach(word => {
     if (lowerText.includes(word)) negativeCount++;
   });
@@ -62,27 +60,25 @@ function getSentimentScore(text) {
 
   const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
   const totalWeighted = positiveCount + weightedNegatives;
-
   return totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
 }
 
-// ⏱ Only include posts from last 7 days
+// Only use items from the last 7 days
 function isRecent(pubDate) {
   const date = new Date(pubDate);
   const now = new Date();
-  const daysAgo = 14;
-  const cutoff = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+  const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   return date >= cutoff;
 }
 
-app.get('/cnn/rss', async (req, res) => {
+// 🚀 BBC Endpoint
+app.get('/bbc/rss', async (req, res) => {
   try {
-    const feed = await parser.parseURL('http://rss.cnn.com/rss/edition.rss');
-    if (!feed || !feed.items) return res.status(500).json({ error: 'No data' });
+    const feed = await parser.parseURL('http://feeds.bbci.co.uk/news/world/rss.xml');
 
     const items = feed.items
       .filter(item => isRecent(item.pubDate))
-      .slice(0, 100); // limit for safety
+      .slice(0, 100);
 
     const results = items.map(item => {
       const score = getSentimentScore(item.title || '');
@@ -98,16 +94,17 @@ app.get('/cnn/rss', async (req, res) => {
 
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
-  } catch (err) {
-    console.error('❌ RSS Error:', err);
-    res.status(500).json({ error: 'Failed to fetch CNN RSS feed' });
+  } catch (error) {
+    console.error('❌ Failed to fetch or parse BBC RSS:', error);
+    res.status(500).json({ error: 'Failed to load BBC RSS feed' });
   }
 });
 
 app.get('/', (req, res) => {
-  res.send('✅ CNN RSS Sentiment API running.');
+  res.send('✅ BBC World News Sentiment API is running.');
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ Server is running on port ${PORT}`);
 });
+        
