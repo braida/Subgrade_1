@@ -12,7 +12,7 @@ app.use(cors({ origin: '*' }));
 // 💬 Sentiment config
 const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
-  'amazing', 'proud', 'confident', 'hopeful', 'great', 'cheerful', 'uplifted',
+  'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
 ];
 
@@ -20,14 +20,14 @@ const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
   'scared', 'tired', 'lonely', 'miserable', 'worthless', 'failure', 'afraid',
   'numb', 'crying', 'helpless', 'guilt', 'ashamed', 'stressed',
-  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning'
+  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning','war','idf','israel'
 ];
 
 const contrastWords = ['but', 'however', 'although'];
 const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate myself", "suicide", "trauma"];
 
-const NEGATIVE_WEIGHT = 2;
-const PHRASE_PENALTY_PER_MATCH = 3;
+const NEGATIVE_WEIGHT = 1;
+const PHRASE_PENALTY_PER_MATCH = 2;
 
 function getSentimentScore(text) {
   let positiveCount = 0;
