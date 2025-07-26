@@ -108,7 +108,7 @@
     previewRow.style.display = isVisible ? "none" : "table-row";
   }
 
-    async function fetchCNNData() {
+    async function fetchBBCData() {
       const tableBody = document.getElementById("cnnTableBody");
       tableBody.innerHTML = '<tr><td colspan="5">🔄 Loading BBC data...</td></tr>';
 
@@ -155,7 +155,7 @@
       }
     }
 
-window.addEventListener("DOMContentLoaded", fetchCNNData);
+window.addEventListener("DOMContentLoaded", fetchBBCData);
   
   </script>
 </body>
