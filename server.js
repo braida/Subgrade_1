@@ -6,12 +6,10 @@ const app = express();
 const parser = new Parser();
 const PORT = process.env.PORT || 3001;
 
-// ✅ Allow CORS for all origins (or restrict to your GitHub Pages domain)
-app.use(cors({
-  origin: '*'  // OR: replace with 'https://your-username.github.io'
-}));
+// ✅ CORS setup
+app.use(cors({ origin: '*' }));
 
-// 🧠 Sentiment analysis config
+// 💬 Sentiment config
 const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful', 'great', 'cheerful', 'uplifted',
@@ -65,17 +63,23 @@ function getSentimentScore(text) {
   const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
   const totalWeighted = positiveCount + weightedNegatives;
 
-  if (totalWeighted === 0) return 0;
-  return (positiveCount - weightedNegatives) / totalWeighted;
+  return totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
 }
 
-// 📰 Endpoint to fetch and analyze CNN RSS
+// 📰 CNN RSS Endpoint
 app.get('/cnn/rss', async (req, res) => {
   try {
     const feed = await parser.parseURL('http://rss.cnn.com/rss/edition.rss');
 
-    const results = feed.items.map(item => {
-      const score = getSentimentScore(item.title);
+    if (!feed || !feed.items || feed.items.length === 0) {
+      return res.status(500).json({ error: 'Empty or invalid RSS feed' });
+    }
+
+    // ✅ Limit to first 100 items
+    const items = feed.items.slice(0, 100);
+
+    const results = items.map(item => {
+      const score = getSentimentScore(item.title || '');
       const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
       return {
         title: item.title,
@@ -90,16 +94,15 @@ app.get('/cnn/rss', async (req, res) => {
     res.json(results.slice(0, 10));
   } catch (error) {
     console.error('❌ Failed to fetch or parse RSS:', error);
-    res.status(500).json({ error: 'Failed to load CNN RSS data' });
+    res.status(500).json({ error: 'Failed to load RSS feed' });
   }
 });
 
-// ✅ Health check
+// Root endpoint for health check
 app.get('/', (req, res) => {
   res.send('✅ CNN RSS Sentiment API is running.');
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
 });
