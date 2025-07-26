@@ -82,30 +82,52 @@ function isRecent(pubDate) {
   return !isNaN(parsedDate.getTime()) && parsedDate >= sevenDaysAgo && parsedDate <= now;
 }
 
+
 app.get('/bbc/rss', async (req, res) => {
+  const sources = [
+    'https://feeds.bbci.co.uk/news/world/rss.xml',
+    'https://rss.cnn.com/rss/edition_world.rss',
+    'https://feeds.skynews.com/feeds/rss/world.xml',
+    'https://www.aljazeera.com/xml/rss/all.xml'
+  ];
+
   try {
-    const feed = await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
+    let allItems = [];
 
-    const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 100);
+    for (const url of sources) {
+      const feed = await parser.parseURL(url);
+      const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 25); // optional: limit per feed
 
-    const results = items.map(item => {
-      const score = getSentimentScore(item.title || item.description || '');
-      const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
-      return {
-        title: item.title,
-        link: item.link,
-        pubDate: item.pubDate,
-        description: item.contentSnippet || item.content || '',
-        sentimentScore: parseFloat(score.toFixed(4)),
-        emotion
-      };
-    });
+      const analyzed = items.map(item => {
+        const score = getSentimentScore(item.title || item.description || '');
+        const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
+        return {
+          source: feed.title,
+          title: item.title,
+          link: item.link,
+          pubDate: item.pubDate,
+          description: item.contentSnippet || item.content || '',
+          sentimentScore: parseFloat(score.toFixed(4)),
+          emotion
+        };
+      });
+
+      allItems = allItems.concat(analyzed);
+    }
+
+    allItems.sort((a, b) => b.sentimentScore - a.sentimentScore);
+    res.json(allItems.slice(0, 20));
+  } catch (error) {
+    console.error('❌ Failed to fetch or parse RSS:', error);
+    res.status(500).json({ error: 'Failed to load news sources' });
+  }
+});
 
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
   } catch (error) {
-    console.error('❌ Failed to fetch or parse BBC RSS:', error);
-    res.status(500).json({ error: 'Failed to load BBC RSS feed' });
+    console.error('❌ Failed to fetch or parse RSS:', error);
+    res.status(500).json({ error: 'Failed to load RSS feed' });
   }
 });
 
