@@ -15,16 +15,18 @@ const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
-
+'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative'
 ];
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
   'scared', 'tired', 'lonely', 'miserable', 'worthless', 'failure', 'afraid',
   'numb', 'crying', 'helpless', 'guilt', 'ashamed', 'stressed',
-  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning','war','idf','israel'
+  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning','war','idf','israel',
+  'crisis', 'fails', 'scandal', 'decline', 'warns', 'crash', 'struggles', 'loss', 'falls', 'controversy', 'outrage', 'disaster', 'accused', 'backlash', 'threat'
 ];
-const contrastWords = ['but', 'however', 'although'];
-const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate myself", "suicide", "trauma"];
+const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'
+  ];
+const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate", "suicide", "trauma"];
 const NEGATIVE_WEIGHT = 2;
 const PHRASE_PENALTY_PER_MATCH = 3;
 
