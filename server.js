@@ -87,10 +87,13 @@ app.get('/bbc/rss', async (req, res) => {
         title: item.title,
         link: item.link,
         pubDate: item.pubDate,
+        description: item.contentSnippet || item.content || '',  
         sentimentScore: score,
         emotion
       };
     });
+    
+
 
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
