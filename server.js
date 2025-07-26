@@ -11,23 +11,23 @@ app.use(cors({ origin: '*' }));
 
 const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'inspired', 'grateful',
-  'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
+  'amazing', 'proud', 'confident', 'hopeful', 'hope', 'peace', 'palestine', 'freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life',
   'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
-  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine','Pro-Palestinian','pro-palestinian'
+  'clemency', 'clemence', 'peace', 'peacetalk', 'recognition', 'relief', 'renewed', 'propalestine', 'Pro-Palestinian', 'pro-palestinian'
 ];
 
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
   'scared', 'tired', 'lonely', 'miserable', 'worthless', 'failure', 'afraid',
   'numb', 'crying', 'helpless', 'guilt', 'ashamed', 'stressed',
-  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning','war','idf','israel',
+  'death', 'ache', 'pain', 'grief', 'loss', 'broken', 'suffering', 'unworthy', 'hopelessness', 'mourning', 'war', 'idf', 'israel',
   'crisis', 'fails', 'scandal', 'decline', 'warns', 'crash', 'struggles', 'loss', 'falls', 'controversy', 'outrage', 'disaster', 'accused', 'backlash', 'threat',
   'blockage', 'controversial'
 ];
 
-const contrastWords = ['epstein','shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'];
-const negativePhrases = ["Ghislane Maxwell","Epstein","ghislane maxwell","epstein","pro israel", "pro-israelien", "pro-israel","aid block", "give up", "hate", "suicide", "trauma","child abuse", "brutality"];
+const contrastWords = ['epstein', 'shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'];
+const negativePhrases = ["Ghislane Maxwell", "Epstein", "ghislane maxwell", "epstein", "pro israel", "pro-israelien", "pro-israel", "aid block", "give up", "hate", "suicide", "trauma", "child abuse", "brutality"];
 
 const NEGATIVE_WEIGHT = 1.2;
 const PHRASE_PENALTY_PER_MATCH = 1.2;
@@ -74,25 +74,6 @@ function getSentimentScore(text) {
   return score;
 }
 
-  const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
-  const totalWeighted = positiveCount + weightedNegatives;
-  const score = totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
-
-  // ✅ Safe log
-  console.log({ text, positiveCount, negativeCount, phrasePenalty, score });
-
-  return score;
-
-
-
-    
-  const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
-  const totalWeighted = positiveCount + weightedNegatives;
-  return totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
-}
-console.log({ text, positiveCount, negativeCount, phrasePenalty, score });
-
-
 function isRecent(pubDate) {
   if (!pubDate) return false;
   const parsedDate = new Date(pubDate);
@@ -102,22 +83,24 @@ function isRecent(pubDate) {
 }
 
 app.get('/bbc/rss', async (req, res) => {
-  try {const feed = await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
+  try {
+    const feed = await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
 
     const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 100);
-    
-const results = items.map(item => {
-  const score = getSentimentScore(item.title || item.description || '');
-  const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
-  return {
-    title: item.title,
-    link: item.link,
-    pubDate: item.pubDate,
-    description: item.contentSnippet || item.content || '',
-    sentimentScore: parseFloat(score.toFixed(4)), // <-- FIXED HERE
-    emotion
-  };
-});      
+
+    const results = items.map(item => {
+      const score = getSentimentScore(item.title || item.description || '');
+      const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
+      return {
+        title: item.title,
+        link: item.link,
+        pubDate: item.pubDate,
+        description: item.contentSnippet || item.content || '',
+        sentimentScore: parseFloat(score.toFixed(4)),
+        emotion
+      };
+    });
+
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
   } catch (error) {
@@ -127,14 +110,14 @@ const results = items.map(item => {
 });
 
 // Serve static files (e.g., index.html)
-app.use(express.static(__dirname)); // ✅ semicolon added
+app.use(express.static(__dirname));
 
 // Serve index.html at root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// ✅ Start the server
+// Start the server
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
 });
