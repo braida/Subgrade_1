@@ -14,7 +14,7 @@ app.use(cors({ origin: '*' }));
 const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
-  'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
+  'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life',
 'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
   'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine'
 ];
@@ -69,16 +69,17 @@ function getSentimentScore(text) {
 }
 
 // Only use items from the last 7 days
+
 function isRecent(pubDate) {
   if (!pubDate) return false;
 
-  const parsedDate = new Date(pubDate);
+  const parsed = new Date(pubDate);
+  if (isNaN(parsed)) return false;
+
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-  return !isNaN(parsedDate.getTime()) && parsedDate >= sevenDaysAgo && parsedDate <= now;
+  return parsed >= sevenDaysAgo && parsed <= now;
 }
-
 
 // 🚀 BBC Endpoint
 app.get('/bbc/rss', async (req, res) => {
