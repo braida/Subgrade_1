@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({ origin: '*' }));
 
 const positiveWords = [
-  'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
+  'happy', 'joy', 'excited', 'love', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life',
   'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
@@ -77,11 +77,10 @@ function isRecent(pubDate) {
 }
 
 app.get('/bbc/rss', async (req, res) => {
-  try {
-    const feed = await parser.parseURL('http://feeds.bbci.co.uk/news/world/rss.xml');
+  try {await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
     const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 100);
     const results = items.map(item => {
-      const score = getSentimentScore(item.title || '');
+      const score = getSentimentScore(item.title || item.description || '');
       const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
       return {
         title: item.title,
