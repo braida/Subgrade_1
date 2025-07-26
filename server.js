@@ -16,7 +16,7 @@ const positiveWords = [
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life',
 'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
-  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine',"pro-palestinian"
+  'clemency','clemence', 'peace', 'peacetalk', 'recognition','relief', 'renewed','propalestine','Pro-Palestinian'
 ];
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
