@@ -70,11 +70,15 @@ function getSentimentScore(text) {
 
 // Only use items from the last 7 days
 function isRecent(pubDate) {
-  const date = new Date(pubDate);
+  if (!pubDate) return false;
+
+  const parsedDate = new Date(pubDate);
   const now = new Date();
-  const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  return date >= cutoff;
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  return !isNaN(parsedDate.getTime()) && parsedDate >= sevenDaysAgo && parsedDate <= now;
 }
+
 
 // 🚀 BBC Endpoint
 app.get('/bbc/rss', async (req, res) => {
@@ -82,8 +86,9 @@ app.get('/bbc/rss', async (req, res) => {
     const feed = await parser.parseURL('http://feeds.bbci.co.uk/news/world/rss.xml');
 
     const items = feed.items
-      .filter(item => isRecent(item.pubDate))
-      .slice(0, 100);
+  .filter(item => isRecent(item.pubDate))
+  .slice(0, 100);
+
 
     const results = items.map(item => {
       const score = getSentimentScore(item.title || '');
