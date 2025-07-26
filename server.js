@@ -69,6 +69,15 @@ function getSentimentScore(text) {
   const totalWeighted = positiveCount + weightedNegatives;
   const score = totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
 
+  console.log({ text, positiveCount, negativeCount, phrasePenalty, score });
+
+  return score;
+}
+
+  const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
+  const totalWeighted = positiveCount + weightedNegatives;
+  const score = totalWeighted === 0 ? 0 : (positiveCount - weightedNegatives) / totalWeighted;
+
   // ✅ Safe log
   console.log({ text, positiveCount, negativeCount, phrasePenalty, score });
 
