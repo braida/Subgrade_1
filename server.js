@@ -15,7 +15,8 @@ const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'optimistic', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful','hope','peace','palestine','freedom', 'great', 'cheerful', 'uplifted',
   'accomplished', 'peaceful', 'motivated', 'encouraged', 'better', 'progress', 'good life'
-'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative'
+'success', 'wins', 'celebrates', 'growth', 'breakthrough', 'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges', 'praises', 'boosts', 'innovative',
+  'clemency','clemence', 'peace', 'peacetalk', 'recognition'
 ];
 const negativeWords = [
   'sad', 'angry', 'hate', 'depressed', 'frustrated', 'hopeless', 'anxious',
@@ -27,8 +28,8 @@ const negativeWords = [
 const contrastWords = ['shocking', 'unbelievable', 'inspiring', 'devastating', 'huge', 'heartbreaking', 'outrageous', 'promising', 'terrifying', 'major', 'brutal', 'bold', 'remarkable'
   ];
 const negativePhrases = ["don't", "can't", "won't", "shouldn't", "give up", "hate", "suicide", "trauma"];
-const NEGATIVE_WEIGHT = 1.5;
-const PHRASE_PENALTY_PER_MATCH = 1.7;
+const NEGATIVE_WEIGHT = 1;
+const PHRASE_PENALTY_PER_MATCH = 1.2;
 
 function getSentimentScore(text) {
   let positiveCount = 0;
