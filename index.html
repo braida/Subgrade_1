@@ -55,20 +55,26 @@
     }
     .preview-row {
   background-color: #eef6ff;
+  transition: all 0.3s ease;
+}
+.preview-content {
+  font-size: 14px;
+  padding: 8px;
 }
 .btn-preview {
-  margin-top: 5px;
   font-size: 12px;
   padding: 4px 8px;
   background-color: #007acc;
   color: white;
   border: none;
   border-radius: 4px;
+  margin-top: 5px;
   cursor: pointer;
 }
 .btn-preview:hover {
   background-color: #005c8c;
 }
+
 
   </style>
 </head>
@@ -93,11 +99,14 @@
 
   <script>
     
-  function togglePreview(id) {
-    const el = document.getElementById(id).parentElement.parentElement;
-    el.style.display = el.style.display === "none" ? "table-row" : "none";
-  }
+  function togglePreview(index) {
+    const previewRow = document.querySelector(`#preview-row-${index}`);
+    if (!previewRow) return;
 
+    const isVisible = previewRow.classList.contains("visible");
+    previewRow.classList.toggle("visible", !isVisible);
+    previewRow.style.display = isVisible ? "none" : "table-row";
+  }
 
     async function fetchCNNData() {
       const tableBody = document.getElementById("cnnTableBody");
@@ -112,12 +121,11 @@
   const row = document.createElement("tr");
   row.classList.add(item.emotion.toLowerCase());
 
-  const previewId = `preview-${i}`;
   row.innerHTML = `
     <td>${i + 1}</td>
     <td>
       <a href="${item.link}" target="_blank">${item.title}</a><br/>
-      <button onclick="togglePreview('${previewId}')" class="btn-preview">🔍 Preview</button>
+      <button class="btn-preview" onclick="togglePreview(${i})">🔍 Preview</button>
     </td>
     <td>${item.sentimentScore.toFixed(2)}</td>
     <td>${item.emotion}</td>
@@ -125,10 +133,11 @@
   `;
 
   const previewRow = document.createElement("tr");
-  previewRow.classList.add("preview-row");
+  previewRow.id = `preview-row-${i}`;
   previewRow.style.display = "none";
+  previewRow.classList.add("preview-row");
   previewRow.innerHTML = `
-    <td colspan="5" id="${previewId}">
+    <td colspan="5">
       <div class="preview-content">
         <strong>Summary:</strong><br/>
         ${item.description || 'No summary available.'}
