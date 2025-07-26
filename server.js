@@ -87,19 +87,19 @@ app.get('/bbc/rss', async (req, res) => {
   try {const feed = await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
 
     const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 100);
-    const results = items.map(item => {
-      const score = getSentimentScore(item.title || item.description || '');
-      const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
-      return {
-        title: item.title,
-        link: item.link,
-        pubDate: item.pubDate,
-        description: item.contentSnippet || item.content || '',
-        sentimentScore: score,
-        emotion
-      };
-    });
-
+    
+const results = items.map(item => {
+  const score = getSentimentScore(item.title || item.description || '');
+  const emotion = score > 0 ? 'Positive' : score < 0 ? 'Negative' : 'Neutral';
+  return {
+    title: item.title,
+    link: item.link,
+    pubDate: item.pubDate,
+    description: item.contentSnippet || item.content || '',
+    sentimentScore: parseFloat(score.toFixed(4)), // <-- FIXED HERE
+    emotion
+  };
+});
 
        
        
