@@ -77,7 +77,8 @@ function isRecent(pubDate) {
 }
 
 app.get('/bbc/rss', async (req, res) => {
-  try {await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
+  try {const feed = await parser.parseURL('https://feeds.bbci.co.uk/news/world/rss.xml');
+
     const items = feed.items.filter(item => isRecent(item.pubDate)).slice(0, 100);
     const results = items.map(item => {
       const score = getSentimentScore(item.title || item.description || '');
@@ -92,6 +93,9 @@ app.get('/bbc/rss', async (req, res) => {
       };
     });
 
+
+       
+       
     results.sort((a, b) => b.sentimentScore - a.sentimentScore);
     res.json(results.slice(0, 10));
   } catch (error) {
