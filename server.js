@@ -61,11 +61,11 @@ function getSentimentScore(text) {
   let phrasePenalty = 0;
 
 for (const phrase of negativePhrases) {
-  const pattern = new RegExp(`\\b${phrase.toLowerCase()}\\b`, 'i');
-  if (pattern.test(lowerText)) {
+  if (lowerText.includes(phrase.toLowerCase())) {
     phrasePenalty += PHRASE_PENALTY_PER_MATCH;
   }
 }
+
 
     
   const weightedNegatives = (negativeCount * NEGATIVE_WEIGHT) + phrasePenalty;
