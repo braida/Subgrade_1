@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🌍 News Sentiment Dashboard</title>
-   <li> Scoring is using model AI and loading can take a couple of minutes. This dashboard pulls in news headlines and description from BBC, Sky News, and Al Jazeera via RSS feeds.</li> <!--Each article is then analyzed for sentiment — is the tone positive, negative, or neutral?</li> -->
-   <style>
+   <li> Scoring is using model AI and loading can take a couple of minutes. This dashboard pulls in news headlines and description fromnews via RSS feeds.</li> 
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f7fa;
@@ -132,12 +131,12 @@
     let ascending = false;
 
     const countries = [
-      'Israel', 'Palestine', 'Ukraine', 'Russia', 'USA', 'China', 'Iran',
+      'USA', 'China', 'Iran','Japan', 'Korea', 'Vietnam', 'Togo','Mali','Africa','Congo','Gabon',
       'France', 'Germany', 'India', 'Brazil', 'Gaza', 'UK', 'Pakistan',
       'Yemen', 'Syria','US','Algeria','Ireland','Dubai','UAE', 'Spain', 'Italy',
-       'Bulgary', 'Turkey', 'Greece', 'Thailand', 'Cambodia','Colombia','Mexico',
+       'Bulgary', 'Turkey', 'Greece', 'Israel', 'Palestine', 'Ukraine', 'Russia', 'Thailand', 'Cambodia','Colombia','Mexico',
        'Morocco','Tunisia','Jordan','Lebanon', 'Libya','Egypt','Afghanistan',
-       'Qatar', 'Saudi Arabia'
+       'Qatar', 'Saudi Arabia','Portugal'
     ];
 
     function togglePreview(index) {
