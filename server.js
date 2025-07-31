@@ -179,7 +179,7 @@ app.get('/bbc/rss', async (req, res) => {
     'https://feeds.bbci.co.uk/news/world/rss.xml',
     //'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://www.aljazeera.com/xml/rss/all.xml',
-    'https://www.lemonde.fr/internationl/rss_full.xml'
+    'https://www.lemonde.fr/en/rss/une.xml'
   ];
 
   try {
