@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🌍 News Sentiment Dashboard</title>
-   <li> Scoring is using model AI and loading can take a couple of minutes. This dashboard pulls in news headlines and description fromnews via RSS feeds.</li> 
+   <li> Scoring is using model AI and loading can take a couple of minutes. This dashboard pulls in news headlines and description from news via RSS feeds.</li> 
     <style>
    body {
       font-family: Arial, sans-serif;
@@ -71,7 +71,8 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.min.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.min.js"></script> --> 
+   
  <!-- Hidden clickable pixel -->
    <div onclick="alert('🤫 You found the hidden message!')" 
      style="position: absolute; top: 0; left: 0; width: 10px; height: 10px; opacity: 1; cursor: pointer;">
@@ -89,10 +90,11 @@
     <div id="countryDetails"></div>
   </div>
 
-  <div style="text-align: center;">
+ <!-- <div style="text-align: center;">
     <h2 style="margin-top: 0;">🌀 Word Cloud from News</h2>
     <canvas id="wordCloud" width="200" height="200"></canvas>
-  </div>
+  </div> -->
+       
 </div>
 
   <button id="toggleSort" class="btn-preview">⬆️ Sort by Score</button>
@@ -234,7 +236,8 @@
         }
       });
     }
-function generateWordCloud(data) {
+
+     /* function generateWordCloud(data) {
   const wordCounts = {};
 
   data.forEach(item => {
@@ -262,7 +265,8 @@ function generateWordCloud(data) {
     backgroundColor: '#f4f7fa'
   });
 }
-
+*/
+     
     async function fetchData() {
      //  document.getElementById("loading").style.display = 'block';
       const tableBody = document.getElementById("newsTableBody");
@@ -275,7 +279,7 @@ function generateWordCloud(data) {
         renderTable(newsData);
         const countryStats = getCountryStats(newsData);
         renderCountryChart(countryStats);
-         generateWordCloud(newsData);
+         // generateWordCloud(newsData);
 
       } catch (error) {
         tableBody.innerHTML = '<tr><td colspan="7">❌ Failed to load news data.</td></tr>';
@@ -306,7 +310,7 @@ document.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'c') {
     for (let i = 0; i < 30; i++) {
       let cat = document.createElement('div');
-      cat.innerHTML = '🐱';
+      cat.innerHTML = '(*‿*)ノ Welcome, this is just a poke...(◕‿◕)つ ';
       cat.style.position = 'fixed';
       cat.style.left = Math.random() * window.innerWidth + 'px';
       cat.style.top = '-50px';
