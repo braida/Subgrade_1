@@ -143,7 +143,7 @@ Evaluate the input and return a JSON object with this format:
 Vous êtes un assistant bilingue d’analyse médiatique. Votre tâche est de détecter la **présence d’un cadrage biaisé** dans un texte d’actualité en anglais ou en français.
 Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement chargé qui influence la perception des événements ou des personnes. Vous ne jugez pas la véracité ni l’orientation politique — seulement si le **langage introduit un biais de cadrage** avec un score de 0 a 1 ou 0 est pas de biai détecte et 1 fort biais détecte
 
-Évaluez le texte et retournez un objet JSON avec ce format :
+Évaluez le texte et retournez un objet JSON avec ce format avec le framing_type dans la langue du text analysè si possible:
 
 {
   "score": number,
