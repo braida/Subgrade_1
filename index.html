@@ -156,9 +156,7 @@
       data.forEach((item, i) => {
         const row = document.createElement("tr");
         row.classList.add(item.emotion.toLowerCase());
-         const emotionLabel = typeof item.emotion === 'string'
-    ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1)
-    : '—';
+         const emotionLabel = typeof item.emotion === 'string' ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1): '—';
 
         row.innerHTML = `
           <td>${i + 1}</td>
