@@ -127,8 +127,7 @@ async function getSentimentScore(text) {
       messages: [
   {
     role: "system",
-    content: `
-`You are a bilingual media analysis assistant. Your task is to detect **bias framing** in news-related text in either English or French.
+    content: `You are a bilingual media analysis assistant. Your task is to detect **bias framing** in news-related text in either English or French.
 
 Bias framing refers to emotionally or ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment — only whether the **language framing** introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
 
@@ -136,8 +135,8 @@ Evaluate the input and return a JSON object with this format:
 
 {
   "score": number,
-  "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc.
-  "examples": [string],               // short phrases or quotes from the text that indicate bias framing
+ // "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc.
+ // "examples": [string],               // short phrases or quotes from the text that indicate bias framing
   "confidence": number                // 0 to 1, how confident you are in this judgment
 }
 
