@@ -135,7 +135,7 @@ Evaluate the input and return a JSON object with this format:
 
 {
   "score": number,
- // "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc.
+ "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc.
  // "examples": [string],               // short phrases or quotes from the text that indicate bias framing
   "confidence": number                // 0 to 1, how confident you are in this judgment
 }
@@ -150,7 +150,7 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
 
 {
   "score": number,
-//  "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral", etc.
+  "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral", etc.
 //  "examples": [string],               // extraits courts du texte qui montrent ce cadrage biaisé
   "confidence": number                // de 0 à 1, niveau de confiance dans cette évaluation
 }`
@@ -167,7 +167,8 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
     const parsed = JSON.parse(aiResponse.choices[0].message.content);
     return {
       score: parseFloat(parsed.score),
-      confidence: parseFloat(parsed.confidence)
+      confidence: parseFloat(parsed.confidence),
+      emotion: parseFloat(parsed.framing_type),
     };
   
      const local = localSentimentScore(text);
