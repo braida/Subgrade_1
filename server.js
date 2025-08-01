@@ -136,7 +136,6 @@ Evaluate the input and return a JSON object with this format:
 {
   "score": number,
  "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc.
- // "examples": [string],               // short phrases or quotes from the text that indicate bias framing
   "confidence": number                // 0 to 1, how confident you are in this judgment
 }
 
@@ -150,9 +149,8 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
 
 {
   "score": number,
-  "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral", etc.
-//  "examples": [string],               // extraits courts du texte qui montrent ce cadrage biaisé
-  "confidence": number                // de 0 à 1, niveau de confiance dans cette évaluation
+  "confidence": number                // de 0 à 1, niveau de confiance dans cette évaluation,
+   "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral"
 }`
 
   },
@@ -224,7 +222,7 @@ app.get('/bbc/rss', async (req, res) => {
             description: item.contentSnippet || item.content || '',
             sentimentScore: parseFloat(score.toFixed(4)),
             confidence: parseFloat(confidence.toFixed(4)),
-            emotion: String(emotion)
+            emotion
           });
         }
       } catch (err) {
