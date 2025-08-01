@@ -156,6 +156,9 @@
       data.forEach((item, i) => {
         const row = document.createElement("tr");
         row.classList.add(item.emotion.toLowerCase());
+         const emotionLabel = typeof item.emotion === 'string'
+    ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1)
+    : '—';
 
         row.innerHTML = `
           <td>${i + 1}</td>
@@ -164,7 +167,7 @@
             <button class="btn-preview" onclick="togglePreview(${i})">🔍 Preview</button>
           </td>
           <td>${item.sentimentScore.toFixed(2)}</td>
-          <td>${item.emotion ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1) : '—'}</td>
+          <td>${emotionLabel}</td>
           <td>${new Date(item.pubDate).toLocaleDateString()}</td>
           <td>${item.confidence !== undefined ? (item.confidence * 100).toFixed(0) + '%' : '—'}</td>
           <td>${item.source || 'Unknown'}</td>
