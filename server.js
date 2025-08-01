@@ -168,7 +168,7 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
     return {
       score: parseFloat(parsed.score),
       confidence: parseFloat(parsed.confidence),
-      emotion: parseFloat(parsed.framing_type),
+      emotion: string(parsed.framing_type),
     };
   
      const local = localSentimentScore(text);
