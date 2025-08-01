@@ -224,7 +224,7 @@ app.get('/bbc/rss', async (req, res) => {
             description: item.contentSnippet || item.content || '',
             sentimentScore: parseFloat(score.toFixed(4)),
             confidence: parseFloat(confidence.toFixed(4)),
-            emotion
+            emotion: string(emotion)
           });
         }
       } catch (err) {
@@ -257,13 +257,12 @@ app.get('/bbc/rss/info', (req, res) => {
       link: "URL to the article",
       pubDate: "Publication date",
       description: "Article snippet",
-      sentimentScore: "Range: -1 (negative) to 1 (positive)",
-      confidence: "How reliable the score is (0–1)",
-      emotion: "Categorical label: UpBeat, DownBeat, or Neutral"
+      sentimentScore: "Between 0 (neutral, impartial) to 1 (emotionally charged)",
+      confidence: "How reliable the score is",
+      emotion: "The charge of emotion type "
     }
   });
 });
-
 app.get('/', (req, res) => {
   res.send("✅ News Sentiment API is live. Use /bbc/rss or /bbc/rss/info.");
 });
