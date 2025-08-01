@@ -128,7 +128,6 @@ async function getSentimentScore(text) {
   {
     role: "system",
     content: `You are a bilingual media analysis assistant. Your task is to detect **bias framing** in news-related text in either English or French.
-
 Bias framing refers to emotionally or ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment — only whether the **language framing** introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
 
 Evaluate the input and return a JSON object with this format:
@@ -142,7 +141,6 @@ Evaluate the input and return a JSON object with this format:
 ---
 
 Vous êtes un assistant bilingue d’analyse médiatique. Votre tâche est de détecter la **présence d’un cadrage biaisé** dans un texte d’actualité en anglais ou en français.
-
 Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement chargé qui influence la perception des événements ou des personnes. Vous ne jugez pas la véracité ni l’orientation politique — seulement si le **langage introduit un biais de cadrage** avec un score de 0 a 1 ou 0 est pas de biai détecte et 1 fort biais détecte
 
 Évaluez le texte et retournez un objet JSON avec ce format :
@@ -192,8 +190,8 @@ function isRecent(pubDate) {
 app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
-    //'https://feeds.skynews.com/feeds/rss/world.xml',
-    'https://www.aljazeera.com/xml/rss/all.xml',
+    'https://feeds.skynews.com/feeds/rss/world.xml',
+    //'https://www.aljazeera.com/xml/rss/all.xml',
     'https://www.lemonde.fr/rss/une.xml'
   ];
 
