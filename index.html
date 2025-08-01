@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🌍 News Sentiment Dashboard</title>
-   <li> Scoring is using model AI and loading can take a couple of minutes. Score is based on the positive/negative or neutral <span style="font-size: 0.8em;">(i.e. Impartial)</span> This dashboard pulls in news via free RSS feeds.</li> 
+   <li> Scoring is using model AI and loading can take a couple of minutes. Score is 0 for neutral <span style="font-size: 0.8em;">(i.e. Impartial)</span> or 1 or emotionally charged. source: free news RSS feeds.</li> 
     <style>
    body {
       font-family: Arial, sans-serif;
@@ -122,10 +122,10 @@
   <ul style="line-height: 1.6;">
     <li><strong>#</strong> — The article's index in the list.</li>
     <li><strong>Title</strong> — Headline of the news article (clickable link).</li>
-    <li><strong>Score</strong> — Sentiment score between -1 (negative) and 1 (positive).</li>
-    <li><strong>Emotion</strong> — Simplified label: UpBeat, Downbeat, or Neutral.</li>
+    <li><strong>Score</strong> — Sentiment score between 0 (neutral) and 1 (emotional charged).</li>
+    <li><strong>Emotion</strong> — Simplified.</li>
     <li><strong>Date</strong> — Publication date of the article.</li>
-    <li><strong>Score Confidence Rate</strong> — Using models OpenAi GPT3.5: Score is a number [-1,1] based on the positive/negative tone. Confidence is how certain the model is about its sentiment classification. It usually ranges from 0 to 1. </li>
+    <li>  Confidence is how certain the model is about its sentiment classification. It usually ranges from 0 to 1. </li>
     <li><strong>Source</strong> — News outlet (e.g., BBC, Sky News, Al Jazeera).</li>
   </ul>
    </section>
@@ -164,7 +164,7 @@
             <button class="btn-preview" onclick="togglePreview(${i})">🔍 Preview</button>
           </td>
           <td>${item.sentimentScore.toFixed(2)}</td>
-          <td>${item.emotion}</td>
+          <td>${item.emotion ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1) : '—'}</td>
           <td>${new Date(item.pubDate).toLocaleDateString()}</td>
           <td>${item.confidence !== undefined ? (item.confidence * 100).toFixed(0) + '%' : '—'}</td>
           <td>${item.source || 'Unknown'}</td>
