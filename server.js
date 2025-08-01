@@ -213,8 +213,8 @@ app.get('/bbc/rss', async (req, res) => {
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
-          const { score, confidence } = await getSentimentScore(combinedText);
-          const emotion = score > 0 ? 'UpBeat' : score < 0 ? 'DownBeat' : 'Neutral';
+          const { score, confidence, emotion } = await getSentimentScore(combinedText);
+        // const emotion = score > 0 ? 'UpBeat' : score < 0 ? 'DownBeat' : 'Neutral';
 
           allItems.push({
             source: feed.title || new URL(url).hostname,
