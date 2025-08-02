@@ -109,7 +109,8 @@
         <th>Score</th>
         <th>Framing Type</th>
         <th>Date</th>
-        <th>Score Confidence Rate</th>
+    <!--<th>Confidence Rate</th>  -->
+        <tr>Reason</th>
         <th>Source</th>
       </tr>
     </thead>
@@ -156,6 +157,7 @@
       data.forEach((item, i) => {
         const row = document.createElement("tr");
         const emotionLabel = typeof item.emotion === 'string'? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1): '—';
+        const reasonlabel = typeof item.reason === 'string'? item.reason.charAt(0).toUpperCase() + item.reason.slice(1): '—';
          
         row.innerHTML = `
           <td>${i + 1}</td>
@@ -166,10 +168,13 @@
           <td>${item.sentimentScore.toFixed(2)}</td>
           <td>${emotionLabel}</td>
           <td>${new Date(item.pubDate).toLocaleDateString()}</td>
-          <td>${item.confidence !== undefined ? (item.confidence * 100).toFixed(0) + '%' : '—'}</td>
+          <td>${reasonlabel}</td}</td>
           <td>${item.source || 'Unknown'}</td>
         `;
+// disabled replaced with Reason
+         //<td>${item.confidence !== undefined ? (item.confidence * 100).toFixed(0) + '%' : '—'}</td>
 
+         
         const preview = document.createElement("tr");
         preview.id = `preview-${i}`;
         preview.className = 'preview-row';
