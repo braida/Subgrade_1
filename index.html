@@ -157,7 +157,7 @@
       data.forEach((item, i) => {
         const row = document.createElement("tr");
         const emotionLabel = typeof item.emotion === 'string'? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1): '—';
-        const reasonlabel = typeof item.reason === 'string'? item.reason.charAt(0).toUpperCase() + item.reason.slice(1): '—';
+        const reasonlabel = typeof item.reason === 'string'? item.reason.charAt(0).toUpperCase() + item.reason.slice(1): '—'
          
         row.innerHTML = `
           <td>${i + 1}</td>
@@ -168,7 +168,7 @@
           <td>${item.sentimentScore.toFixed(2)}</td>
           <td>${emotionLabel}</td>
           <td>${new Date(item.pubDate).toLocaleDateString()}</td>
-          <td>${reasonlabel}</td}</td>
+          <td>${reasonlabel}</td>
           <td>${item.source || 'Unknown'}</td>
         `;
 // disabled replaced with Reason
