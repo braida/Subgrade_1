@@ -140,7 +140,7 @@ Evaluate the input and return a JSON object with this format:
   "score": number,
  "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc. 
  "confidence": number                // 0 to 1, how confident you are in this judgment
- "reason": string | null,              //e.g , 
+ "reason": string | null,              //I.e Is structural context (occupation, blockade, systemic violence) present or erased? if any of these are missing or distorted, label the pattern (e.g. False equivalence, Justification framing, Causal inversion) and explain the effect of the framing.
 }  
 
 ---
