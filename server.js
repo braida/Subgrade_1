@@ -129,6 +129,9 @@ async function getSentimentScore(text) {
     role: "system",
     content: `You are a bilingual media analysis assistant. Your task is to detect **bias framing** in news-related text in either English or French.
 Bias framing refers to emotionally or ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment — only whether the **language framing** introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
+also, try Identify any language used to frame or justify large-scale violence, especially against civilian populations. identify the use of preemptive moral defens (e.g. 'surgical strike', 'neutralized', 'tragic but necessary') and 
+Detect whether civilian deaths are acknowledged, minimized, or reframed as inevitable. If applicable, assign one or more of the following framing_type:
+Strategic justification bias, Civilian harm rationalized, Patterned justification,Responsibility deflection.
 
 Evaluate the input and return a JSON object with this format:
 
