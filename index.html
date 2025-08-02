@@ -107,10 +107,10 @@
         <th>#</th>
         <th>Title</th>
         <th>Score</th>
-        <th>Framing Type</th>
-        <th>Date</th>
+        <th>Framing Type</th> 
     <!--<th>Confidence Rate</th>  -->
         <th>Reason</th>
+         <th>Date</th>
         <th>Source</th>
       </tr>
     </thead>
@@ -167,8 +167,8 @@
           </td>
           <td>${item.sentimentScore.toFixed(2)}</td>
           <td>${emotionLabel}</td>
-          <td>${new Date(item.pubDate).toLocaleDateString()}</td>
           <td>${reasonlabel}</td>
+          <td>${new Date(item.pubDate).toLocaleDateString()}</td>
           <td>${item.source || 'Unknown'}</td>
         `;
 // disabled replaced with Reason
