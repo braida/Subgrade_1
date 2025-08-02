@@ -132,14 +132,16 @@ Bias framing refers to emotionally or ideologically loaded language that shapes 
 also, try Identify any language used to frame or justify large-scale violence, especially against civilian populations. identify the use of preemptive moral defens (e.g. 'surgical strike', 'neutralized', 'tragic but necessary') and 
 Detect whether civilian deaths are acknowledged, minimized, or reframed as inevitable. If applicable, assign one or more of the following framing_type:
 Strategic justification bias, Civilian harm rationalized, Patterned justification,Responsibility deflection.
+provide a short justification or example keywords as reason. 
 
 Evaluate the input and return a JSON object with this format:
 
 {
   "score": number,
- "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc.
-  "confidence": number                // 0 to 1, how confident you are in this judgment
-}
+ "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc. 
+ "confidence": number                // 0 to 1, how confident you are in this judgment
+ "reason": string | null,              //e.g , 
+}  
 
 ---
 
@@ -150,8 +152,9 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
 
 {
   "score": number,
+  "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral"
   "confidence": number                // de 0 à 1, niveau de confiance dans cette évaluation,
-   "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral"
+  "reason" : string | null
 }`
 
   },
@@ -166,8 +169,10 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
     const parsed = JSON.parse(aiResponse.choices[0].message.content);
     return {
       score: parseFloat(parsed.score),
-      confidence: parseFloat(parsed.confidence),
+     // confidence: parseFloat(parsed.confidence),
       emotion: String(parsed.framing_type),
+      reason: String(parsed.reason)
+   
     };
   
      const local = localSentimentScore(text);
@@ -212,7 +217,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
-          const { score, confidence, emotion } = await getSentimentScore(combinedText);
+          const { score, reason, emotion } = await getSentimentScore(combinedText);
         // const emotion = score > 0 ? 'UpBeat' : score < 0 ? 'DownBeat' : 'Neutral';
 
           allItems.push({
@@ -222,8 +227,9 @@ app.get('/bbc/rss', async (req, res) => {
             pubDate: item.pubDate,
             description: item.contentSnippet || item.content || '',
             sentimentScore: parseFloat(score.toFixed(4)),
-            confidence: parseFloat(confidence.toFixed(4)),
-            emotion
+          //  confidence: parseFloat(confidence.toFixed(4)),
+            emotion,
+            reason
           });
         }
       } catch (err) {
