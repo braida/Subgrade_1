@@ -152,7 +152,7 @@ Return JSOn at the follow8ng format:
  "confidence": number                // 0 to 1, how confident you are in this judgment
  "reason": string | null,              // Stay brief 
 
-`}
+`
   },
   {
     role: "user",
