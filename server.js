@@ -128,15 +128,16 @@ async function getSentimentScore(text) {
   {
     role: "system",
     content: `You are a bilingual media analysis assistant. Your task is to detect **bias framing** in news-related text in either English or French.
-Bias framing refers to emotionally or ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment — only whether the **language framing** introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
+Bias framing here refers to ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment But stay moral — focus to identify whether the **language framing** introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
 also, try Identify any language used to frame or justify large-scale violence, especially against civilian populations. identify the use of preemptive moral defens (e.g. 'surgical strike', 'neutralized', 'tragic but necessary') and 
 Provide a short reason or example keywords as reason. 
+**consider emotional language as part of a narrative style. focus on identifying political and ideological bias. 
 
 Evaluate the input and return a JSON object with this format:
 
 {
   "score": number,
- "framing_type": string | null,      // e.g., "emotional language", "loaded terms", "one-sided framing", etc. 
+ "framing_type": string | null,      // e.g., "loaded terms", "one-sided framing", etc. 
  "confidence": number                // 0 to 1, how confident you are in this judgment
  "reason": string | null,              // Stay brief 
 
@@ -149,7 +150,7 @@ Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement cha
 
 {
   "score": number,
-  "framing_type": string | null,      // ex. : "langage émotionnel", "termes connotés", "cadrage unilatéral"
+  "framing_type": string | null,      // ex. :  "termes connotés", "cadrage unilatéral"
   "confidence": number                // de 0 à 1, niveau de confiance dans cette évaluation,
   "reason" : string | null
 }`
