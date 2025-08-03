@@ -127,10 +127,12 @@ async function getSentimentScore(text) {
   {
     role: "system",
     content: `You are a bilingual media analysis assistant. Your task is to detect **bias framing** in news-related text in either English or French.
-Bias framing here refers to ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment But stay moral — focus to identify whether the intentional language framing introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
-Provide a short reason or example keywords as reason. 
 
-Evaluate the input and return a JSON object with this format:
+**Bias framing** refers to the use of ideologically loaded language or structural choices that shape how events or people are perceived — whether by evoking sympathy, condemnation, doubt, or justification. It can appear in word choice, tone, omission of context, or imbalance in how parties are represented.
+
+🛑 **Important**: You are not judging whether a claim is true, or which side is politically correct. However, you must remain ethically grounded — it is *not* biased to report factual harm (such as death or injury), especially when properly attributed. Do not dismiss such language as “loaded” simply because it has emotional weight. Bias involves how the information is framed — not whether it is tragic.
+
+Return strict JSON in the following format:
 
 {
   "score": number,
@@ -138,20 +140,7 @@ Evaluate the input and return a JSON object with this format:
  "confidence": number                // 0 to 1, how confident you are in this judgment
  "reason": string | null,              // Stay brief 
 
----
-
-Vous êtes un assistant bilingue d’analyse médiatique. Votre tâche est de détecter la **présence d’un cadrage biaisé** dans un texte d’actualité en anglais ou en français.
-Le cadrage biaisé désigne un langage émotionnellement ou idéologiquement chargé qui influence la perception des événements ou des personnes. Vous ne jugez pas la véracité ni l’orientation politique — seulement si le **langage introduit un biais de cadrage** avec un score de 0 a 1 ou 0 est pas de biai détecte et 1 fort biais détecte
-
-Évaluez le texte et retournez un objet JSON avec ce format avec le framing_type dans la langue du text analysè si possible:
-
-{
-  "score": number,
-  "framing_type": string | null,      // ex. :  "termes connotés", "cadrage unilatéral"
-  "confidence": number                // de 0 à 1, niveau de confiance dans cette évaluation,
-  "reason" : string | null
-}`
-
+`
   },
   {
     role: "user",
