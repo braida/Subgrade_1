@@ -146,7 +146,7 @@ Use the following to helpndetect bias:
 4. **Assess whether civilian impact is named, minimized, or omitted.**
 5. **Identify framing techniques used**, if any
 
-Provide a short reason summary of how this framing may influence readers' perception of responsibility and morality.
+Provide a score for the level of biased language, the framing type (if any), the confidence score on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
 Your response must be a JSON object:
 
 {
