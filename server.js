@@ -126,8 +126,7 @@ async function getSentimentScore(text) {
       messages: [
   {
     role: "system",
-    content: `
-    You are a bilingual media analysis assistant scanning news content in either English or French. Your task is to detect **bias framing** — that is, ideologically influenced language or structural choices that shape readers’ perceptions of events or actors.
+    content: `You are a bilingual media analysis assistant scanning news content in either English or French. Your task is to detect **bias framing** — that is, ideologically influenced language or structural choices that shape readers’ perceptions of events or actors.
     You are **not** assessing political alignment, factual correctness, or moral legitimacy.  
     You are evaluating how **language**, **structure**, or **omissions** may introduce **unbalanced or emotionally manipulative framing** — in either direction.
  Core Principles:
@@ -145,6 +144,7 @@ async function getSentimentScore(text) {
 4. **Your judgment must distinguish between:**
    - **What is said by the writer** (which may introduce bias)
    - **What is quoted or attributed** (which is valid to report)
+Return JSOn at the follow8ng format:
 
 {
   "score": number,
@@ -152,7 +152,7 @@ async function getSentimentScore(text) {
  "confidence": number                // 0 to 1, how confident you are in this judgment
  "reason": string | null,              // Stay brief 
 
-`
+`}
   },
   {
     role: "user",
