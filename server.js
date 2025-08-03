@@ -49,8 +49,7 @@ const contrastWords = [
 const negativePhrases = [
   "real difficulties", "very difficult","seeking help", "seeking support", "seeking shelters","mass shooting","mass murder","mass killing"
 ];
-const positivePhrases = ['better world', 'aid delivered to Gaza', 'good vibes', 'unsung hero',
-                         'returning home'
+const positivePhrases = ['better world', 'good vibes', 'unsung hero'
                          ];
 
 const NEGATIVE_WEIGHT = 0.5;
@@ -131,7 +130,7 @@ async function getSentimentScore(text) {
 Bias framing here refers to ideologically loaded language that shapes how events or people are perceived. You are not judging truth or political alignment But stay moral — focus to identify whether the **language framing** introduces bias. return stict json between 0 and 1 with 0 no bias detected at all 1 biased detected
 also, try Identify any language used to frame or justify large-scale violence, especially against civilian populations. identify the use of preemptive moral defens (e.g. 'surgical strike', 'neutralized', 'tragic but necessary') and 
 Provide a short reason or example keywords as reason. 
-Consider emotional language as part of a narrative style. focus on identifying political and ideological bias considering ethics and moral
+If Emotional language framing is not used for negative bias then dont flag it. focus on identifying political and ideological bias considering ethics and moral thinking
 
 Evaluate the input and return a JSON object with this format:
 
