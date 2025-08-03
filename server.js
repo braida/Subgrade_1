@@ -168,9 +168,9 @@ Your response must be a JSON object:
     const parsed = JSON.parse(aiResponse.choices[0].message.content);
     return {
       score: parseFloat(parsed.score),
-     // confidence: parseFloat(parsed.confidence),
       emotion: String(parsed.framing_type),
-      reason: String(parsed.reason)
+      reason: String(parsed.reason),
+      confidence: parseFloat(parsed.confidence)
    
     };
   
@@ -216,7 +216,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
-          const { score, reason, emotion } = await getSentimentScore(combinedText);
+          const { score, reason, emotion, confidence } = await getSentimentScore(combinedText);
         // const emotion = score > 0 ? 'UpBeat' : score < 0 ? 'DownBeat' : 'Neutral';
 
           allItems.push({
@@ -226,7 +226,7 @@ app.get('/bbc/rss', async (req, res) => {
             pubDate: item.pubDate,
             description: item.contentSnippet || item.content || '',
             sentimentScore: parseFloat(score.toFixed(4)),
-          //  confidence: parseFloat(confidence.toFixed(4)),
+            confidence: parseFloat(confidence.toFixed(4)),
             emotion,
             reason
           });
