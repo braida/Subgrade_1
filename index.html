@@ -114,6 +114,7 @@
         <th>Reason</th>
          <th>Date</th>
         <th>Source</th>
+         <th>Confidence</th>
       </tr>
     </thead>
     <tbody id="newsTableBody">
@@ -172,9 +173,8 @@
           <td>${reasonlabel}</td>
           <td>${new Date(item.pubDate).toLocaleDateString()}</td>
           <td>${item.source || 'Unknown'}</td>
+          <td>${item.confidence !== undefined ? (item.confidence * 100).toFixed(0) + '%' : '—'}</td>
         `;
-// disabled replaced with Reason
-         //<td>${item.confidence !== undefined ? (item.confidence * 100).toFixed(0) + '%' : '—'}</td>
 
          
         const preview = document.createElement("tr");
@@ -289,7 +289,7 @@
          // generateWordCloud(newsData);
 
       } catch (error) {
-        tableBody.innerHTML = '<tr><td colspan="7">❌ Failed to load news data.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="8">❌ Failed to load news data.</td></tr>';
         console.error("Error:", error);
       }
      document.getElementById("loading").style.display = 'none';  
