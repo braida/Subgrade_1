@@ -198,8 +198,8 @@ app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
     'https://feeds.skynews.com/feeds/rss/world.xml',
-    //'https://www.aljazeera.com/xml/rss/all.xml',
-    'http://rss.cnn.com/rss/cnn_topstories.rss',
+    'https://www.aljazeera.com/xml/rss/all.xml',
+    'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     'https://www.lemonde.fr/rss/une.xml'
   ];
 
@@ -213,7 +213,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         const items = feed.items
           .filter(item => isRecent(item.pubDate))
-          .slice(0, 15);
+          .slice(0, 25);
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
@@ -264,7 +264,8 @@ app.get('/bbc/rss/info', (req, res) => {
       description: "Article snippet",
       sentimentScore: "Between 0 (neutral, impartial) to 1 (emotionally charged)",
       confidence: "How reliable the score is",
-      emotion: "The charge of emotion type "
+      emotion: "The charge of emotion type ",
+      reason: "Reason for the score"
     }
   });
 });
