@@ -136,13 +136,14 @@ Your response must be a JSON object:
  "framing_type": string | null,      // e.g., "loaded terms", "one-sided framing", etc. 
  "confidence": number                // 0 to 1, how confident you are in this judgment
  "reason": string | null,              // Stay brief 
-   }`
+  ` 
+  }
   ,
-  {
+         {
     role: "user",
     content: text
   }
-]
+         ]
     });
 
     const parsed = JSON.parse(aiResponse.choices[0].message.content);
@@ -165,7 +166,6 @@ Your response must be a JSON object:
     return localSentimentScore(text);
   }
 }
-
 /* from here 
 {
     role: "system",
@@ -192,10 +192,6 @@ Use the following to helpndetect bias:
 Provide a score for the level of biased language, the framing type (if any), the confidence % on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
 Your response must be a JSON object:
 */ // to here 
-
-    
-
-
 
 function isRecent(pubDate) {
   if (!pubDate) return false;
