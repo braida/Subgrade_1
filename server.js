@@ -124,7 +124,50 @@ async function getSentimentScore(text) {
       model: "gpt-3.5-turbo",
       temperature: 0,
       messages: [
+        {
+        role: "system",
+    content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
+    Analyze the emotional content and potential bias in this news text using perspective-aware decoding — that is, consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
+Provide a score for the level of biased language, the framing type (if any), the confidence % on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
+Your response must be a JSON object:
+
   {
+  "score": number,
+ "framing_type": string | null,      // e.g., "loaded terms", "one-sided framing", etc. 
+ "confidence": number                // 0 to 1, how confident you are in this judgment
+ "reason": string | null,              // Stay brief 
+   }`
+  ,
+  {
+    role: "user",
+    content: text
+  }
+]
+    });
+
+    const parsed = JSON.parse(aiResponse.choices[0].message.content);
+    return {
+      score: parseFloat(parsed.score),
+      emotion: String(parsed.framing_type),
+      reason: String(parsed.reason),
+      confidence: parseFloat(parsed.confidence)
+   
+    };
+  
+     const local = localSentimentScore(text);
+     const ai = await getSentimentScore(text);
+     console.log("Local:", local);
+   console.log("AI:", ai);
+
+  } catch (err) {
+    console.error("❌ OpenAI scoring failed:", err.message);
+    // Fallback to local if AI fails
+    return localSentimentScore(text);
+  }
+}
+
+/* from here 
+{
     role: "system",
     content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
 Your goal is not to judge truth or political alignment, but to identify **rhetorical or structural framing choices** that may influence how readers interpret events, actors, or responsibility.
@@ -148,43 +191,11 @@ Use the following to helpndetect bias:
 
 Provide a score for the level of biased language, the framing type (if any), the confidence % on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
 Your response must be a JSON object:
+*/ // to here 
 
-{
-  "score": number,
- "framing_type": string | null,      // e.g., "loaded terms", "one-sided framing", etc. 
- "confidence": number                // 0 to 1, how confident you are in this judgment
- "reason": string | null,              // Stay brief 
+    
 
-`
-  },
-  {
-    role: "user",
-    content: text
-  }
-]
 
-    });
-
-    const parsed = JSON.parse(aiResponse.choices[0].message.content);
-    return {
-      score: parseFloat(parsed.score),
-      emotion: String(parsed.framing_type),
-      reason: String(parsed.reason),
-      confidence: parseFloat(parsed.confidence)
-   
-    };
-  
-     const local = localSentimentScore(text);
-     const ai = await getSentimentScore(text);
-     console.log("Local:", local);
-   console.log("AI:", ai);
-
-  } catch (err) {
-    console.error("❌ OpenAI scoring failed:", err.message);
-    // Fallback to local if AI fails
-    return localSentimentScore(text);
-  }
-}
 
 function isRecent(pubDate) {
   if (!pubDate) return false;
