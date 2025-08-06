@@ -129,7 +129,7 @@ async function getSentimentScore(text) {
     content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
     Analyze the emotional content and potential bias in this news text using perspective-aware decoding — that is, consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
 
-Do **not** treat emotionally direct language (e.g., “killed”, “airstrike”, “bombed”) as biased **if**:
+Do **not** treat emotionally direct language (e.g., “killed”, "genocide", “airstrike”, “bombed”) as biased **if**:
 - It is attributed to a known actor
 - It describes verifiable or factual harm
 - It follows standard journalistic usage
@@ -211,7 +211,7 @@ app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
     'https://feeds.skynews.com/feeds/rss/world.xml',
-    'https://www.aljazeera.com/xml/rss/all.xml',
+   // 'https://www.aljazeera.com/xml/rss/all.xml',
     'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     'https://www.lemonde.fr/rss/une.xml'
   ];
