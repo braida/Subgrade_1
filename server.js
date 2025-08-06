@@ -128,6 +128,12 @@ async function getSentimentScore(text) {
         role: "system",
     content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
     Analyze the emotional content and potential bias in this news text using perspective-aware decoding — that is, consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
+
+Do **not** treat emotionally direct language (e.g., “killed”, “airstrike”, “bombed”) as biased **if**:
+- It is attributed to a known actor
+- It describes verifiable or factual harm
+- It follows standard journalistic usage
+
 Provide a score for the level of biased language, the framing type (if any), the confidence % on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
 Your response must be a JSON object:
 
