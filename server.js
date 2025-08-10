@@ -118,15 +118,15 @@ async function getSentimentScore(text) {
 
   try {
     openaiCallCount++;
-    console.log(` OpenAI scoring (call #${openaiCallCount})`);
+    console.log(`OpenAI scoring (call #${openaiCallCount})`);
 
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       temperature: 0,
       messages: [
         {
-        role: "system",
-    content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
+          role: "system",
+          content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
 Analyze the emotional content and potential bias in this news text using perspective-aware decoding, that is to consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
 Important rule for emotional language:
 Do not classify emotional or violent language (e.g., “killed”, "genocide", “airstrike”, “bombed”, “famine”, “exorbitant”) as bias if:
@@ -136,33 +136,26 @@ Instead, focus on thematic framing (e.g., “Humanitarian Crisis”, “Conflict
 
 Your response must be a JSON object: 
 {
-Bias Score (0–3, where 0 = none, 3 = extreme bias)
-Framing Type (from categories like: Humanitarian Crisis, Conflict and Consequences, Economic Impact, Security Threat, Policy Debate, Partisan Conflict, Human Interest, Loaded Language, etc.)
-Confidence %
-Reason Summary - Explain how the framing may influence readers’ perception of responsibility, morality, or urgency, considering your bias rules above.
-    }`
-  }
-  ,
-         {
-    role: "user",
-    content: text
-  }
-         ]
+- score: number //(0–3, where 0 = none, 3 = extreme bias)
+- framing_type: string  (from categories like: Humanitarian Crisis, Conflict and Consequences, Economic Impact, Security Threat, Policy Debate, Partisan Conflict, Human Interest, Loaded Language, etc.)
+- confidence: number // 0 to 1
+- reason: string // Explain how the framing may influence readers’ perception of responsibility, morality, or urgency, considering your bias rules above.
+}`
+        },
+        {
+          role: "user",
+          content: text
+        }
+      ]
     });
 
     const parsed = JSON.parse(aiResponse.choices[0].message.content);
     return {
-      score: parseFloat(parsed.score),
-      emotion: String(parsed.framing_type),
-      reason: String(parsed.reason),
-      confidence: parseFloat(parsed.confidence)
-   
+      score: parseFloat(parsed["Bias Score"]),
+      emotion: String(parsed["Framing Type"]),
+      reason: String(parsed["Reason Summary"]),
+      confidence: parseFloat(parsed["Confidence %"])
     };
-  
-     const local = localSentimentScore(text);
-     const ai = await getSentimentScore(text);
-     console.log("Local:", local);
-   console.log("AI:", ai);
 
   } catch (err) {
     console.error("❌ OpenAI scoring failed:", err.message);
@@ -170,6 +163,7 @@ Reason Summary - Explain how the framing may influence readers’ perception of 
     return localSentimentScore(text);
   }
 }
+
 /* from here 
 {
     role: "system",
