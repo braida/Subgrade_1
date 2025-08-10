@@ -136,10 +136,10 @@ Instead, focus on thematic framing (e.g., “Humanitarian Crisis”, “Conflict
 
 Your response must be a JSON object: 
 {
-- score: number //(0–3, where 0 = none, 3 = extreme bias)
-- framing_type: string  (from categories like: Humanitarian Crisis, Conflict and Consequences, Economic Impact, Security Threat, Policy Debate, Partisan Conflict, Human Interest, Loaded Language, etc.)
-- confidence: number // 0 to 1
-- reason: string // Explain how the framing may influence readers’ perception of responsibility, morality, or urgency, considering your bias rules above.
+Bias Score (0–3, where 0 = none, 3 = extreme bias)
+Framing Type (from categories like: Humanitarian Crisis, Conflict and Consequences, Economic Impact, Security Threat, Policy Debate, Partisan Conflict, Human Interest, Loaded Language, etc.)
+Confidence %
+Reason Summary - Explain how the framing may influence readers’ perception of responsibility, morality, or urgency, considering your bias rules above.
 }`
         },
         {
@@ -163,7 +163,6 @@ Your response must be a JSON object:
     return localSentimentScore(text);
   }
 }
-
 /* from here 
 {
     role: "system",
