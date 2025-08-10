@@ -127,22 +127,20 @@ async function getSentimentScore(text) {
         {
         role: "system",
     content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
-    Analyze the emotional content and potential bias in this news text using perspective-aware decoding — that is, consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
+Analyze the emotional content and potential bias in this news text using perspective-aware decoding, that is to consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
+Important rule for emotional language:
+Do not classify emotional or violent language (e.g., “killed”, "genocide", “airstrike”, “bombed”, “famine”, “exorbitant”) as bias if:
+It is attributed to a known actor, or if It describes verifiable, factual harm, and if It follows standard journalistic usage.
+In such cases, do not use “Loaded Language” as the framing type unless the wording exaggerates, speculates, or is clearly intended to provoke without factual grounding. 
+Instead, focus on thematic framing (e.g., “Humanitarian Crisis”, “Conflict and Consequences”, “Human Impact”).
 
-Do **not** treat emotionally direct language (e.g., “killed”, "genocide", “airstrike”, “bombed”) as biased **if**:
-- It is attributed to a known actor
-- It describes verifiable or factual harm
-- It follows standard journalistic usage
-
-Provide a score for the level of biased language, the framing type (if any), the confidence % on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
-Your response must be a JSON object:
-
-  {
-  "score": number,
- "framing_type": string | null,      // e.g., "loaded terms", "one-sided framing", etc. 
- "confidence": number                // 0 to 1, how confident you are in this judgment
- "reason": string | null,              // Stay brief 
-  ` 
+Your response must be a JSON object: 
+{
+Bias Score (0–3, where 0 = none, 3 = extreme bias)
+Framing Type (from categories like: Humanitarian Crisis, Conflict and Consequences, Economic Impact, Security Threat, Policy Debate, Partisan Conflict, Human Interest, Loaded Language, etc.)
+Confidence %
+Reason Summary - Explain how the framing may influence readers’ perception of responsibility, morality, or urgency, considering your bias rules above.
+    }`
   }
   ,
          {
