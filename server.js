@@ -20,7 +20,7 @@ const sentimentCache = new Map();
 
 // OpenAI usage cap
 let openaiCallCount = 0;
-const MAX_OPENAI_CALLS = 900;
+const MAX_OPENAI_CALLS = 1500;
 
 // Optional: reset cap every hour
 setInterval(() => {
