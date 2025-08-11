@@ -110,9 +110,10 @@ function localSentimentScore(text) {
   return { score, confidence };
 }
 
+
+// updated 
 async function getSentimentScore(text) {
   if (text.length < 20 || openaiCallCount >= MAX_OPENAI_CALLS) {
-    // 🔁 Fallback: use local keyword scoring
     return localSentimentScore(text);
   }
 
@@ -121,8 +122,11 @@ async function getSentimentScore(text) {
     console.log(`OpenAI scoring (call #${openaiCallCount})`);
 
     const aiResponse = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      
+      model: "gpt-4o-mini",
       temperature: 0,
+      // ⬇️ Force JSON
+      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
@@ -134,35 +138,45 @@ It is attributed to a known actor, or if It describes verifiable, factual harm, 
 In such cases, do not use “Loaded Language” as the framing type unless the wording exaggerates, speculates, or is clearly intended to provoke without factual grounding. 
 Instead, focus on thematic framing (e.g., “Humanitarian Crisis”, “Conflict and Consequences”, “Human Impact”).
 
-Your response must be a JSON object: 
+Return ONLY valid JSON. Do not include commentary or code fences. Schema:
 {
-Bias Score (0–3, where 0 = none, 3 = extreme bias)
-Framing Type (from categories like: Humanitarian Crisis, Conflict and Consequences, Economic Impact, Security Threat, Policy Debate, Partisan Conflict, Human Interest, Loaded Language, etc.)
-Confidence %
-Reason Summary - Explain how the framing may influence readers’ perception of responsibility, morality, or urgency, considering your bias rules above.
-}`
+  "bias_score": number,            // 0–3
+  "framing_type": string,          // One of: "Humanitarian Crisis", "Conflict and Consequences", ...
+  "confidence_pct": number,        // 0–100
+  "reason_summary": string
+}
+Rules:
+- Do NOT label factual, attributed harm language as "Loaded Language" unless it exaggerates/speculates per the criteria.`
         },
-        {
-          role: "user",
-          content: text
-        }
+        { role: "user", content: text }
       ]
     });
 
-    const parsed = JSON.parse(aiResponse.choices[0].message.content);
+    const content = aiResponse.choices[0].message.content;
+    const parsed = JSON.parse(content);
+
     return {
-      score: parseFloat(parsed["Bias Score"]),
-      emotion: String(parsed["Framing Type"]),
-      reason: String(parsed["Reason Summary"]),
-      confidence: parseFloat(parsed["Confidence %"])
+      score: Number(parsed.bias_score),
+      emotion: String(parsed.framing_type),
+      reason: String(parsed.reason_summary),
+      confidence: Number(parsed.confidence_pct)
     };
 
   } catch (err) {
     console.error("❌ OpenAI scoring failed:", err.message);
-    // Fallback to local if AI fails
     return localSentimentScore(text);
   }
 }
+
+function safeParseJSON(s) {
+  try { return JSON.parse(s); } catch {}
+  // try to pull the first {...} block
+  const m = s.match(/{[\s\S]*}/);
+  if (m) { try { return JSON.parse(m[0]); } catch {} }
+  throw new Error("Model did not return valid JSON");
+}
+
+
 /* from here 
 {
     role: "system",
