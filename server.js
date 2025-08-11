@@ -28,7 +28,6 @@ setInterval(() => {
   console.log("🔄 OpenAI call counter reset.");
 }, 60 * 60 * 1000);
 
-// Your sentiment keyword lists here
 const positiveWords = [
   'happy', 'joy', 'excited', 'love', 'inspired', 'grateful',
   'amazing', 'proud', 'confident', 'hopeful', 'hope', 'peace', 'freedom',
@@ -215,7 +214,7 @@ function isRecent(pubDate) {
 app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
-  //  'https://feeds.skynews.com/feeds/rss/world.xml',
+    'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://www.aljazeera.com/xml/rss/all.xml',
  //   'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     'https://www.lemonde.fr/rss/une.xml'
