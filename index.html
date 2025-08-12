@@ -124,24 +124,22 @@
    <section style="margin-top: 15px; padding: 10px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
   <h4 style="margin-bottom: 10px;">📘 How framing is measured</h4>
   <ul style="line-height: 1.6;">
-    <li><strong>LLM <del>GPT-3.5</del> GPT4o-mini (updated) is asked to: 1/</strong> Identify rhetorical or structural framing choices that may influence how readers interpret events, actors, or responsibility.</li>
+    <li><strong>LLM <del>GPT-3.5</del> GPT4o-mini (updated) is asked to: 1/</strong> Analyze how different viewpoints are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied.</li>
     <li><strong>"Bias framing”</strong> refers to emotionally manipulative or structurally imbalanced language
 <!--- Justifies or obscures violence
 - Minimizes civilian impact
 - Uses vague or euphemistic phrasing to deflect responsibility
 - Erases legal or moral context around acts of war or repression-->.</li>
 
-  <li><strong>It's asked to *not* treat emotionally direct language (e.g., “killed”, “bombed”) as biased if:</strong>:
-- It is attributed to a known actor.
-- It describes verifiable or factual harm.
-- It follows standard journalistic usage.</li>
+  <li><strong>A severe term passes the credibility check if:</strong>:
+* It is attributed to a known actor or cited from a credible source (UN, NGO, reputable news), and
 
-<li><strong>2/ Use the following to help-detect bias:</strong>
-1. Do not classify emotional or violent language (e.g., “killed”, "famine"...) as bias if:
-It is attributed to a known actor, <strong>or</strong> if It describes verifiable, factual harm, <strong>and</strong> if It follows standard journalistic usage.
-2. In such cases, do not use “Loaded Language” as the framing type unless the wording exaggerates, speculates, or is clearly intended to provoke without factual grounding. 
-3. Instead, focus on thematic framing (e.g., “Humanitarian Crisis”, “Conflict and Consequences”, “Human Impact”).
-</li>
+* The evidence is present either in the snippet or in clearly linked or referenced sources, and
+
+* It describes verifiable harm using standard journalistic usage.</li>
+
+<li><strong>Note</strong>
+Self-check before final answer <strong>(prompt in progress)</strong></li>
   </ul>
    </section>
   <script>
