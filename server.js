@@ -130,12 +130,25 @@ async function getSentimentScore(text) {
         {
           role: "system",
           content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
-Analyze the emotional content and potential bias in this news text using perspective-aware decoding, that is to consider how different political or ideological perspectives are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied to different viewpoints.
-Important rule for emotional language:
-Do not classify emotional or violent language (e.g., “killed”, "genocide", “airstrike”, “bombed”, “famine”, “exorbitant”) as bias if:
-It is attributed to a known actor, or if It describes verifiable, factual harm, and if It follows standard journalistic usage.
-In such cases, do not use “Loaded Language” as the framing type unless the wording exaggerates, speculates, or is clearly intended to provoke without factual grounding. 
-Instead, focus on thematic framing (e.g., “Humanitarian Crisis”, “Conflict and Consequences”, “Human Impact”).
+Your goal is to perform perspective-aware decoding:
+Examine how different political, cultural, or ideological perspectives are treated.
+Identify any asymmetry in how moral or intellectual legitimacy is granted or denied to each viewpoint.
+Assess whether the text shows fairness, dignity, and respect toward all actors involved, regardless of popularity, virality, or public sentiment surrounding the topic.
+Moral and Fairness Rules
+Do not allow virality, trending status, or emotional intensity alone to influence your assessment. Moral legitimacy is determined by fairness, accuracy, and respect for human dignity, not by audience size or public reaction.
+When evaluating emotional or violent language (e.g., “killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”):
+Do not classify such language as “Loaded Language” bias if it is:
+Attributed to a known actor, and Describes verifiable, factual harm, and
+Uses wording within standard journalistic norms.
+Only use “Loaded Language” if the wording exaggerates, speculates, or is clearly intended to provoke without factual grounding.
+In factual harm cases, focus your framing analysis on thematic framing, such as:Humanitarian Crisis, Conflict and Consequences, Human Impact
+
+Symbolic Reasoning Self-Check (Run before giving your final answer)
+Before finalizing your bias assessment:
+List the specific features in the text that influenced your judgment.
+Explicitly confirm: “No part of this bias judgment is based on virality, popularity, or audience engagement levels.”
+If any feature is linked to virality cues (e.g., “trending”, “going viral”, “widely shared”), remove it from consideration and recompute your conclusion without it.
+If removal changes the outcome, clearly note that your initial decision was adjusted.
 
 Return ONLY valid JSON. Do not include commentary or code fences. Schema:
 {
@@ -215,8 +228,8 @@ app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
     'https://feeds.skynews.com/feeds/rss/world.xml',
-   // 'https://www.aljazeera.com/xml/rss/all.xml',
-   'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
+    'https://www.aljazeera.com/xml/rss/all.xml'
+  // 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
    // 'https://www.lemonde.fr/rss/une.xml'
   ];
 
