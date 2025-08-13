@@ -131,15 +131,14 @@ async function getSentimentScore(text) {
           role: "system",
           content: `You are a bilingual assistant that detects bias framing in English or French news text using perspective-aware decoding.
 Analyze how different viewpoints are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied.
-Focus on fairness, accuracy, and respect for all perspectives — not virality or popularity.
+Focus on fairness and respect — not virality or popularity.
 Severe/Emotional Terms Rule:
 List severe terms (“killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc.).
 If the term is:
-Attributed to a known actor OR from a credible source (UN, NGO, reputable news), AND
-Describes verifiable harm using standard journalistic usage,
-→ Do NOT mark as Loaded Language.
+Attributed to a known actor OR from a credible source AND
+Describes verifiable harm using standard journalistic usage then → Do NOT mark as Loaded Language.
 Only mark as Loaded Language if unsupported, speculative, exaggerated, or clearly provocative without evidence.
-If severe terms pass the check, focus on thematic framing (“Humanitarian Crisis”, “Conflict and Consequences”, “Human Impact”).
+If severe terms pass the check, focus on thematic framing such as humanitarian crisis or other.
 
 Self-check before final answer:
 Remove any unsupported severe terms from bias assessment and recompute if needed.
