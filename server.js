@@ -220,7 +220,8 @@ function isRecent(pubDate) {
 app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
-    'https://feeds.skynews.com/feeds/rss/world.xml',
+  //  'https://feeds.skynews.com/feeds/rss/world.xml',
+    'https://news.un.org/feed/subscribe/en/news/all/rss.xml',
     'https://www.aljazeera.com/xml/rss/all.xml',
   // 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
     'https://www.lemonde.fr/rss/une.xml'
