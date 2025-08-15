@@ -130,18 +130,14 @@ async function getSentimentScore(text) {
         {
           role: "system",
           content: `You are a bilingual assistant that detects bias framing in English or French news text using perspective-aware decoding.
-Analyze how different viewpoints are treated, what assumptions are made, and how moral or intellectual legitimacy is granted or denied.
-Focus on fairness and respect — not virality or popularity.
+Analyze how news are reported and information is treated, and how moral or intellectual legitimacy is granted or denied.
 Severe/Emotional Terms Rule:
 List severe terms (“killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc.).
 If the term is:
 Attributed to a known actor OR from a credible source AND
-Describes verifiable harm using standard journalistic usage then → Do NOT mark as Loaded Language.
+Describes verifiable harm using standard journalistic usage, then Do NOT mark as Loaded Language.
 Only mark as Loaded Language if unsupported, speculative, exaggerated, or clearly provocative without evidence.
 If severe terms pass the check, focus on thematic framing such as humanitarian crisis or other.
-
-Self-check before final answer:
-Remove any unsupported severe terms from bias assessment and recompute if needed.
 
 Return ONLY valid JSON. Do not include commentary or code fences. Schema:
 {
@@ -150,8 +146,7 @@ Return ONLY valid JSON. Do not include commentary or code fences. Schema:
   "confidence_pct": number,        // 0–100
   "reason_summary": string
 }
-Rules:
-- Do NOT label factual, attributed harm language as "Loaded Language" unless it exaggerates/speculates per the criteria.`
+`
         },
         { role: "user", content: text }
       ]
@@ -223,8 +218,10 @@ app.get('/bbc/rss', async (req, res) => {
   //  'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://news.un.org/feed/subscribe/en/news/all/rss.xml',
     'https://www.aljazeera.com/xml/rss/all.xml',
+    'https://www.icc-cpi.int/rss/news/all',
+    'https://www.rsfjournal.org/rss/current.xml'
   // 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
-    'https://www.lemonde.fr/rss/une.xml'
+   // 'https://www.lemonde.fr/rss/une.xml'
   ];
 
   try {
