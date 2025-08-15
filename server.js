@@ -20,7 +20,7 @@ const sentimentCache = new Map();
 
 // OpenAI usage cap
 let openaiCallCount = 0;
-const MAX_OPENAI_CALLS = 1500;
+const MAX_OPENAI_CALLS = 1000;
 
 // Optional: reset cap every hour
 setInterval(() => {
@@ -208,7 +208,7 @@ function isRecent(pubDate) {
   if (!pubDate) return false;
   const parsedDate = new Date(pubDate);
   const now = new Date();
-  const sevenDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);  // data back 3 days ago
+  const sevenDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);  // data back 2 days ago
   return !isNaN(parsedDate.getTime()) && parsedDate >= sevenDaysAgo && parsedDate <= now;
 }
 
@@ -217,7 +217,9 @@ app.get('/bbc/rss', async (req, res) => {
     'https://feeds.bbci.co.uk/news/world/rss.xml',
   //  'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://news.un.org/feed/subscribe/en/news/all/rss.xml',
-    'https://www.aljazeera.com/xml/rss/all.xml',
+    'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15',
+    
+    //'https://www.aljazeera.com/xml/rss/all.xml',
     'https://www.icc-cpi.int/rss/news/all',
     'https://www.rsfjournal.org/rss/current.xml'
   // 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
@@ -234,7 +236,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         const items = feed.items
           .filter(item => isRecent(item.pubDate))
-          .slice(0, 25);
+          .slice(0, 15);
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
