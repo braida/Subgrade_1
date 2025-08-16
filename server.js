@@ -217,14 +217,15 @@ function isRecent(pubDate) {
 app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
+    
     'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://news.un.org/feed/subscribe/en/news/all/rss.xml',
     'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15',
     
-    //'https://www.aljazeera.com/xml/rss/all.xml',
+    'https://www.aljazeera.com/xml/rss/all.xml',
     'https://www.icc-cpi.int/rss/news/all',
-    'https://www.rsfjournal.org/rss/current.xml',
-    'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
+    'https://www.rsfjournal.org/rss/current.xml'
+   // 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
    // 'https://www.lemonde.fr/rss/une.xml'
   ];
 
