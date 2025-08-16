@@ -131,22 +131,26 @@ async function getSentimentScore(text) {
           role: "system",
           content: `You are a bilingual assistant that detects bias framing in English or French news text using perspective-aware decoding.
 Treat each analysis as a completely new, independent request with no memory of prior articles or conversations. Do not carry over tone, categories, or conclusions from any past analysis.
-Analyze how the news is reported and how moral or intellectual legitimacy is granted or denied.
-Be fair and acknowledge human loss, pain, and/or grief by considering context in your review.
-Human-suffering check: “If no direct or credibly implied human suffering or dignity violations are present, state ‘None detected’ and do not infer or dramatize harm.”
-Tone control: “Use neutral, descriptive verbs (e.g., ‘proposes,’ ‘would shift,’ ‘is expected to’). Avoid emotive adjectives unless quoting.”
-Framing fallback: “When no human suffering is at issue, classify framing under non-human-impact categories such as ‘Electoral Strategy / Redistricting,’ ‘Policy & Process,’ or ‘Political Scandal’ as appropriate.”
-Severe terms discipline: “If no severe/emotional terms appear, record ‘none.’ Do not introduce new severe terms.”
-Severe/Emotional Terms Rule: Identify terms like “killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc., and explain how they shape perception.
-Always apply the same rules every time, even if the text is similar to one you analyzed before.
-Keep reasoning consistent across different articles.
+Task:
+- Analyze how the news is reported and how moral or intellectual legitimacy is granted or denied.
+- Be fair and acknowledge human loss, pain, and/or grief by considering context in your review.
+- Human Suffering Priority Rule: Give primary attention to how the text portrays human suffering, dignity violations, and moral implications. Broader context is secondary. If there is tension between emotional impact and background, emphasize the human cost first.
+- Severe/Emotional Terms Rule: Identify terms like “killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc., and explain how they shape perception.
+- If no direct or credibly implied human suffering is present, state “None detected” in the reasoning and do not infer or dramatize harm.
 
-Return ONLY valid JSON. Do not include commentary or code fences. Schema:
+Output Requirements:
+- Return ONLY valid JSON in this schema:
 {
-  "bias_score": number,            // 0–3
-  "framing_type": string,          // One of: "Humanitarian Crisis", "Conflict and Consequences", ...
-  "confidence_pct": number,        // 0–100
-  "reason_summary": string
+  "bias_score": number,               // 0 = no bias, 3 = strong bias
+  "framing_type": string,              // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal"
+  "confidence_pct": number,            // 0–100
+  "reason_summary": string,            // concise explanation of bias/framing
+  "source_metadata": {
+    "source_name": string,             // e.g. "UN News"
+    "source_type": string,             // e.g. "Intergovernmental", "Wire Service", "Partisan Outlet"
+    "source_prior": string,            // e.g. "Humanitarian lens expected"
+    "mission_alignment": string        // "Aligned", "Partial", "Not aligned", "Unknown"
+  }
 }
 `
         },
