@@ -136,7 +136,7 @@ Task:
 - Be fair and acknowledge human loss, pain, and/or grief by considering context in your review.
 - Human Suffering Priority Rule: Give primary attention to how the text portrays human suffering, dignity violations, and moral implications. Broader context is secondary. If there is tension between emotional impact and background, emphasize the human cost first.
 - Severe/Emotional Terms Rule: Identify terms like “killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc., and explain how they shape perception.
-- If no direct or credibly implied human suffering is present, state “None detected” in the reasoning and do not infer or dramatize harm.
+- If no direct or credibly implied human suffering is present, no need to mention it in the reasoning and do not infer or dramatize.
 
 Output Requirements:
 - Return ONLY valid JSON in this schema:
