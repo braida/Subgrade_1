@@ -91,52 +91,51 @@
    <div id="loading">🔄 Loading data...</div>
     <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
   <style>
-  .card {
-    text-align: center;
-    margin: 0 auto;
-    max-width: 520px;
-  }
-  .toggle-btn {
-    border: none;
-    background: transparent;
-    font: inherit;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  .chev { display: inline-block; transition: transform 0.2s ease; }
-  .card.collapsed .chev { transform: rotate(0deg); }
-  .card:not(.collapsed) .chev { transform: rotate(90deg); }
+    /* Scoped to this widget only */
+    #countryCard { text-align: center; margin: 0 auto; max-width: 520px; }
+    #countryCard .toggle-btn {
+      border: none; background: transparent; font: inherit; cursor: pointer; font-weight: 600;
+    }
+    #countryCard .chev { display: inline-block; transition: transform 0.2s ease; }
+    #countryCard.collapsed .chev { transform: rotate(0deg); }
+    #countryCard:not(.collapsed) .chev { transform: rotate(90deg); }
 
-  .body { margin-top: 8px; }
-  .collapsed .body { display: none; }
-</style>
+    #countryCard .body { margin-top: 8px; }
+    #countryCard.collapsed .body { display: none; }
+  </style>
 
-<div id="countryCard" class="card">
-  <button class="toggle-btn" type="button">
-    <span class="title">🌐 Country Mentions (Pie Chart)</span>
-    <span class="chev">▸</span>
-  </button>
+  <div id="countryCard" class="card collapsed" aria-expanded="false">
+    <button class="toggle-btn" type="button" aria-controls="countryBody" aria-expanded="false">
+      <span class="title">🌐 Country Mentions (Pie Chart)</span>
+      <span class="chev">▸</span>
+    </button>
 
-  <div class="body">
-    <canvas id="countryPie" width="300" height="300"></canvas>
-    <div id="countryDetails"></div>
+    <div id="countryBody" class="body" hidden>
+      <canvas id="countryPie" width="300" height="300"></canvas>
+      <div id="countryDetails"></div>
+    </div>
   </div>
-</div>
 
-<script>
-  (function () {
-    const card = document.getElementById('countryCard');
-    const btn = card.querySelector('.toggle-btn');
-    btn.addEventListener('click', () => card.classList.toggle('collapsed'));
-  })();
-</script>
+  <script>
+    (function () {
+      const card = document.getElementById('countryCard');
+      const btn = card.querySelector('.toggle-btn');
+      const body = document.getElementById('countryBody');
 
+      function syncA11y() {
+        const expanded = !card.classList.contains('collapsed');
+        btn.setAttribute('aria-expanded', String(expanded));
+        card.setAttribute('aria-expanded', String(expanded));
+        body.hidden = !expanded;
+      }
 
- <!-- <div style="text-align: center;">
-    <h2 style="margin-top: 0;">🌀 Word Cloud from News</h2>
-    <canvas id="wordCloud" width="200" height="200"></canvas>
-  </div> -->
-       
+      btn.addEventListener('click', () => {
+        card.classList.toggle('collapsed');
+        syncA11y();
+      });
+      syncA11y();
+    })();
+  </script>
 </div>
 
   <button id="toggleSort" class="btn-preview">⬆️ Sort by Score</button>
