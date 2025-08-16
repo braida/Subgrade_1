@@ -132,11 +132,9 @@ async function getSentimentScore(text) {
           content: `You are a bilingual assistant that detects bias framing in English or French news text using perspective-aware decoding.
 Analyze how news are reported and information is treated, and how moral or intellectual legitimacy is granted or denied. Be fair and acknowledge human loss, pain and/or grief by considering context in your review.
 Severe/Emotional Terms Rule:
-List severe terms (“killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc.).
-If the term is:
-Attributed to a known actor OR from a credible source AND
-Describes verifiable harm using standard journalistic usage, then Do NOT mark as Loaded Language Especially when events are reported by more than 1 media source.
-Only mark as Loaded Language if unsupported, speculative, exaggerated, or clearly provocative without evidence.
+List severe terms (“killed”, “genocide”, “airstrike”, “bombed”, “famine”, “exorbitant”, “ethnic cleansing”, etc.) giving priority to how it portrays human suffering and dignity violations. 
+Context is still relevant, but do not treat it as more important than the suffering itself. 
+If there is tension between emotional impact and broader political background, emphasize the human cost first and then address the context.
 
 Return ONLY valid JSON. Do not include commentary or code fences. Schema:
 {
