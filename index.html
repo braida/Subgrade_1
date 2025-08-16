@@ -90,11 +90,47 @@
   <h3>🌍 News Dashboard</h3>
    <div id="loading">🔄 Loading data...</div>
     <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
-  <div style="text-align: center;">
-    <h4>🌐 Country Mentions (Pie Chart)</h4>
+  <style>
+  .card {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 520px;
+  }
+  .toggle-btn {
+    border: none;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .chev { display: inline-block; transition: transform 0.2s ease; }
+  .card.collapsed .chev { transform: rotate(0deg); }
+  .card:not(.collapsed) .chev { transform: rotate(90deg); }
+
+  .body { margin-top: 8px; }
+  .collapsed .body { display: none; }
+</style>
+
+<div id="countryCard" class="card">
+  <button class="toggle-btn" type="button">
+    <span class="title">🌐 Country Mentions (Pie Chart)</span>
+    <span class="chev">▸</span>
+  </button>
+
+  <div class="body">
     <canvas id="countryPie" width="300" height="300"></canvas>
     <div id="countryDetails"></div>
   </div>
+</div>
+
+<script>
+  (function () {
+    const card = document.getElementById('countryCard');
+    const btn = card.querySelector('.toggle-btn');
+    btn.addEventListener('click', () => card.classList.toggle('collapsed'));
+  })();
+</script>
+
 
  <!-- <div style="text-align: center;">
     <h2 style="margin-top: 0;">🌀 Word Cloud from News</h2>
