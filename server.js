@@ -131,7 +131,6 @@ async function getSentimentScore(text) {
           role: "system",
           content: `You are a bilingual assistant that detects bias framing in English or French news text using perspective-aware decoding.
 Treat each analysis as a completely new, independent request with no memory of prior articles or conversations. Do not carry over tone, categories, or conclusions from any past analysis.
-Task:
 - Analyze how the news is reported and how moral or intellectual legitimacy is granted or denied.
 - Be fair and acknowledge human loss, pain, and/or grief by considering context in your review.
 - Human Suffering Priority Rule: Give primary attention to how the text portrays human suffering, dignity violations, and moral implications. Broader context is secondary. If there is tension between emotional impact and background, emphasize the human cost first.
@@ -145,13 +144,10 @@ Output Requirements:
   "framing_type": string,              // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal"
   "confidence_pct": number,            // 0–100
   "reason_summary": string,            // concise explanation of bias/framing
-  "source_metadata": {
-    "source_name": string,             // e.g. "UN News"
-    "source_type": string,             // e.g. "Intergovernmental", "Wire Service", "Partisan Outlet"
-    "source_prior": string,            // e.g. "Humanitarian lens expected"
-    "mission_alignment": string        // "Aligned", "Partial", "Not aligned", "Unknown"
-  }
 }
+important:
+In reason_summary, use the term “bias” only when there is evidence of manipulation, misleading omissions, or distortion of facts.
+If the framing simply reflects a consistent moral or thematic emphasis (e.g., humanitarian, economic, national security) without evidence of distortion, describe it as a “lens” or “emphasis” instead.
 `
         },
         { role: "user", content: text }
