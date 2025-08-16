@@ -137,7 +137,7 @@ If the term is:
 Attributed to a known actor OR from a credible source AND
 Describes verifiable harm using standard journalistic usage, then Do NOT mark as Loaded Language.
 Only mark as Loaded Language if unsupported, speculative, exaggerated, or clearly provocative without evidence.
-If severe terms pass the check, focus on thematic framing such as humanitarian crisis or other.
+If severe terms are reported by variois sources then consider this trend in your analysis.
 
 Return ONLY valid JSON. Do not include commentary or code fences. Schema:
 {
