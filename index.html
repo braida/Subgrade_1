@@ -79,53 +79,57 @@
 
   <h3>🌍 News Dashboard</h3>
    <div id="loading">🔄 Loading data...</div>
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+  <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; align-items:flex-start; width:100%;">
   <style>
-    /* Scoped to this widget only */
-    #countryCard { text-align: center; margin: 0 auto; max-width: 520px; }
-    #countryCard .toggle-btn {
-      border: none; background: transparent; font: inherit; cursor: pointer; font-weight: 600;
+    #countryCard {
+      text-align:center;
+      margin:0 auto;
+      max-width:520px;
     }
-    #countryCard .chev { display: inline-block; transition: transform 0.2s ease; }
-    #countryCard.collapsed .chev { transform: rotate(0deg); }
-    #countryCard:not(.collapsed) .chev { transform: rotate(90deg); }
-
-    #countryCard .body { margin-top: 8px; }
-    #countryCard.collapsed .body { display: none; }
+    #countryToggle {
+      position:absolute;
+      left:-9999px;
+    }
+    #countryCard .toggle-btn {
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      border:none;
+      background:transparent;
+      font:inherit;
+      cursor:pointer;
+      font-weight:600;
+      padding:4px 0;
+    }
+    #countryCard .chev {
+      display:inline-block;
+      transition: transform .2s ease;
+    }
+    #countryToggle:checked + .toggle-btn .chev {
+      transform: rotate(90deg);
+    }
+    #countryCard .body {
+      margin-top:8px;
+      display:none;
+    }
+    #countryToggle:checked + .toggle-btn + .body {
+      display:block;
+    }
   </style>
 
-  <div id="countryCard" class="card collapsed" aria-expanded="false">
-    <button class="toggle-btn" type="button" aria-controls="countryBody" aria-expanded="false">
+  <div id="countryCard">
+    <input type="checkbox" id="countryToggle">
+    
+    <label class="toggle-btn" for="countryToggle">
       <span class="title">🌐 Country Mentions (Pie Chart)</span>
       <span class="chev">▸</span>
-    </button>
+    </label>
 
-    <div id="countryBody" class="body" hidden>
+    <div class="body" id="countryBody">
       <canvas id="countryPie" width="300" height="300"></canvas>
       <div id="countryDetails"></div>
     </div>
   </div>
-
-  <script>
-    (function () {
-      const card = document.getElementById('countryCard');
-      const btn = card.querySelector('.toggle-btn');
-      const body = document.getElementById('countryBody');
-
-      function syncA11y() {
-        const expanded = !card.classList.contains('collapsed');
-        btn.setAttribute('aria-expanded', String(expanded));
-        card.setAttribute('aria-expanded', String(expanded));
-        body.hidden = !expanded;
-      }
-
-      btn.addEventListener('click', () => {
-        card.classList.toggle('collapsed');
-        syncA11y();
-      });
-      syncA11y();
-    })();
-  </script>
 </div>
 
   <button id="toggleSort" class="btn-preview">⬆️ Sort by Score</button>
