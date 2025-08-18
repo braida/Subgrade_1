@@ -238,7 +238,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         const items = feed.items
           .filter(item => isRecent(item.pubDate))
-          .slice(0, 15);
+          .slice(0, 8);
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
