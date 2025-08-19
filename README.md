@@ -45,17 +45,8 @@ This project is released under **Creative Commons BY-NC 4.0**.
 - Free for research, education, and personal use.
 - Not permitted for commercial use without a license.  
 
-**Commercial Use**:  
-Startups, media organizations, or platforms wishing to integrate this framework into products may obtain a **commercial license**.  
- Contact me
----
-
-##  Collaboration
-If you’re building tools in:  
-- Explainable AI  
-- Bias detection & transparency  
-- Media literacy edtech  
-- Journalism technology  
+ 
+**[![DOI]**
 
 
 ---
