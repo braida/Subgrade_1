@@ -201,7 +201,7 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
           <td>${item.sentimentScore.toFixed(2)}</td>
           <td>${emotionLabel}</td>
           <td>${reasonlabel}</td>
-          <td>${new Date(item.pubDate).toLocaleDateString()}</td>
+          <td>${new Date(item.pubDate).toLocaleString()}</td>
           <td>${item.source || 'Unknown'}</td>
           <td>${item.confidence !== undefined ? (item.confidence ).toFixed(0) + '%' : '—'}</td>
         `;
