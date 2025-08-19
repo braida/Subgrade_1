@@ -1,1 +1,69 @@
-Init
+#  Framing Visibility Framework  
+
+**Author:** N.B
+**Status:** Early release (research + conceptual model)  
+**License:** CC-BY-NC 4.0 (non-commercial use permitted)  
+
+---
+
+##  Overview
+Language models (LLMs) are not neutral, they shape narratives.  
+Emotional yet factual language often gets flagged as “biased.”   Neutral tone can erase harm, sanitize lived experience, or flatten asymmetry in history.  
+
+The **Framing Visibility Framework** is a conceptual + technical toolkit designed to:  
+- Make framing visible in AI outputs.  
+- Highlight when “neutrality” is actually a perspective.  
+- Provide journalists, researchers, and educators with tools to interrogate narratives.  
+
+---
+
+##  Core Concepts
+1. **Neutrality as Erasure**  Neutral tone can obscure pain or injustice.  
+2. **Bias as Cultural Inheritance**  Data carries histories and dominant perspectives.  
+3. **Framing Visibility**  How outputs are framed.  
+4. **Accountability in Authorship**  History, language, and cultural memory must remain human-authored.  
+
+---
+
+##  What’s Included
+- **Model** (conceptual model).    
+- **Prototype examples** (e.g., news RSS headlines, perspective-aware summaries).  
+
+---
+
+##  Use Cases
+ **Journalism:** Check how stories shift tone across framings.  
+ **Media Literacy:** Teach students to interrogate neutrality.  
+ **AI Governance:** Audit AI generated outputs for hidden bias.  
+ **Research:** Explore how LLMs reproduce dominant narratives.  
+
+---
+
+##  License
+This project is released under **Creative Commons BY-NC 4.0**.  
+- Free for research, education, and personal use.
+- Not permitted for commercial use without a license.  
+
+**Commercial Use**:  
+Startups, media organizations, or platforms wishing to integrate this framework into products may obtain a **commercial license**.  
+ Contact me
+---
+
+##  Collaboration
+If you’re building tools in:  
+- Explainable AI  
+- Bias detection & transparency  
+- Media literacy edtech  
+- Journalism technology  
+
+…let’s talk. I license the framework and provide narrative strategy consulting for tool builders.  
+
+---
+
+
+
+
+
+---
+
+
