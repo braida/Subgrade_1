@@ -1,4 +1,5 @@
-#  Framing Visibility Framework  
+#  Make Perspective Visible:
+
 
 **Author:** N.B
 **Status:** Early release (research + conceptual model)  
@@ -56,11 +57,16 @@ If you’re building tools in:
 - Media literacy edtech  
 - Journalism technology  
 
-…let’s talk. I license the framework and provide narrative strategy consulting for tool builders.  
 
 ---
 
 
+## License
+
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+This project is licensed under the 
+[Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
 
 
 
