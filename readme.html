@@ -35,6 +35,22 @@
         .back-button:hover {
             background-color: #45a049;
         }
+        
+        #video-container {
+            width: 70%; 
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: #f4f4f4; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #video-container iframe {
+            max-width: 100%;
+            height: 384px; 
+            border-radius: 10px; 
+                }
     </style>
     
     <title>Context-Aware Bias Detection in News Headlines — README:</title>
@@ -98,23 +114,19 @@ But the meaning is on us.  </p>
     </blockquote>
 
     <h2>Why Fair Narratives Matter</h2>
-    <p>
-        Fair and balanced narratives shape how societies understand truth, empathy, and responsibility. 
-        Policies promoting accurate and inclusive storytelling can reduce bias, improve trust in institutions, 
-        and empower communities to engage in constructive dialogue.
-    </p>
-    <p>According to UNESCO’s <em>Global Media and Information Literacy</em> framework, fostering critical thinking 
+      <p>According to UNESCO’s <em>Global Media and Information Literacy</em> framework, fostering critical thinking 
         and equitable representation in media is essential for informed decision-making and protecting democratic values.
     </p>
-    <p>
-        By improving the lens through which readers view the world, we create space for compassion, innovation, 
-        and collective progress.
-    </p>
+    
 
-
-    <button class="back-button" onclick="window.open('https://archive.org/details/richard-feynman-computers-from-the-inside-out/MPF+Redumper/FEYNMAN_CFTIO.iso');">
-        Revisit Heuristics
-    </button>
+<div id="video-container">
+        <iframe src="https://archive.org/embed/richard-feynman-computers-from-the-inside-out/MPF Redumper/FEYNMAN_CFTIO.iso" 
+                frameborder="0" 
+                webkitallowfullscreen="true" 
+                mozallowfullscreen="true" 
+                allowfullscreen>
+        </iframe>
+    </div>
 
 
 
