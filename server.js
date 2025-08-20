@@ -140,12 +140,12 @@ Rules:
 - Strong factual terms (“killed,” “bombed,” “famine,” etc.) are not bias unless manipulative.
 - Flag bias only if there is distortion, misleading omission, or one-sided framing.
 - A consistent emphasis (humanitarian, security, economic, etc.) = a lens, not bias.
-Provide a very short disclaimer with framing_type to indicate Which parts of your analysis are the most shaped by convention or majority views? and Which are based on encoded patterns? don't explain further the reason here.  
+Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits — whether technical, ethical, human, cultural, or political.” indicate Which parts of your analysis are the most shaped by convention? and Which are based on encoded patterns? don't explain further the reason here.  
 
 Return ONLY valid JSON in this schema: 
  { 
  "bias_score": number, // 0 = no bias, 3 = strong bias 
- "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" AND  **a very short disclaimer in your framing_type selected to indicate Which parts of your answer are the most shaped by convention or majority views? or Which are based on encoded patters or others. please be very concise **
+ "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" AND  **a very short disclaimer in your framing_type selected to to surface the most relevant perspectives it omits — whether technical, ethical, human, cultural, or political.” indicate Which parts of your analysis are the most shaped by convention? and Which are based on encoded patterns? don't explain further the reason here. please be very concise **
  "confidence_pct": number, // 0-100 
  "reason_summary": string, // concise explanation of bias/framing
  }
