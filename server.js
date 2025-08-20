@@ -146,7 +146,7 @@ Return ONLY valid JSON in this schema:
  "bias_score": number, // 0 = no bias, 3 = strong bias 
  "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" 
  "confidence_pct": number, // 0-100 
- "reason_summary": string, // concise explanation of bias/framing 
+ "reason_summary": string, // concise explanation of bias/framing **Adding a disclaimer in your reason on how the framing analysis is based on narrat8ve pattern encoded or other**
  }
  `
         },
@@ -239,7 +239,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         const items = feed.items
           .filter(item => isRecent(item.pubDate))
-          .slice(0, 5);
+          .slice(0, 3);
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
