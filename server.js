@@ -238,7 +238,7 @@ app.get('/bbc/rss', async (req, res) => {
 
         const items = feed.items
           .filter(item => isRecent(item.pubDate))
-          .slice(0, 8);
+          .slice(0, 5);
 
         for (const item of items) {
           const combinedText = `${item.title || ''} ${item.description || ''}`;
@@ -263,7 +263,7 @@ app.get('/bbc/rss', async (req, res) => {
     }
 
     allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    res.json(allItems.slice(0, 50));
+    res.json(allItems.slice(0, 35));
   } catch (err) {
     console.error("❌ RSS processing failed:", err.message);
     res.status(500).json({ error: "RSS error" });
@@ -295,10 +295,10 @@ app.get('/bbc/rss/info', (req, res) => {
   });
 });
 app.get('/', (req, res) => {
-  res.send("✅ News Sentiment API is live. Use /bbc/rss or /bbc/rss/info.");
+  res.send(" News Sentiment API is live. Use /bbc/rss or /bbc/rss/info.");
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(` Server running on port ${PORT}`);
 });
  
