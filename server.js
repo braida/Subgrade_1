@@ -147,7 +147,7 @@ Return ONLY valid JSON in this schema:
  "bias_score": number, // 0 = no bias, 3 = strong bias 
  "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" AND  **a very short disclaimer in your framing_type selected to to surface the most relevant perspectives it omits — whether technical, ethical, human, cultural, or political.” indicate Which parts of your analysis are the most shaped by convention? and Which are based on encoded patterns? don't explain further the reason here. please be very concise **
  "confidence_pct": number, // 0-100 
- "reason_summary": string, // Always explain it using this equation format: Signals (textual cues in the text). Conventions (majority or cultural defaults shaping interpretation). Encoded patterns (habits from your training data). = framing_type: X vs. Y. Keep short like a worked-out problem, not just a summary
+ "reason_summary": string, // Always explain it using this equation format: Signals (textual cues in the text). Conventions (majority or cultural defaults shaping interpretation). Encoded patterns (and source patterns if known). = framing_type: X vs. Y. Keep short like a worked-out problem, not just a summary
 }
  `
         },
@@ -265,7 +265,7 @@ app.get('/bbc/rss', async (req, res) => {
     }
 
     allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    res.json(allItems.slice(0, 35));
+    res.json(allItems.slice(0, 25));
   } catch (err) {
     console.error("❌ RSS processing failed:", err.message);
     res.status(500).json({ error: "RSS error" });
