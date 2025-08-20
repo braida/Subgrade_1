@@ -145,7 +145,8 @@ Return ONLY valid JSON in this schema:
  { 
  "bias_score": number, // 0 = no bias, 3 = strong bias 
  "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" 
- "confidence_pct": number, // 0-100 "reason_summary": string, // concise explanation of bias/framing 
+ "confidence_pct": number, // 0-100 
+ "reason_summary": string, // concise explanation of bias/framing 
  }
  `
         },
