@@ -219,7 +219,7 @@ app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml',
     
-    'https://feeds.skynews.com/feeds/rss/world.xml',
+   // 'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://news.un.org/feed/subscribe/en/news/all/rss.xml',
   //  'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15',
     
