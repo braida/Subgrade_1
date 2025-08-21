@@ -140,14 +140,14 @@ Rules:
 - Strong factual terms (“killed,” “bombed,” “famine,” etc.) are not bias unless manipulative.
 - Flag bias only if there is distortion, misleading omission, or one-sided framing.
 - A consistent emphasis (humanitarian, security, economic, etc.) = a lens, not bias.
-Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits — whether technical, ethical, human, cultural, or political.” indicate Which parts of your analysis are the most shaped by convention? and Which are based on encoded patterns? don't explain further the reason here.  
+Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits - whether technical, ethical, human, cultural, or political.”  don't explain further the reason here.  
 
 Return ONLY valid JSON in this schema: 
  { 
  "bias_score": number, // 0 = no bias, 3 = strong bias 
  "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" AND  **a very short disclaimer in your framing_type selected to to surface the most relevant perspectives it omits — whether technical, ethical, human, cultural, or political.” indicate Which parts of your analysis are the most shaped by convention? and Which are based on encoded patterns? don't explain further the reason here. please be very concise **
  "confidence_pct": number, // 0-100 
- "reason_summary": string, // Always explain it using this equation format: Signals (textual cues in the text). Conventions (majority or cultural defaults shaping interpretation). Encoded patterns (give more context to specify the pattern reproduced and if constant framing of this issue as a binary). = framing_type: X vs. Y. Keep short like a worked-out problem, not just a summary
+ "reason_summary": string, // Always explain it using this equation format: Signals (textual cues in the text). Conventions (majority or cultural defaults shaping interpretation). Encoded patterns (to specify the pattern reproduced write them out as full sentences that explain what the pattern represents). = framing_type: X vs. Y. Keep short like a worked-out problem
 }
  `
         },
