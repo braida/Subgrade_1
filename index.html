@@ -356,22 +356,28 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
   </script>
    
  <!-- Click C on the keyboard -->
-<script> 
-document.addEventListener('keydown', e => {
-  if (e.key.toLowerCase() === 'c') {
-    for (let i = 0; i < 10; i++) {
-      let cat = document.createElement('div');
-      cat.innerHTML = '(*‿*)ノ Welcome, this is just a poke...(◕‿◕)つ ';
-      cat.style.position = 'fixed';
-      cat.style.left = Math.random() * window.innerWidth + 'px';
-      cat.style.top = '-50px';
-      cat.style.fontSize = '2em';
-      cat.style.animation = 'fall 3s linear infinite';
-      document.body.appendChild(cat);
-
-      setTimeout(() => cat.remove(), 3000);
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'c') {
+      const catCount = document.querySelectorAll('.falling-cat').length;
+      if (catCount < 2) { // Limit 
+        const cat = document.createElement('div');
+        cat.classList.add('falling-cat');
+        cat.textContent = '(*‿*)ノ Welcome, this is just a poke...(◕‿◕)つ';
+        cat.style.position = 'fixed';
+        cat.style.left = Math.random() * window.innerWidth + 'px';
+        cat.style.top = '-50px';
+        cat.style.fontSize = '2em';
+        cat.style.transition = 'top 3s linear';
+        document.body.appendChild(cat);
+        setTimeout(() => {
+          cat.style.top = window.innerHeight + 'px';
+        }, 10); 
+        setTimeout(() => cat.remove(), 3000);
+      }
     }
-  }
+  });
 });
 </script>
 
