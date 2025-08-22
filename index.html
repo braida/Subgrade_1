@@ -151,12 +151,13 @@
         <th>#</th>
         <th>Title</th>
         <th>Score</th>
-        <th>Framing Type & <b>Why <small>perspective decoding</small></b></th> 
+        <th>Framing Type <b> <small>vs other</small></b></th> 
     <!--<th>Confidence Rate</th>  -->
         <th>Reason <small>Signals+Conventions+Patterns = Framing_type</small></th>
          <th>Date</th>
         <th>Source</th>
          <th>Score Confidence rate</th>
+         <th>GPT generated summary</th>
       </tr>
     </thead>
     <tbody id="newsTableBody">
@@ -182,7 +183,7 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
       'Yemen', 'Syria','US','Algeria','Ireland','Dubai','UAE', 'Spain', 'Italy','Somali','Laos','Nepal',
        'Bulgary', 'Turkey', 'Greece', 'Israel', 'Palestine', 'Ukraine', 'Russia', 'Thailand', 'Cambodia','Colombia','Mexico',
        'Morocco','Tunisia','Jordan','Lebanon', 'Libya','Egypt','Afghanistan','Kashmir',
-       'Qatar', 'Saudi Arabia','Portugal'
+       'Qatar', 'Saudi Arabia','Portugal', 'New York','Chicago','Washington', 'California', 'Texas'
     ];
 
     function togglePreview(index) {
@@ -199,7 +200,8 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
       data.forEach((item, i) => {
         const row = document.createElement("tr");
         const emotionLabel = typeof item.emotion === 'string'? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1): '—';
-        const reasonlabel = typeof item.reason === 'string'? item.reason.charAt(0).toUpperCase() + item.reason.slice(1): '—'
+        const reasonlabel = typeof item.reason === 'string'? item.reason.charAt(0).toUpperCase() + item.reason.slice(1): '—';
+        const aisummarylabel = typeof item.aisummary === 'string'? item.aisummary.charAt(0).toUpperCase() + item.aisummary.slice(1): '—'
          
         row.innerHTML = `
           <td>${i + 1}</td>
@@ -213,6 +215,7 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
           <td>${new Date(item.pubDate).toLocaleString()}</td>
           <td>${item.source || 'Unknown'}</td>
           <td>${item.confidence !== undefined ? (item.confidence ).toFixed(0) + '%' : '—'}</td>
+          <td>${aisummarylabel}</td>
         `;
 
          
