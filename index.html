@@ -156,8 +156,9 @@
         <th>Reason <small>Signals+Conventions+Patterns = Framing_type</small></th>
          <th>Date</th>
         <th>Source</th>
-         <th>Score Confidence rate</th>
          <th>GPT generated summary</th>
+         <th><i>Score Confidence rate</i></th>
+         
       </tr>
     </thead>
     <tbody id="newsTableBody">
@@ -207,15 +208,16 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
           <td>${i + 1}</td>
           <td>
             <a href="${item.link}" target="_blank">${item.title}</a><br>
-            <button class="btn-preview" onclick="togglePreview(${i})">🔍 Preview</button>
+            <button class="btn-preview" onclick="togglePreview(${i})">🔍 Description </button>
           </td>
           <td>${item.sentimentScore.toFixed(2)}</td>
           <td>${emotionLabel}</td>
           <td>${reasonlabel}</td>
           <td>${new Date(item.pubDate).toLocaleString()}</td>
           <td>${item.source || 'Unknown'}</td>
+          <td>${aisummarylabel}</td> 
           <td>${item.confidence !== undefined ? (item.confidence ).toFixed(0) + '%' : '—'}</td>
-          <td>${aisummarylabel}</td>
+          
         `;
 
          
