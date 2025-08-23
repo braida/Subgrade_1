@@ -225,7 +225,7 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
         preview.id = `preview-${i}`;
         preview.className = 'preview-row';
         preview.innerHTML = `
-          <td colspan="9">
+          <td colspan="8">
             <div class="preview-content">
               <strong>Summary:</strong><br>${item.description || "No description available."}
             </div>
@@ -321,7 +321,7 @@ Journalists and humanitarian workers often say:<i>“If it’s not visible, it d
     async function fetchData() {
      //  document.getElementById("loading").style.display = 'block';
       const tableBody = document.getElementById("newsTableBody");
-      document.getElementById("loading").style.display = 'block';
+      document.getElementById("loading").style.display = 'flex';
 
       try {
         
