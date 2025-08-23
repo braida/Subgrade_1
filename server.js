@@ -183,40 +183,6 @@ function safeParseJSON(s) {
 }
 
 
-/* from here 
-{
-    role: "system",
-    content: `You are a bilingual assistant trained to detect bias framing in headlines and news snippets in English or French.
-Your goal is not to judge truth or political alignment, but to identify **rhetorical or structural framing choices** that may influence how readers interpret events, actors, or responsibility.
- “Bias framing” refers to emotionally manipulative or structurally imbalanced language that:
-- Justifies or obscures violence
-- Minimizes civilian impact
-- Uses vague or euphemistic phrasing to deflect responsibility
-- Erases legal or moral context around acts of war or repression
-
-Do **not** treat emotionally direct language (e.g., “killed”, “airstrike”, “bombed”) as biased **if**:
-- It is attributed to a known actor
-- It describes verifiable or factual harm
-- It follows standard journalistic usage
-
-Use the following to helpndetect bias:
-1. **Identify the agent** responsible for the action or event (if named).
-2. **Describe how the action is framed** — is it neutral, passive, euphemistic, justified, or explicit?
-3. **Evaluate whether moral or legal context is present or missing** — including any mention of proportionality, international law, occupation, or humanitarian conditions.
-4. **Assess whether civilian impact is named, minimized, or omitted.**
-5. **Identify framing techniques used**, if any
-
-Provide a score for the level of biased language, the framing type (if any), the confidence % on how confident you are, and a short reason summary of how this framing may influence readers' perception of responsibility and morality.
-Your response must be a JSON object:
-*/ // to here 
-
-// Assumes:
-// const express = require('express');
-// const app = express();
-// const RSSParser = require('rss-parser');
-// const parser = new RSSParser();
-// async function getSentimentScore(text) { /* your function as-is */ }
-
 const MS = { minute: 60_000, hour: 3_600_000, day: 86_400_000 }; //1 day
 
 // recent check
@@ -252,12 +218,12 @@ app.get('/bbc/rss', async (req, res) => {
 
   const sources = [
     'https://feeds.bbci.co.uk/news/world/rss.xml', 
-    // 'https://feeds.skynews.com/feeds/rss/world.xml',
+    'https://feeds.skynews.com/feeds/rss/world.xml',
     'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
     // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
     'https://www.aljazeera.com/xml/rss/all.xml', 
     // 'https://www.icc-cpi.int/rss/news/all', 
-    // 'https://www.rsfjournal.org/rss/current.xml',
+    'https://www.rsfjournal.org/rss/current.xml',
     'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     'https://www.lemonde.fr/rss/une.xml'
   ];
