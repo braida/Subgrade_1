@@ -210,71 +210,165 @@ Provide a score for the level of biased language, the framing type (if any), the
 Your response must be a JSON object:
 */ // to here 
 
-function isRecent(pubDate) {
-  if (!pubDate) return false;
-  const parsedDate = new Date(pubDate);
-  const now = new Date();
-  const sevenDaysAgo = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);  // data back 1 days ago
-  return !isNaN(parsedDate.getTime()) && parsedDate >= sevenDaysAgo && parsedDate <= now;
+// Assumes:
+// const express = require('express');
+// const app = express();
+// const RSSParser = require('rss-parser');
+// const parser = new RSSParser();
+// async function getSentimentScore(text) { /* your function as-is */ }
+
+const MS = { minute: 60_000, hour: 3_600_000, day: 86_400_000 }; //1 day
+
+// recent check
+function isRecent(dateLike, days = 1) {
+  if (!dateLike) return false;
+  const t = Date.parse(dateLike);
+  if (Number.isNaN(t)) return false;
+
+  const now = Date.now();
+  const lower = now - days * MS.day;
+  const upper = now + 5 * MS.minute; // clock ahead timestamps
+  return t >= lower && t <= upper;
 }
 
+// HTML stripper for descriptions
+function stripHtml(s = "") {
+  return s.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+}
+
+// memory cache 
+let cache = { data: null, expiresAt: 0 };
+
 app.get('/bbc/rss', async (req, res) => {
+  // Query params: ?days=1&perSource=3&limit=15
+  const days = Math.max(0, parseInt(req.query.days ?? "1", 10) || 1);
+  const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
+  const limit = Math.max(1, parseInt(req.query.limit ?? "15", 10) || 15);
+
+  // cache
+  if (cache.data && cache.expiresAt > Date.now()) {
+    return res.json(cache.data.slice(0, limit));
+  }
+
   const sources = [
-    'https://feeds.bbci.co.uk/news/world/rss.xml',
-    
-   // 'https://feeds.skynews.com/feeds/rss/world.xml',
-    'https://news.un.org/feed/subscribe/en/news/all/rss.xml',
-  //  'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15',
-    
-    'https://www.aljazeera.com/xml/rss/all.xml',
-  //  'https://www.icc-cpi.int/rss/news/all',
- //   'https://www.rsfjournal.org/rss/current.xml',
+    'https://feeds.bbci.co.uk/news/world/rss.xml', 
+    // 'https://feeds.skynews.com/feeds/rss/world.xml',
+    'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
+    // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
+    'https://www.aljazeera.com/xml/rss/all.xml', 
+    // 'https://www.icc-cpi.int/rss/news/all', 
+    // 'https://www.rsfjournal.org/rss/current.xml',
     'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
-   'https://www.lemonde.fr/rss/une.xml'
+    'https://www.lemonde.fr/rss/une.xml'
   ];
 
   try {
-    let allItems = [];
-
-    for (const url of sources) {
-      try {
+    // Fetch all feeds in parallel 
+    const feedResults = await Promise.allSettled(
+      sources.map(async (url) => {
         console.log(`📡 Fetching: ${url}`);
         const feed = await parser.parseURL(url);
-
-        const items = feed.items
-          .filter(item => isRecent(item.pubDate))
-          .slice(0, 3);
-
-        for (const item of items) {
-          const combinedText = `${item.title || ''} ${item.description || ''}`;
-          const { score, reason, emotion, confidence, aisummary } = await getSentimentScore(combinedText);
-        // const emotion = score > 0 ? 'UpBeat' : score < 0 ? 'DownBeat' : 'Neutral';
-
-          allItems.push({
+        //
+        const items = (feed.items || [])
+          .filter(it => isRecent(it.isoDate || it.pubDate, days))
+          .slice(0, perSource)
+          .map(it => ({
             source: feed.title || new URL(url).hostname,
-            title: item.title,
-            link: item.link,
-            pubDate: item.pubDate,
-            description: item.contentSnippet || item.content || '',
-            sentimentScore: parseFloat(score.toFixed(4)),
-            confidence: parseFloat(confidence.toFixed(4)),
-            emotion,
-            reason,
-            aisummary
-          });
-        }
-      } catch (err) {
-        console.error(`❌ Feed failed (${url}):`, err.message);
+            title: it.title || "",
+            link: it.link,
+            pubDate: it.isoDate || it.pubDate || null,
+            // strip HTML
+            description: stripHtml(it.contentSnippet || it.content || ""),
+            // Sentiment fields filled later
+            _combinedText: `${it.title || ''} ${stripHtml(it.contentSnippet || it.content || '')}`.trim(),
+          }));
+
+        return items;
+      })
+    );
+
+    let allItems = [];
+    for (const r of feedResults) {
+      if (r.status === 'fulfilled') {
+        allItems.push(...r.value);
+      } else {
+        console.error(`❌ Feed failed:`, r.reason?.message || r.reason);
       }
     }
 
-    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    res.json(allItems.slice(0, 15));
+    // deduplicate by link
+    const dedupMap = new Map();
+    for (const it of allItems) {
+      const key = it.link || `${it.title}|${it.pubDate}`;
+      if (!dedupMap.has(key)) dedupMap.set(key, it);
+    }
+    allItems = Array.from(dedupMap.values());
+
+    // Get sentiment 
+    const chunkSize = 10;
+    const chunks = [];
+    for (let i = 0; i < allItems.length; i += chunkSize) {
+      chunks.push(allItems.slice(i, i + chunkSize));
+    }
+
+    for (const chunk of chunks) {
+      const scored = await Promise.allSettled(
+        chunk.map(async (item) => {
+          const { score, reason, emotion, confidence, aisummary } =
+            await getSentimentScore(item._combinedText);
+
+          return {
+            ...item,
+            sentimentScore: Number.isFinite(score) ? Number(score.toFixed(4)) : null,
+            confidence: Number.isFinite(confidence) ? Number(confidence.toFixed(4)) : null,
+            emotion: emotion ?? null,
+            reason: reason ?? null,
+            aisummary: aisummary ?? null,
+          };
+        })
+      );
+      for (let i = 0; i < scored.length; i++) {
+        if (scored[i].status === 'fulfilled') {
+          const idx = allItems.indexOf(chunk[i]);
+          allItems[idx] = scored[i].value;
+        } else {
+          console.error('❌ Sentiment failed:', scored[i].reason?.message || scored[i].reason);
+          // Keep unscored item without sentiment fields
+          const idx = allItems.indexOf(chunk[i]);
+          allItems[idx] = {
+            ...chunk[i],
+            sentimentScore: null,
+            confidence: null,
+            emotion: null,
+            reason: null,
+            aisummary: null,
+          };
+        }
+      }
+    }
+
+    // Sort newest first
+    allItems.sort((a, b) => {
+      const ta = Date.parse(a.pubDate || '') || 0;
+      const tb = Date.parse(b.pubDate || '') || 0;
+      return tb - ta;
+    });
+
+    const payload = allItems.slice(0, limit).map(({ _combinedText, ...rest }) => rest);
+
+    // Update cache
+    cache = {
+      data: payload,
+      expiresAt: Date.now() + 5 * MS.minute,
+    };
+
+    res.json(payload);
   } catch (err) {
-    console.error("❌ RSS processing failed:", err.message);
+    console.error("❌ RSS processing failed:", err.message || err);
     res.status(500).json({ error: "RSS error" });
   }
 });
+
 
 // Test + info routes
 app.get('/test', async (req, res) => {
