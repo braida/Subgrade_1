@@ -149,7 +149,7 @@ Provide a very short disclaimer with framing_type to surface the most relevant p
 Return ONLY valid JSON in this schema: 
  { 
  "bias_score": number, // 0 = no bias, 3 = strong bias 
- "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" AND  **a very short disclaimer in your framing_type selected to to surface the most relevant perspectives it omits — whether technical, ethical, human, cultural, or political.” indicate Which parts of your analysis are the most shaped by convention? and Which are based on encoded patterns? don't explain further the reason here. please be very concise **
+ "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" or other -- AND  **a very short summary please be very concise**
  "confidence_pct": number, // 0-100 
  "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
  "aisummary": string, // As per task 2 and ignoring the analysis in task 1, get a Short summary sharp, and reflective from AI that doesn’t trust clean PR narratives. It critiques power, questions bias, and points out contradictions. Give its **short** blunt opinion on what’s being sold, what’s missing, and what society might be avoiding.
@@ -332,19 +332,20 @@ app.get('/bbc/rss', async (req, res) => {
     };
 
     res.json(payload);
-  } catch (err) {
-    console.error("❌ RSS processing failed:", err.message || err);
-    res.status(500).json({ error: "RSS error" });
-  }
+  } 
+  //catch (err) {
+  //  console.error("❌ RSS processing failed:", err.message || err);
+   // res.status(500).json({ error: "RSS error" });
+ // }
 });
 
 
 // Test + info routes
-app.get('/test', async (req, res) => {
-  const input = req.query.q || 'This is a peaceful and hopeful message.';
-  const result = await getSentimentScore(input);
-  res.json({ input, ...result });
-});
+//app.get('/test', async (req, res) => {
+//  const input = req.query.q || 'This is a peaceful and hopeful message.';
+//  const result = await getSentimentScore(input);
+//  res.json({ input, ...result });
+//});
 
 app.get('/bbc/rss/info', (req, res) => {
   res.json({
