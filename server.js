@@ -333,19 +333,19 @@ app.get('/bbc/rss', async (req, res) => {
 
     res.json(payload);
   } 
-  //catch (err) {
-  //  console.error("❌ RSS processing failed:", err.message || err);
-   // res.status(500).json({ error: "RSS error" });
- // }
+  catch (err) {
+    console.error("❌ RSS processing failed:", err.message || err);
+    res.status(500).json({ error: "RSS error" });
+  }
 });
 
 
 // Test + info routes
-//app.get('/test', async (req, res) => {
-//  const input = req.query.q || 'This is a peaceful and hopeful message.';
-//  const result = await getSentimentScore(input);
-//  res.json({ input, ...result });
-//});
+app.get('/test', async (req, res) => {
+  const input = req.query.q || 'This is a peaceful and hopeful message.';
+  const result = await getSentimentScore(input);
+  res.json({ input, ...result });
+});
 
 app.get('/bbc/rss/info', (req, res) => {
   res.json({
