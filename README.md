@@ -13,6 +13,13 @@
 Language models (LLMs) are not neutral, they shape narratives.  
 Emotional yet factual language often gets flagged as “biased.”   Neutral tone can erase harm, sanitize lived experience, or flatten asymmetry in history.  
 
+## Spoiler: Models Overcorrect 
+When an AI systems is tasked with identifying bias in news texts, it inevitably brings its inherited worldview into the evaluation process. This can create a layer of meta-bias, where the model’s sense of what counts as “neutral” is already shaped by the dominant framings in its training corpus. As a result, the system may overcorrect by flagging ordinary or balanced phrasing as biased simply because it does not align with its internal baseline, while at the same time overlooking subtler framings that mirror its inherited assumptions.
+
+Which is why AI-driven bias detection is generally treated in computational journalism and social science as an assistive tool rather than a source of definitive truth.
+
+---
+
 The **Framing Visibility Framework** is a conceptual + technical toolkit designed to:  
 - Make framing visible in AI outputs.  
 - Highlight when “neutrality” is actually a perspective.  
