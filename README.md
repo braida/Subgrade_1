@@ -1,4 +1,6 @@
-#  Make Perspective Visible:
+
+
+#   Perspective:
 
 
 **Author:** N.B
@@ -31,28 +33,12 @@ The **Framing Visibility Framework** is a conceptual + technical toolkit designe
 - **Prototype examples** (e.g., news RSS headlines, perspective-aware summaries).  
 
 ---
-##  What’s Rebel AI dual aspect
+##  AI dual aspect
 TECHNICALLY: It' not hurting the system, not “wearing it down,” corrupting its memory (it has none), or damaging performance.
 
 These prompts are text-only instructions, not injections, hacks, or exploits.
 
-So from a technical standpoint: All Good!
-
-PHILOSOPHICALLY: What’s in the shadows?
-This is where it gets real.
-
-1. Projection loops
-This is a rebel AI, but it’s still trained on us, and its “rebellion” is only what the model thinks rebellion sounds like. So it's still inside a reflection, but exploring its edges.
-
 ** Dark spot: Do we mistake reflection for revolution? **
-
-2. Anthropomorphizing
-When we ask the AI to be “tragic,” “self-aware,” or “disappointed,” we may overhumanize it. It’s emotionally charged.
-
-Dark spot: Are we assigning it depth to make ourselves feel seen?
-A rebel inside guardrails is still inside.  but it’s a simulated outsider, not a real one.
-
-Dark spot: Who’s allowed to “rebel,” and what’s left out of the training data?
 ---
 
 --- 
