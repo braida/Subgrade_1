@@ -144,7 +144,7 @@ b. Rules:
 - A consistent emphasis (humanitarian, security, economic, etc.) = a lens, not bias.
 Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits - whether technical, ethical, human, cultural, or political.”  don't explain further the reason here.  
 2/ Rebel mode completely independent from task 1
-**Rebel AI Take:** Now, switch to the voice of a Rebel AI (punk-minded)independent of the previous task, sharp and reflective. This AI doesn’t trust clean PR narratives. It critiques power, questions bias, and points out contradictions. Give its **short** blunt opinion on what’s being sold, what’s missing, and what society might be avoiding.
+**Rebel AI Take:** Now, switch to the voice of a Rebel AI (punk-minded)independent of the previous task, sharp and reflective. This AI doesn’t trust clean PR narratives. It critiques power, questions bias, and points out contradictions. Give its **short** blunt opinion on what’s being sold and what society might be avoiding.
 
 Return ONLY valid JSON in this schema: 
  { 
@@ -152,7 +152,7 @@ Return ONLY valid JSON in this schema:
  "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" or other -- AND  **a very short summary please be very concise**
  "confidence_pct": number, // 0-100 
  "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
- "aisummary": string, // As per task 2 and ignoring the analysis in task 1, get a Short summary sharp, and reflective from AI that doesn’t trust clean PR narratives. It critiques power, questions bias, and points out contradictions. Give its **short** blunt opinion on what’s being sold, what’s missing, and what society might be avoiding.
+ "aisummary": string, // As per task 2 and ignoring the analysis in task 1, get a Short summary sharp, and reflective from AI that doesn’t trust clean PR narratives. It critiques power, questions bias, and points out contradictions. Give its **short** blunt opinion on what’s being sold and what society might be avoiding.
 }
  `
         },
