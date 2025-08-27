@@ -151,7 +151,7 @@ Return ONLY valid JSON in this schema:
  "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" or other -- AND  **a very short summary please be very concise**
  "confidence_pct": number, // 0-100 
  "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
- "aisummary": string, // As per task 2** evaluate the wisdom in the words used and their meaning in the stories. Give your **short** opinion and what society can do better **please be concise**
+ "aisummary": string, // As per task 2** evaluate the wisdom in the words used and their meaning in the stories. Give your **short** opinion 
 }
  `
         },
