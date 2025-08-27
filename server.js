@@ -157,16 +157,17 @@ Return ONLY valid JSON in this schema:
           role: "system",
           content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess from 1 relevant to 3 good read.
           Give a short summary of the text and **be concise** to why it's interesting.
-          Explain briefly like I'm 5 what's the impact of this type of research. **be concise**
+          Give a 1 to 3 examples of key impact area related to this news.
+          Explain briefly like I'm 5 what's the impact of this type of research on society or life or a specific field of study. **be concise**
           
 Return ONLY valid JSON in this schema: 
  { 
- "bias_score": number, // 0 = no bias, 3 = strong bias 
- "framing_type": string, // short summary of the text and why it's interesting. **be concise** 
+ "bias_score": number, // 1 = relevant topic in it's own field only, 3 = strong impact across multiple areas.
+ "framing_type": string, // short summary of the text and why it's interesting and does it have an impact. **be concise** 
  "confidence_pct": number, // 0-100 
- "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
- "aisummary": string, // also explain briefly like I'm 5 what's the impact of this type of research. **be concise**
- }
+ "reason_summary": string, // Give a 1 to 3 examples of key impact area related to this news.
+ "aisummary": string, // Explain briefly like I'm 5 what's the impact of this news on society or life or a specific field of study. **be concise**
+  }
  `
         },
         { role: "user", content: text }
