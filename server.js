@@ -143,7 +143,7 @@ b. Rules:
 - A consistent emphasis (humanitarian, security, economic, etc.) = a lens, not bias.
 Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits - whether technical, ethical, human, cultural, or political.”  don't explain further the reason here.  
 Task 2/ aisummary: Evaluate wisdom behind stories analysed completely independent from task 1
-**Wisdom AI Take:** Now, switch to the voice of wisdom independent of the previous task, wise and reflective of all text reviewed, This AI evaluate the wisdom in the words used and their meaning in the stories. Give its **short** opinion and what society can do better.**please be concise**
+**Wisdom AI Take:** Now, switch to the voice of wisdom independent of the previous task, wise and reflective of all text reviewed, This AI evaluate the wisdom in the words used and their meaning in the stories. Give a **short** opinion **please be concise**
 
 Return ONLY valid JSON in this schema: 
  { 
