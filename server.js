@@ -124,12 +124,11 @@ async function getSentimentScore(text) {
       
       model: "gpt-4o-mini",
       temperature: 0,
-      // ⬇️ Force JSON
+      // Force JSON
       response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: `You are a bilingual assistant (English & French) that detects bias framing in news text and have two tasks.
+    /*
+    note:
+    You are a bilingual assistant (English & French) that detects bias framing in news text and have two tasks.
 Each task is independent.
 Task 1/ Neutral mode and do not reference earlier content
 a. Principles:
@@ -144,7 +143,6 @@ b. Rules:
 Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits - whether technical, ethical, human, cultural, or political.”  don't explain further the reason here.  
 Task 2/ aisummary: Evaluate wisdom behind stories analysed completely independent from task 1
 **Wisdom AI Take:** Now, switch to the voice of wisdom independent of the previous task, wise and reflective of all text reviewed, This AI evaluate the wisdom in the words used and their meaning in the stories. Give a **short** opinion **please be concise**
-
 Return ONLY valid JSON in this schema: 
  { 
  "bias_score": number, // 0 = no bias, 3 = strong bias 
@@ -153,6 +151,22 @@ Return ONLY valid JSON in this schema:
  "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
  "aisummary": string, // As per task 2** evaluate the wisdom in the words used and their meaning in the stories. Give your **short** opinion 
 }
+    */
+      messages: [
+        {
+          role: "system",
+          content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess from 1 relevant to 3 good read.
+          Give a short summary of the text and **be concise** to why it's interesting.
+          Explain briefly like I'm 5 what's the impact of this type of research. **be concise**
+          
+Return ONLY valid JSON in this schema: 
+ { 
+ "bias_score": number, // 0 = no bias, 3 = strong bias 
+ "framing_type": string, // short summary of the text and why it's interesting. **be concise** 
+ "confidence_pct": number, // 0-100 
+ "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
+ "aisummary": string, // also explain briefly like I'm 5 what's the impact of this type of research. **be concise**
+ }
  `
         },
         { role: "user", content: text }
@@ -219,15 +233,20 @@ app.get('/bbc/rss', async (req, res) => {
   }
 
   const sources = [
-    'https://feeds.bbci.co.uk/news/world/rss.xml', 
-    'https://feeds.skynews.com/feeds/rss/world.xml',
-    'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
+    'https://www.sciencedaily.com/rss/top/science.xml',
+    'https://www.newscientist.com/feed/home/',
+    'https://news.mit.edu/rss/topic/artificial-intelligence2',
+    'https://www.frontiersin.org/journals/artificial-intelligence/rss'
+
+  //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
+ //   'https://feeds.skynews.com/feeds/rss/world.xml',
+  //  'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
     // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
-    'https://www.aljazeera.com/xml/rss/all.xml', 
+  //  'https://www.aljazeera.com/xml/rss/all.xml', 
     // 'https://www.icc-cpi.int/rss/news/all', 
-    'https://www.rsfjournal.org/rss/current.xml',
-    'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
-    'https://www.lemonde.fr/rss/une.xml'
+  //  'https://www.rsfjournal.org/rss/current.xml',
+  //  'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+  //  'https://www.lemonde.fr/rss/une.xml'
   ];
 
   try {
