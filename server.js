@@ -298,220 +298,15 @@ app.get('/bbc/rss', async (req, res) => {
     }
     allItems = Array.from(dedupMap.values());
 
-    //  Score each article
-    for (const item of allItems) {
-      const { score, reason, emotion, confidence, aisummary } = await getSentimentScore(item._combinedText);
-
-      Object.assign(item, {
-        sentimentScore: Number.isFinite(score) ? Number(score.toFixed(4)) : null,
-        confidence: Number.isFinite(confidence) ? Number(confidence.toFixed(4)) : null,
-        emotion: emotion ?? null,
-        reason: reason ?? null,
-        aisummary: aisummary ?? null,
-      });
-    }
-
-    //  Sort by newest first
-    allItems.sort((a, b) => {
-      const ta = Date.parse(a.pubDate || '') || 0;
-      const tb = Date.parse(b.pubDate || '') || 0;
-      return tb - ta;
-    });
-
-    // Build overall summary
-    const overallSummary = (() => {
-      const n = allItems.length || 1;
-      const avgScore = allItems.reduce((sum, r) => sum + (r.sentimentScore || 0), 0) / n;
-      const emotions = {};
-      for (const r of allItems) {
-        const e = r.emotion?.toLowerCase() || "unknown";
-        emotions[e] = (emotions[e] || 0) + 1;
-      }
-      return {
-        stats: {
-          count: n,
-          avgScore: Number(avgScore.toFixed(3)),
-          emotions
-        },
-        generatedAt: new Date().toISOString()
-      };
-    })();
-
-    // Cache the results
-    cache = {
-      data: allItems,
-      overall: overallSummary,
-      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
-    };
-
-    // Get review 
-const chunkSize = 10;
-const chunks = [];
-for (let i = 0; i < allItems.length; i += chunkSize) {
-  chunks.push(allItems.slice(i, i + chunkSize));
-}
-
-// collect per-chunk settled results for aggregation
-const settledArrays = [];
-
-for (const chunk of chunks) {
-  const scored = await Promise.allSettled(
-    chunk.map(async (item) => {
-      const { score, reason, emotion, confidence, aisummary } =
-        await getSentimentScore(item._combinedText);
-
-      return {
-        ...item,
-        sentimentScore: Number.isFinite(score) ? Number(score.toFixed(4)) : null,
-        confidence: Number.isFinite(confidence) ? Number(confidence.toFixed(4)) : null,
-        emotion: emotion ?? null,
-        reason: reason ?? null,
-        aisummary: aisummary ?? null,
-      };
-    })
-  );
-
-
-    //  Send response
-    res.json({
-      data: allItems.slice(0, limit),
-      overall: overallSummary
-    });
-
-  } catch (err) {
-    console.error("❌ RSS processing failed:", err.stack || err.message || err);
-    if (!res.headersSent) {
-      res.status(500).json({ error: "RSS error" });
-    }
-  }
-});
-
-
-    //updated 
-    // ...everything above stays the same
-
-
-  //  overall aggregation
-  settledArrays.push(scored);
-
-  // logic unchanged
-  for (let i = 0; i < scored.length; i++) {
-    if (scored[i].status === 'fulfilled') {
-      const idx = allItems.indexOf(chunk[i]);
-      allItems[idx] = scored[i].value;
-    } else {
-      console.error('❌ Sentiment failed:', scored[i].reason?.message || scored[i].reason);
-      const idx = allItems.indexOf(chunk[i]);
-      allItems[idx] = {
-        ...chunk[i],
-        sentimentScore: null,
-        confidence: null,
-        emotion: null,
-        reason: null,
-        aisummary: null,
-      };
-    }
-  }
-}
-
-// overall aggregation
-const settled = settledArrays.flat();
-const articles = settled
-  .filter(r => r.status === "fulfilled")
-  .map(r => r.value);
-
-function aggregateMetrics(rows) {
-  const n = rows.length || 1;
-  const sumScore = rows.reduce((a, r) => a + (Number(r.sentimentScore) || 0), 0);
-  const avgScore = sumScore / n;
-
-  const sumConf = rows.reduce((a, r) => a + (Number(r.confidence) || 0), 0);
-  const wAvgScore = rows.reduce(
-    (a, r) => a + (Number(r.sentimentScore) || 0) * (Number(r.confidence) || 0),
-    0
-  ) / (sumConf || 1);
-
-  const emotions = {};
-  for (const r of rows) {
-    const e = String(r.emotion || "unknown").toLowerCase();
-    emotions[e] = (emotions[e] || 0) + 1;
-  }
-
-  const topPositive = [...rows].sort((a, b) => (b.sentimentScore ?? 0) - (a.sentimentScore ?? 0)).slice(0, 5)
-    .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
-  const topNegative = [...rows].sort((a, b) => (a.sentimentScore ?? 0) - (b.sentimentScore ?? 0)).slice(0, 5)
-    .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
-
-  return { count: n, avgScore, wAvgScore, emotions, topPositive, topNegative };
-}
-
-const overallStats = aggregateMetrics(articles);
-
-// call for a crossarticle 
-async function getOverallRead(summaries) {
-  // Keeping this as a noop placeholder prevents breaking anything.
-  return {
-    tl_dr: "Overall synthesis not enabled.",
-    themes: [],
-    sentiment_overall
-      : overallStats.wAvgScore > 0.1 ? "positive"
-                      : overallStats.wAvgScore < -0.1 ? "negative"
-                      : "neutral",
-    evidence_snippets: [],
-    risks: [],
-    opportunities: []
-  };
-}
-
-const synthesisInput = articles.map(a => ({
-  title: a.title ?? a.link ?? "(untitled)",
-  score: a.sentimentScore,
-  emotion: a.emotion,
-  confidence: a.confidence,
-  summary: a.aisummary ?? (a._combinedText || "").slice(0, 400)
-}));
-
-const overallSynthesis = await getOverallRead(synthesisInput);
-//  overall aggregation
-// Sort newest first (unchanged)
-allItems.sort((a, b) => {
-  const ta = Date.parse(a.pubDate || '') || 0;
-  const tb = Date.parse(b.pubDate || '') || 0;
-  return tb - ta;
-});
-
-const payload = allItems.slice(0, limit).map(({ _combinedText, ...rest }) => rest);
-
-// Update cache add overall
-cache = {
-  data: payload,
-  overall: {
-    stats: overallStats,
-    synthesis: overallSynthesis,
-    generatedAt: new Date().toISOString()
-  },
-  expiresAt: Date.now() + 5 * MS.minute,
-};
-
-// response
-res.json({
-  data: payload,               // array of articles
-  overall: overallSummary      // object
-});
-
-// ...catch stays the same
-
-
-    //end updated
-    
-   /*
-    // for here 28.08 1530
-    // Get review 
+    // Get review
     const chunkSize = 10;
     const chunks = [];
     for (let i = 0; i < allItems.length; i += chunkSize) {
       chunks.push(allItems.slice(i, i + chunkSize));
     }
+
+    // collect per-chunk settled results for aggregation
+    const settledArrays = [];
 
     for (const chunk of chunks) {
       const scored = await Promise.allSettled(
@@ -529,14 +324,17 @@ res.json({
           };
         })
       );
+
+      //  overall aggregation
+      settledArrays.push(scored);
+
+      // logic unchanged
       for (let i = 0; i < scored.length; i++) {
+        const idx = allItems.indexOf(chunk[i]);
         if (scored[i].status === 'fulfilled') {
-          const idx = allItems.indexOf(chunk[i]);
           allItems[idx] = scored[i].value;
         } else {
           console.error('❌ Sentiment failed:', scored[i].reason?.message || scored[i].reason);
-          // Keep unscored item without sentiment fields
-          const idx = allItems.indexOf(chunk[i]);
           allItems[idx] = {
             ...chunk[i],
             sentimentScore: null,
@@ -549,7 +347,63 @@ res.json({
       }
     }
 
-    // Sort newest first
+    // overall aggregation
+    const settled = settledArrays.flat();
+    const articles = settled
+      .filter(r => r.status === "fulfilled")
+      .map(r => r.value);
+
+    function aggregateMetrics(rows) {
+      const n = rows.length || 1;
+      const sumScore = rows.reduce((a, r) => a + (Number(r.sentimentScore) || 0), 0);
+      const avgScore = sumScore / n;
+
+      const sumConf = rows.reduce((a, r) => a + (Number(r.confidence) || 0), 0);
+      const wAvgScore = rows.reduce(
+        (a, r) => a + (Number(r.sentimentScore) || 0) * (Number(r.confidence) || 0),
+        0
+      ) / (sumConf || 1);
+
+      const emotions = {};
+      for (const r of rows) {
+        const e = String(r.emotion || "unknown").toLowerCase();
+        emotions[e] = (emotions[e] || 0) + 1;
+      }
+
+      const topPositive = [...rows].sort((a, b) => (b.sentimentScore ?? 0) - (a.sentimentScore ?? 0)).slice(0, 5)
+        .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
+      const topNegative = [...rows].sort((a, b) => (a.sentimentScore ?? 0) - (b.sentimentScore ?? 0)).slice(0, 5)
+        .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
+
+      return { count: n, avgScore, wAvgScore, emotions, topPositive, topNegative };
+    }
+
+    const overallStats = aggregateMetrics(articles);
+
+    const synthesisInput = articles.map(a => ({
+      title: a.title ?? a.link ?? "(untitled)",
+      score: a.sentimentScore,
+      emotion: a.emotion,
+      confidence: a.confidence,
+      summary: a.aisummary ?? (a._combinedText || "").slice(0, 400)
+    }));
+
+    async function getOverallRead(summaries) {
+      return {
+        tl_dr: "Overall synthesis not enabled.",
+        themes: [],
+        sentiment_overall: overallStats.wAvgScore > 0.1 ? "positive"
+                          : overallStats.wAvgScore < -0.1 ? "negative"
+                          : "neutral",
+        evidence_snippets: [],
+        risks: [],
+        opportunities: []
+      };
+    }
+
+    const overallSynthesis = await getOverallRead(synthesisInput);
+
+    // Sort newest first (unchanged)
     allItems.sort((a, b) => {
       const ta = Date.parse(a.pubDate || '') || 0;
       const tb = Date.parse(b.pubDate || '') || 0;
@@ -558,21 +412,37 @@ res.json({
 
     const payload = allItems.slice(0, limit).map(({ _combinedText, ...rest }) => rest);
 
-    // Update cache
+    // Update cache add overall
     cache = {
       data: payload,
+      overall: {
+        stats: overallStats,
+        synthesis: overallSynthesis,
+        generatedAt: new Date().toISOString()
+      },
       expiresAt: Date.now() + 5 * MS.minute,
     };
 
-    res.json(payload);
-    // till here 28.08. 1530
-    */
-  } 
-  catch (err) {
+    // response
+    res.json({
+      data: payload,
+      overall: cache.overall
+    });
+
+  } catch (err) {
     console.error("❌ RSS processing failed:", err.message || err);
-    res.status(500).json({ error: "RSS error" });
+    if (!res.headersSent) {
+      res.status(500).json({ error: "RSS error" });
+    }
   }
 });
+
+  
+    
+
+
+    //end updated
+
 
 
 // Test + info routes
