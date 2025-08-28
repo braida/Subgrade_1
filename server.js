@@ -429,7 +429,7 @@ cache = {
 };
 
 // response
-res.json(payload);
+res.json({ data: payload, overall: cache.overall });
 
 // ...catch stays the same
 
