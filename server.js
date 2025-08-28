@@ -150,7 +150,7 @@ Return ONLY valid JSON in this schema:
           content: `You are a bilingual French and English assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess between 1 neutral to 3 good read.
           Explain your opinion on why the topic is interesting or not so much interesting, depending on the breakthrough and progress discussed **be concise**.
           Suggest 1 to 3 examples of breakthrough projects or impactful prokects related to this post. no more than 3 and minimum 1, You don't have to find than 1 example.
-          Explain briefly like I'm 5 what's the impact of this type of research on society or life or a specific field of study. **be concise**
+          Explain briefly like I'm 5 what's the impact of this topic on society or life or a specific field of study. **be concise**
           
 Return ONLY valid JSON in this schema: 
  {
