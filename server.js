@@ -235,7 +235,8 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
     'https://www.frontiersin.org/journals/artificial-intelligence/rss',
-    'https://export.arxiv.org/rss/cs.AI'
+    'https://phys.org/rss-feed/science-news/',
+    'https://nautil.us/feed/'
     
 
   //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
