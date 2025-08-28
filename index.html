@@ -1,32 +1,23 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🌍 Dashboard</title>
-   <p> Scoring <i>(from 1 neutral to 3 good read)</i> is using GPT4o-mini and news comes from RSS feeds. 
-   </p> 
 
-   <!--  <p><i>More details:</i></p>
-    <button onclick="window.location.href='readme.html';">
-        Readme
-    </button>
-   -->
-   
-  <!-- Google tag (gtag.js) -->
- 
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VN5C4XB6K1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <p> Scoring <i>(from 1 neutral to 3 good read)</i> is using GPT4o-mini and news comes from RSS feeds. </p> 
 
-  gtag('config', 'G-VN5C4XB6K1');
-</script> 
-   
-  
-   <style>
-   body {
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VN5C4XB6K1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-VN5C4XB6K1');
+  </script>
+
+  <style>
+    body {
       font-family: Arial, sans-serif;
       background-color: #f4f7fa;
       max-width: 960px;
@@ -55,9 +46,6 @@
       background-color: #007acc;
       color: #fff;
     }
-    tr.positive { background-color: ##f2f2f2; }
-    tr.negative { background-color: #D3D3D3; }
-    tr.neutral  { background-color: #FCFCF7; }
     .btn-preview {
       padding: 4px 8px;
       font-size: 12px;
@@ -78,123 +66,63 @@
     .preview-content {
       padding: 10px;
     }
-    
+    .overall-box {
+      background: #f9f9f9;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border: 1px solid #ccc;
+    }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!--  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.min.js"></script> --> 
-   
- <!-- Hidden clickable pixel -->
-
-   <!-- add div 28.08 -->
-<div id="overallStats"></div>
-
-   <!-- till here add div 28.08 -->
-   
-   <div onclick="alert('“I told my LLM to ‘think outside the box’… it asked me for the dimensions of the box and whether it was in JSON or YAML')" 
-     style="position: absolute; top: 0; left: 0; width: 10px; height: 10px; opacity: 1; cursor: pointer;">
-   </div>
 </head>
 
-   <body>
+<body>
 
-  <h3> Dashboard</h3>
-   <div id="loading">🔄 Loading data...</div>
-<button id="toggleSort" class="btn-preview">⬆️ Sort by Date</button>
+  <h3>Dashboard</h3>
 
-  <!--
-  <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; align-items:flex-start; width:100%;">
-  <style>
-    #countryCard {
-      text-align:center;
-      margin:0 auto;
-      max-width:520px;
-    }
-    #countryToggle {
-      position:absolute;
-      left:-9999px;
-    }
-    #countryCard .toggle-btn {
-      display:inline-flex;
-      align-items:center;
-      gap:.5rem;
-      border:none;
-      background:transparent;
-      font:inherit;
-      cursor:pointer;
-      font-weight:600;
-      padding:4px 0;
-    }
-    #countryCard .chev {
-      display:inline-block;
-      transition: transform .2s ease;
-    }
-    #countryToggle:checked + .toggle-btn .chev {
-      transform: rotate(90deg);
-    }
-    #countryCard .body {
-      margin-top:8px;
-      display:none;
-    }
-    #countryToggle:checked + .toggle-btn + .body {
-      display:block;
-    }
-  </style>
+  <!-- Loading Spinner -->
+  <div id="loading" style="display: none;">🔄 Loading data...</div>
 
- <div id="countryCard">
-    <input type="checkbox" id="countryToggle">
-    
-    <label class="toggle-btn" for="countryToggle">
-      <span class="title">🌐 Country Mentions (Pie Chart)</span>
-      <span class="chev">▸</span>
-    </label>
+  <!-- Sort button -->
+  <button id="toggleSort" class="btn-preview">⬆️ Sort by Date</button>
 
-    <div class="body" id="countryBody">
-      <canvas id="countryPie" width="300" height="300"></canvas>
-      <div id="countryDetails"></div>
-    </div>
-  </div>
-</div>
--->
-      <table id="newsTable">
+  <!-- NEW: Overall stats block (will be filled in later) -->
+  <div id="overallStats"></div>
+
+  <!-- News Table -->
+  <table id="newsTable">
     <thead>
       <tr>
         <th>#</th>
         <th>Title</th>
         <th>Topic score</th>
-        <th>Highlight in this article</th> 
-    <!--<th>Confidence Rate</th>  -->
-        <th>Potential use case</th>
-        <th>ELI5 what's about</th>
+        <th>Highlight</th>
+        <th>Use Case</th>
+        <th>ELI5</th>
         <th>PubDate</th>
-        <th>Media Source</th>
+        <th>Source</th>
         <th><i>Confidence%</i></th>
-         
       </tr>
     </thead>
     <tbody id="newsTableBody">
-      <tr><td colspan="3">Loading data...</td></tr>
+      <tr><td colspan="9">Loading data...</td></tr>
     </tbody>
   </table>
-   <section style="margin-top: 15px; padding: 10px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-  <h4 style="margin-bottom: 10px;">📘 Text review</h4>
-  <ul style="line-height: 1.6;">
-    <li> GPT4o-mini is prompted to summerise and give examples for the related topic.<li>
-     <li><strong>Note</strong>
-This output is generated by GPT4o-mini.</li>
-  </ul>
-   </section>
+
+  <!-- Text Review Section -->
+  <section style="margin-top: 15px; padding: 10px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+    <h4>📘 Text review</h4>
+    <ul>
+      <li>GPT4o-mini is prompted to summarize and give examples related to the topic.</li>
+      <li><strong>Note:</strong> This output is generated by GPT4o-mini.</li>
+    </ul>
+  </section>
+
+  <!-- Inline Script Starts Here -->
   <script>
     let newsData = [];
-   // let ascending = false;
-
-    const countries = [
-      'USA', 'Alaska','China', 'Iran','Japan', 'Korea', 'Vietnam', 'Togo','Mali','Africa','Congo','Gabon',
-      'France', 'Germany', 'India', 'Brazil', 'Gaza', 'UK', 'Pakistan','Indonesia', 'Bangladesh',
-      'Yemen', 'Syria','US','Algeria','Ireland','Dubai','UAE', 'Spain', 'Italy','Somali','Laos','Nepal',
-       'Bulgary', 'Turkey', 'Greece', 'Israel', 'Palestine', 'Ukraine', 'Russia', 'Thailand', 'Cambodia','Colombia','Mexico',
-       'Morocco','Tunisia','Jordan','Lebanon', 'Libya','Egypt','Afghanistan','Kashmir',
-       'Qatar', 'Saudi Arabia','Portugal', 'New York','Chicago','Washington', 'California', 'Texas'
-    ];
+    let sortMode = "date";
+    let ascending = true;
 
     function togglePreview(index) {
       const row = document.getElementById(`preview-${index}`);
@@ -203,38 +131,37 @@ This output is generated by GPT4o-mini.</li>
       }
     }
 
+    // ✅ TABLE RENDERING FUNCTION (KEEP THIS IN HTML)
     function renderTable(data) {
       const tableBody = document.getElementById("newsTableBody");
       tableBody.innerHTML = '';
 
       data.forEach((item, i) => {
         const row = document.createElement("tr");
-        const emotionLabel = typeof item.emotion === 'string'? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1): '—';
-        const reasonlabel = typeof item.reason === 'string'? item.reason.charAt(0).toUpperCase() + item.reason.slice(1): '—';
-        const aisummarylabel = typeof item.aisummary === 'string'? item.aisummary.charAt(0).toUpperCase() + item.aisummary.slice(1): '—'
-         
+
+        const emotionLabel = typeof item.emotion === 'string' ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1) : '—';
+        const reasonLabel = typeof item.reason === 'string' ? item.reason.charAt(0).toUpperCase() + item.reason.slice(1) : '—';
+        const summaryLabel = typeof item.aisummary === 'string' ? item.aisummary.charAt(0).toUpperCase() + item.aisummary.slice(1) : '—';
+
         row.innerHTML = `
           <td>${i + 1}</td>
-          <td>
-            <a href="${item.link}" target="_blank">${item.title}</a><br>
-            <button class="btn-preview" onclick="togglePreview(${i})">🔍 Description </button>
+          <td><a href="${item.link}" target="_blank">${item.title}</a><br>
+            <button class="btn-preview" onclick="togglePreview(${i})">🔍 Description</button>
           </td>
-          <td>${item.sentimentScore.toFixed(2)}</td>
+          <td>${item.sentimentScore?.toFixed(2) ?? '—'}</td>
           <td>${emotionLabel}</td>
-          <td>${reasonlabel}</td>
-          <td>${aisummarylabel}</td> 
+          <td>${reasonLabel}</td>
+          <td>${summaryLabel}</td>
           <td>${new Date(item.pubDate).toLocaleString()}</td>
           <td>${item.source || 'Unknown'}</td>
-          <td>${item.confidence !== undefined ? (item.confidence ).toFixed(0) + '%' : '—'}</td>
-          
+          <td>${item.confidence !== undefined ? item.confidence.toFixed(0) + '%' : '—'}</td>
         `;
 
-         
         const preview = document.createElement("tr");
         preview.id = `preview-${i}`;
         preview.className = 'preview-row';
         preview.innerHTML = `
-          <td colspan="8">
+          <td colspan="9">
             <div class="preview-content">
               <strong>Summary:</strong><br>${item.description || "No description available."}
             </div>
@@ -245,217 +172,80 @@ This output is generated by GPT4o-mini.</li>
         tableBody.appendChild(preview);
       });
     }
-//new add 28.08
 
-function renderOverall(overall) {
-  const statsContainer = document.getElementById("overallStats");
-  if (!statsContainer || !overall?.stats) return;
-
-  const { avgScore, wAvgScore, count, emotions } = overall.stats;
-  const emotionList = Object.entries(emotions)
-    .map(([key, val]) => `${key}: ${val}`)
-    .join(", ");
-
-  statsContainer.innerHTML = `
-    <div class="overall-box">
-      <h2>📊 Overall Summary</h2>
-      <p><strong>Articles Scored:</strong> ${count}</p>
-      <p><strong>Average Sentiment:</strong> ${avgScore.toFixed(3)}</p>
-      <p><strong>Weighted Average:</strong> ${wAvgScore.toFixed(3)}</p>
-      <p><strong>Emotions:</strong> ${emotionList}</p>
-    </div>
-  `;
-}
-     // till here new add 28.08
-
- /*    
-    function getCountryStats(data) {
-      const stats = {};
-      data.forEach(item => {
-        countries.forEach(country => {
-          const regex = new RegExp(`\\b${country}\\b`, 'i');
-          if (regex.test(item.title + ' ' + item.description)) {
-            if (!stats[country]) stats[country] = { count: 0, totalScore: 0 };
-            stats[country].count += 1;
-            stats[country].totalScore += item.sentimentScore;
-          }
-        });
-      });
-      return Object.entries(stats)
-        .map(([country, { count, totalScore }]) => ({
-          country,
-          count,
-          avgScore: parseFloat((totalScore / count).toFixed(2))
-        }))
-        .sort((a, b) => b.count - a.count);
+    // PLACEHOLDER: Overall rendering is PAUSED (will not run)
+    function renderOverall(overall) {
+      console.log("🤚 Skipping renderOverall() – currently paused.");
+      return;
     }
 
-    function renderCountryChart(stats) {
-      const ctx = document.getElementById('countryPie').getContext('2d');
-      const labels = stats.map(s => s.country);
-      const data = stats.map(s => s.count);
+    //  FETCH + RENDER FUNCTION 
+    async function fetchData() {
+      const tableBody = document.getElementById("newsTableBody");
+      const loadingSpinner = document.getElementById("loading");
+      loadingSpinner.style.display = 'flex';
 
-      new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Mentions by Country',
-            data
-          }]
-        },
-        options: {
-          onClick: (e, elements) => {
-            if (elements.length > 0) {
-              const index = elements[0].index;
-              const selected = stats[index];
-              document.getElementById('countryDetails').innerHTML = `
-                <strong>${selected.country}</strong><br>
-                Mentions: ${selected.count}<br>
-                Avg Score: ${selected.avgScore > 0 ? '+' : ''}${selected.avgScore.toFixed(2)}
-              `;
-            }
-          }
-        }
-      });
+      try {
+        const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
+        const response = await res.json();
+
+        const articles = response.data || [];
+        const overall = response.overall || null;
+
+        newsData = [...articles]; // for sorting
+        renderTable(articles);
+        if (overall) renderOverall(overall); // currently a no-op
+
+      } catch (error) {
+        tableBody.innerHTML = '<tr><td colspan="9">❌ Failed to load news data.</td></tr>';
+        console.error("Error:", error);
+      }
+
+      loadingSpinner.style.display = 'none';
     }
-*/
 
-     
-     /* function generateWordCloud(data) {
-  const wordCounts = {};
+    //  SORTING LOGIC
+    const comparator = (a, b) => {
+      if (sortMode === "date") {
+        const ta = Date.parse(a.pubDate);
+        const tb = Date.parse(b.pubDate);
+        return ascending ? ta - tb : tb - ta;
+      } else {
+        const sa = Number(a.sentimentScore ?? 0);
+        const sb = Number(b.sentimentScore ?? 0);
+        return ascending ? sa - sb : sb - sa;
+      }
+    };
 
-  data.forEach(item => {
-    const text = `${item.title} ${item.description}`.toLowerCase();
-    const words = text.match(/\b[a-z]{4,}\b/g); // only words with 4+ letters
-    if (!words) return;
+    document.getElementById("toggleSort").addEventListener("click", () => {
+      if (sortMode === "date" && ascending) {
+        ascending = false;
+      } else if (sortMode === "date" && !ascending) {
+        sortMode = "score";
+        ascending = true;
+      } else if (sortMode === "score" && ascending) {
+        ascending = false;
+      } else {
+        sortMode = "date";
+        ascending = true;
+      }
 
-    words.forEach(word => {
-      if (wordCounts[word]) wordCounts[word]++;
-      else wordCounts[word] = 1;
+      const sorted = [...newsData].sort(comparator);
+      document.getElementById("toggleSort").innerText =
+        ascending
+          ? (sortMode === "date" ? "⬆️ Sort by Date" : "⬆️ Sort by Score")
+          : (sortMode === "date" ? "⬇️ Sort by Date" : "⬇️ Sort by Score");
+
+      renderTable(sorted);
     });
-  });
 
-  const entries = Object.entries(wordCounts)
-    .filter(([word, count]) => count > 1) // filter out single-use words
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 100); // top 100 terms
-
-  WordCloud(document.getElementById('wordCloud'), {
-    list: entries,
-    gridSize: 8,
-    weightFactor: 3,
-    fontFamily: 'Arial',
-    color: 'random-dark',
-    backgroundColor: '#f4f7fa'
-  });
-}
-*/
-
-
-
-          
-  //  async function fetchData() {
-     ////  document.getElementById("loading").style.display = 'block';
-   //   const tableBody = document.getElementById("newsTableBody");
-  //    document.getElementById("loading").style.display = 'flex';
-
-   //   try {
-        
-     //   const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
-    //    newsData = await res.json();
-   //     renderTable(newsData);
-       //// const countryStats = getCountryStats(newsData);
-       //// renderCountryChart(countryStats);
-         //// generateWordCloud(newsData);
-
-   //   } catch (error) {
-   //     tableBody.innerHTML = '<tr><td colspan="8">❌ Failed to load news data.</td></tr>';
-   //     console.error("Error:", error);
- //     }
-         //till here change 28.08
-
-         
-     document.getElementById("loading").style.display = 'none';  
-    
-
-    let sortMode = "date"; // or "score"
-let ascending = true;
-
-const comparator = (a, b) => {
-  if (sortMode === "date") {
-    const ta = Date.parse(a.pubDate);
-    const tb = Date.parse(b.pubDate);
-    return ascending ? ta - tb : tb - ta;
-  } else {
-    const sa = Number(a.sentimentScore ?? 0);
-    const sb = Number(b.sentimentScore ?? 0);
-    return ascending ? sa - sb : sb - sa;
-  }
-};
-
-document.getElementById("toggleSort").addEventListener("click", () => {
-  // date ↑ → date ↓ → score ↑ → score ↓ → back to date ↑
-  if (sortMode === "date" && ascending) {
-    ascending = false;
-  } else if (sortMode === "date" && !ascending) {
-    sortMode = "score";
-    ascending = true;
-  } else if (sortMode === "score" && ascending) {
-    ascending = false;
-  } else {
-    sortMode = "date";
-    ascending = true;
-  }
-
-  const sorted = [...newsData].sort(comparator);
-
-  document.getElementById("toggleSort").innerText =
-    ascending
-      ? (sortMode === "date" ? "⬆️ Sort by Date" : "⬆️ Sort by Score")
-      : (sortMode === "date" ? "⬇️ Sort by Date" : "⬇️ Sort by Score");
-
-  renderTable(sorted);
-});
-
-
+    //  FETCH
     window.addEventListener("DOMContentLoaded", fetchData);
- 
-        // from here 28.08
-     async function fetchData() {
-  const tableBody = document.getElementById("newsTableBody");
-  const loadingSpinner = document.getElementById("loading");
-  loadingSpinner.style.display = 'flex';
-
-  try {
-    const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
-    const response = await res.json();
-
-    // Split the response into data and overall
-    const articles = response.data || [];
-    const overall = response.overall || null;
-
-    renderTable(articles);
-    if (overall) renderOverall(overall);
-
-  } catch (error) {
-    tableBody.innerHTML = '<tr><td colspan="8">❌ Failed to load news data.</td></tr>';
-    console.error("Error:", error);
-  }
-
-  loadingSpinner.style.display = 'none';
-}
-
-
-     // till here new 28.08
-
-  
   </script>
 
-      
-      
+         
  <!-- Click C on the keyboard -->
-<script>
+       <script>
 document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 'c') {
@@ -490,12 +280,18 @@ document.addEventListener('DOMContentLoaded', function() {
    <!-- Hidden clickable pixel -->
 <div onclick="alert('I carry no badge, yet I’m great at directions;\nI’m the compass, not the captain.\n\nI set the stage, you play the scene.\n\nI bring the map, you choose the journey.\n\nI can prompt, but you perform. ^_^')" 
      style="position: absolute; bottom: 10; left: 10; width: 50px; height: 50px; cursor: pointer;"></div>
+</body>
+</html>
+
+
+
+   
+
 
 
 
       
-</body>
-</html>      
+    
 
 
                     
