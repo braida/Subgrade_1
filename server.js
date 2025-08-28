@@ -153,6 +153,7 @@ Return ONLY valid JSON in this schema:
 }
     */
       messages: [
+            messages: [
         {
           role: "system",
           content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess from 1 relevant to 3 good read.
@@ -162,11 +163,11 @@ Return ONLY valid JSON in this schema:
           
 Return ONLY valid JSON in this schema: 
  { 
- "bias_score": number, // 1 = relevant topic in it's own field only, 3 = strong impact across multiple areas.
- "framing_type": string, // short summary of the text and why it's interesting and does it have an impact. **be concise** 
- "confidence_pct": number, // 0-100 
- "reason_summary": string, // Give a 1 to 3 examples of key impact area related to this news.
- "aisummary": string, // Explain briefly like I'm 5 what's the impact of this news on society or life or a specific field of study. **be concise**
+ "bias_score": number, // score 1 = relevant , 2 = good read , 3 = highly recommend based on science breakthrough, innovation, impact on society and/or other key elements.**be concise**
+ "framing_type": string, // your humble short opinion on why it's interesting article. **be concise** 
+ "confidence_pct": number, // 0-100 confidence rate
+ "reason_summary": string, // to justify the score, give 1 to 3 examples of the impact of the related news. 
+ "aisummary": string, // also explain briefly like I'm 5 what's the impact of this type of research on society, on technologie or any specific field. **fpcus on impact and be concise**
   }
  `
         },
@@ -237,6 +238,7 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.sciencedaily.com/rss/top/science.xml',
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
+    'https://www.frontiersin.org/journals/artificial-intelligence/rss',
     'https://www.frontiersin.org/journals/artificial-intelligence/rss'
 
   //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
