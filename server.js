@@ -157,7 +157,7 @@ Return ONLY valid JSON in this schema:
  "bias_score": number, // give your blunt very honest to score how much this topic is interesting from 1 = neutral  to 3 =  good read 
  "framing_type": string, // your blunt unfiltered opinion on why the topic is interesting or not so much interesting if it's redundant and depending on the breakthrough and progress discussed **be concise**. 
  "confidence_pct": number, // 0-100 confidence rate
- "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on high impact projects if any. 
+ "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on high impact projects if any. **please be concise** and try not go over 250/270 caracters.
  "aisummary": string, // also explain briefly like I'm 5 what's the impact of this topic on society, on technology or any specific field. **focus on potential impact and be concise**
   }
  `
