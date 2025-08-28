@@ -103,7 +103,6 @@ function localSentimentScore(text) {
 
 
 // updated 
-
 async function getSentimentScore(text) {
   if (text.length < 20 || openaiCallCount >= MAX_OPENAI_CALLS) {
     return localSentimentScore(text);
@@ -114,10 +113,12 @@ async function getSentimentScore(text) {
     console.log(`OpenAI scoring (call #${openaiCallCount})`);
 
     const aiResponse = await openai.chat.completions.create({
+      
       model: "gpt-4o-mini",
       temperature: 0,
-      response_format: "json",
-        /*
+      // Force JSON
+      response_format: { type: "json_object" },
+    /*
     note:
     You are a bilingual assistant (English & French) that detects bias framing in news text and have two tasks.
 Each task is independent.
@@ -166,19 +167,19 @@ Return ONLY valid JSON in this schema:
     });
 
     const content = aiResponse.choices[0].message.content;
-    const parsed = safeParseJSON(content);
+    const parsed = JSON.parse(content);
 
     return {
       score: Number(parsed.bias_score),
       emotion: String(parsed.framing_type),
       reason: String(parsed.reason_summary),
       confidence: Number(parsed.confidence_pct),
-      aisummary: String(parsed.aisummary)
+      aisummary:String(parsed.aisummary)
     };
 
   } catch (err) {
-    console.error("❌ OpenAI scoring failed:", err.stack || err.message || err);
-    return localSentimentScore(text); // fallback
+    console.error("❌ OpenAI scoring failed:", err.message);
+    return localSentimentScore(text);
   }
 }
 
@@ -218,8 +219,19 @@ function stripHtml(s = "") {
 // memory cache 
 let cache = { data: null, expiresAt: 0 };
 
-const sources = [
-  'https://www.sciencedaily.com/rss/top/science.xml',
+app.get('/bbc/rss', async (req, res) => {
+  // Query params: ?days=1&perSource=3&limit=15
+  const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
+  const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
+  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 25);
+
+  // cache
+  if (cache.data && cache.expiresAt > Date.now()) {
+    return res.json(cache.data.slice(0, limit));
+  }
+
+  const sources = [
+    'https://www.sciencedaily.com/rss/top/science.xml',
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
     'https://www.nasa.gov/news-release/feed/',
@@ -243,28 +255,13 @@ const sources = [
   //  'https://www.lemonde.fr/rss/une.xml'
   ];
 
-
-
-
-app.get('/bbc/rss', async (req, res) => {
-  const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
-  const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
-  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 25);
-
-  //  Return cached version if still valid
-  if (cache.data && cache.overall && cache.expiresAt > Date.now()) {
-    return res.json({
-      data: cache.data.slice(0, limit),
-      overall: cache.overall
-    });
-  }
-
   try {
-    //  Fetch all feeds in parallel
+    // Fetch all feeds in parallel 
     const feedResults = await Promise.allSettled(
       sources.map(async (url) => {
         console.log(`📡 Fetching: ${url}`);
         const feed = await parser.parseURL(url);
+        //
         const items = (feed.items || [])
           .filter(it => isRecent(it.isoDate || it.pubDate, days))
           .slice(0, perSource)
@@ -273,14 +270,16 @@ app.get('/bbc/rss', async (req, res) => {
             title: it.title || "",
             link: it.link,
             pubDate: it.isoDate || it.pubDate || null,
+            // strip HTML
             description: stripHtml(it.contentSnippet || it.content || ""),
+            // Sentiment fields filled later
             _combinedText: `${it.title || ''} ${stripHtml(it.contentSnippet || it.content || '')}`.trim(),
           }));
+
         return items;
       })
     );
 
-    //  Collect all successful results
     let allItems = [];
     for (const r of feedResults) {
       if (r.status === 'fulfilled') {
@@ -290,7 +289,7 @@ app.get('/bbc/rss', async (req, res) => {
       }
     }
 
-    //  Deduplicate by link or title+pubDate
+    // deduplicate by link
     const dedupMap = new Map();
     for (const it of allItems) {
       const key = it.link || `${it.title}|${it.pubDate}`;
@@ -298,15 +297,12 @@ app.get('/bbc/rss', async (req, res) => {
     }
     allItems = Array.from(dedupMap.values());
 
-    // Get review
+    // Get review 
     const chunkSize = 10;
     const chunks = [];
     for (let i = 0; i < allItems.length; i += chunkSize) {
       chunks.push(allItems.slice(i, i + chunkSize));
     }
-
-    // collect per-chunk settled results for aggregation
-    const settledArrays = [];
 
     for (const chunk of chunks) {
       const scored = await Promise.allSettled(
@@ -324,17 +320,14 @@ app.get('/bbc/rss', async (req, res) => {
           };
         })
       );
-
-      //  overall aggregation
-      settledArrays.push(scored);
-
-      // logic unchanged
       for (let i = 0; i < scored.length; i++) {
-        const idx = allItems.indexOf(chunk[i]);
         if (scored[i].status === 'fulfilled') {
+          const idx = allItems.indexOf(chunk[i]);
           allItems[idx] = scored[i].value;
         } else {
           console.error('❌ Sentiment failed:', scored[i].reason?.message || scored[i].reason);
+          // Keep unscored item without sentiment fields
+          const idx = allItems.indexOf(chunk[i]);
           allItems[idx] = {
             ...chunk[i],
             sentimentScore: null,
@@ -347,63 +340,7 @@ app.get('/bbc/rss', async (req, res) => {
       }
     }
 
-    // overall aggregation
-    const settled = settledArrays.flat();
-    const articles = settled
-      .filter(r => r.status === "fulfilled")
-      .map(r => r.value);
-
-    function aggregateMetrics(rows) {
-      const n = rows.length || 1;
-      const sumScore = rows.reduce((a, r) => a + (Number(r.sentimentScore) || 0), 0);
-      const avgScore = sumScore / n;
-
-      const sumConf = rows.reduce((a, r) => a + (Number(r.confidence) || 0), 0);
-      const wAvgScore = rows.reduce(
-        (a, r) => a + (Number(r.sentimentScore) || 0) * (Number(r.confidence) || 0),
-        0
-      ) / (sumConf || 1);
-
-      const emotions = {};
-      for (const r of rows) {
-        const e = String(r.emotion || "unknown").toLowerCase();
-        emotions[e] = (emotions[e] || 0) + 1;
-      }
-
-      const topPositive = [...rows].sort((a, b) => (b.sentimentScore ?? 0) - (a.sentimentScore ?? 0)).slice(0, 5)
-        .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
-      const topNegative = [...rows].sort((a, b) => (a.sentimentScore ?? 0) - (b.sentimentScore ?? 0)).slice(0, 5)
-        .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
-
-      return { count: n, avgScore, wAvgScore, emotions, topPositive, topNegative };
-    }
-
-    const overallStats = aggregateMetrics(articles);
-
-    const synthesisInput = articles.map(a => ({
-      title: a.title ?? a.link ?? "(untitled)",
-      score: a.sentimentScore,
-      emotion: a.emotion,
-      confidence: a.confidence,
-      summary: a.aisummary ?? (a._combinedText || "").slice(0, 400)
-    }));
-
-    async function getOverallRead(summaries) {
-      return {
-        tl_dr: "Overall synthesis not enabled.",
-        themes: [],
-        sentiment_overall: overallStats.wAvgScore > 0.1 ? "positive"
-                          : overallStats.wAvgScore < -0.1 ? "negative"
-                          : "neutral",
-        evidence_snippets: [],
-        risks: [],
-        opportunities: []
-      };
-    }
-
-    const overallSynthesis = await getOverallRead(synthesisInput);
-
-    // Sort newest first (unchanged)
+    // Sort newest first
     allItems.sort((a, b) => {
       const ta = Date.parse(a.pubDate || '') || 0;
       const tb = Date.parse(b.pubDate || '') || 0;
@@ -412,37 +349,19 @@ app.get('/bbc/rss', async (req, res) => {
 
     const payload = allItems.slice(0, limit).map(({ _combinedText, ...rest }) => rest);
 
-    // Update cache add overall
+    // Update cache
     cache = {
       data: payload,
-      overall: {
-        stats: overallStats,
-        synthesis: overallSynthesis,
-        generatedAt: new Date().toISOString()
-      },
       expiresAt: Date.now() + 5 * MS.minute,
     };
 
-    // response
-    res.json({
-      data: payload,
-      overall: cache.overall
-    });
-
-  } catch (err) {
+    res.json(payload);
+  } 
+  catch (err) {
     console.error("❌ RSS processing failed:", err.message || err);
-    if (!res.headersSent) {
-      res.status(500).json({ error: "RSS error" });
-    }
+    res.status(500).json({ error: "RSS error" });
   }
 });
-
-  
-    
-
-
-    //end updated
-
 
 
 // Test + info routes
