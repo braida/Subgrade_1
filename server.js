@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname)));
 app.use(cors({ origin: '*' }));
 
 const parser = new Parser({
-  headers: { 'User-Agent': 'Mozilla/5.0 (compatible; sentiment-bot/1.0)' },
+  headers: { 'User-Agent': 'Mozilla/5.0 (compatible; review-sam/1.0)' },
   timeout: 10000
 });
 
@@ -29,24 +29,16 @@ setInterval(() => {
 }, 60 * 60 * 1000);
 
 const positiveWords = [
-  'happy', 'joy', 'excited', 'love', 'inspired', 'grateful',
-  'amazing', 'proud', 'confident', 'hopeful', 'hope', 'peace', 'freedom',
-  'great', 'cheerful', 'uplifted', 'accomplished', 'peaceful', 'motivated', 'encouraged',
-  'better', 'progress', 'good life', 'success', 'wins', 'celebrates', 'growth', 'breakthrough',
-  'improves', 'achieves', 'strong', 'record-high', 'optimistic', 'thriving', 'surges',
-  'praises', 'boosts', 'innovative',  'peacetalk', 'relief', 
-  'renewed', 'miracle', 'win','pioneer','pioneering','inventor', 
-  'ceasefire','evacuate'
-];
+  'happy', 'joy', 'excited', 'love',
+  'inspired', 'grateful'
+  ];
 const negativeWords = [
-  'sad', 'angry', 'hate', 'depressed','deadly','dead', 'frustrated', 'hopeless', 'anxious',
-  'scared', 'tired', 'lonely', 'miserable', 'worthless', 'failure', 'afraid','war','killing'
-];
+  'sad', 'angry', 'hate'];
 const contrastWords = [
   'shocking', 'unbelievable','but','despite'
 ];
 const negativePhrases = [
-  "real difficulties", "very difficult","seeking help", "seeking support", "seeking shelters","mass shooting","mass murder","mass killing"
+  "real difficulties", "very difficult"
 ];
 const positivePhrases = ['better world', 'good vibes', 'unsung hero'
                          ];
@@ -200,10 +192,15 @@ function safeParseJSON(s) {
 }
 
 
-const MS = { minute: 60_000, hour: 3_600_000, day: 86_400_000 }; //1 day
+const MS = { 
+  minute: 60_000, 
+  hour: 3_600_000, 
+  day: 86_400_000, // 1 day
+  days3: 86_400_000 * 3 // 3 days
+};
 
 // recent check
-function isRecent(dateLike, days = 1) {
+function isRecent(dateLike, days = 3) {
   if (!dateLike) return false;
   const t = Date.parse(dateLike);
   if (Number.isNaN(t)) return false;
@@ -238,7 +235,8 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
     'https://www.frontiersin.org/journals/artificial-intelligence/rss',
-    'https://www.frontiersin.org/journals/artificial-intelligence/rss'
+    'https://export.arxiv.org/rss/cs.AI'
+    
 
   //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
  //   'https://feeds.skynews.com/feeds/rss/world.xml',
