@@ -196,10 +196,16 @@ async function getRecentArticlesSummary(articles = []) {
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       temperature: 0.5,
+      response_format: { type: "json_object" },
+
       messages: [
         {
           role: "system",
-          content: `You are a summarization assistant. Read the 5 latest science-related articles and summarize the main themes, breakthroughs, and implications. Group similar ideas. Highlight patterns, trends, or any key discoveries. Be concise, objective, and insightful.`
+          content: `You are an AI assistant bilingual in French and English help to summarize and be very concise. 
+          Read the 5 latest science-related articles and summarize the main themes, breakthroughs, and implications. Group similar ideas. 
+          Highlight trend topics if any, or any key discoveries but don't need to reference the article, Just give me summary of text. **Please be very concise**.
+          `
+        
         },
         {
           role: "user",
