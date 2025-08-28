@@ -429,7 +429,9 @@ cache = {
 };
 
 // response
-res.json({ data: payload, overall: cache.overall });
+const response = await res.json();
+renderTable(response.data);       // render per-article
+renderOverall(response.overall);  // new function to show stats
 
 // ...catch stays the same
 
