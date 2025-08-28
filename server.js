@@ -219,50 +219,8 @@ function stripHtml(s = "") {
 // memory cache 
 let cache = { data: null, expiresAt: 0 };
 
-app.get('/bbc/rss', async (req, res) => {
-  const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
-  const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
-  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 25);
-
-  //  Serve cached version if fresh
-  if (cache.data && cache.overall && cache.expiresAt > Date.now()) {
-    return res.json({
-      data: cache.data.slice(0, limit),
-      overall: cache.overall
-    });
-  }
-
-  try {
-    // fetch, parse, dedupe.
-    const payload = allItems.slice(0, limit); //  scored articles
-    const overallSummary = synthesisInput;    //  aggregated stats
-
-    // Update cache
-    cache = {
-      data: payload,
-      overall: overallSummary,
-      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
-    };
-
-    // Send response
-    res.json({
-      data: payload.slice(0, limit),
-      overall: overallSummary
-    });
-
-  } catch (err) {
-    console.error("❌ RSS processing failed:");
-    console.error(err.stack || err.message || err);
-    if (!res.headersSent) {
-      res.status(500).json({ error: "RSS error" });
-    }
-  }
-});
-
-
-
-  const sources = [
-    'https://www.sciencedaily.com/rss/top/science.xml',
+const sources = [
+  'https://www.sciencedaily.com/rss/top/science.xml',
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
     'https://www.nasa.gov/news-release/feed/',
@@ -286,13 +244,28 @@ app.get('/bbc/rss', async (req, res) => {
   //  'https://www.lemonde.fr/rss/une.xml'
   ];
 
+
+
+
+app.get('/bbc/rss', async (req, res) => {
+  const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
+  const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
+  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 25);
+
+  //  Return cached version if still valid
+  if (cache.data && cache.overall && cache.expiresAt > Date.now()) {
+    return res.json({
+      data: cache.data.slice(0, limit),
+      overall: cache.overall
+    });
+  }
+
   try {
-    // Fetch all feeds in parallel 
+    //  Fetch all feeds in parallel
     const feedResults = await Promise.allSettled(
       sources.map(async (url) => {
         console.log(`📡 Fetching: ${url}`);
         const feed = await parser.parseURL(url);
-        //
         const items = (feed.items || [])
           .filter(it => isRecent(it.isoDate || it.pubDate, days))
           .slice(0, perSource)
@@ -301,16 +274,14 @@ app.get('/bbc/rss', async (req, res) => {
             title: it.title || "",
             link: it.link,
             pubDate: it.isoDate || it.pubDate || null,
-            // strip HTML
             description: stripHtml(it.contentSnippet || it.content || ""),
-            // Sentiment fields filled later
             _combinedText: `${it.title || ''} ${stripHtml(it.contentSnippet || it.content || '')}`.trim(),
           }));
-
         return items;
       })
     );
 
+    //  Collect all successful results
     let allItems = [];
     for (const r of feedResults) {
       if (r.status === 'fulfilled') {
@@ -320,13 +291,74 @@ app.get('/bbc/rss', async (req, res) => {
       }
     }
 
-    // deduplicate by link
+    //  Deduplicate by link or title+pubDate
     const dedupMap = new Map();
     for (const it of allItems) {
       const key = it.link || `${it.title}|${it.pubDate}`;
       if (!dedupMap.has(key)) dedupMap.set(key, it);
     }
     allItems = Array.from(dedupMap.values());
+
+    //  Score each article
+    for (const item of allItems) {
+      const { score, reason, emotion, confidence, aisummary } = await getSentimentScore(item._combinedText);
+
+      Object.assign(item, {
+        sentimentScore: Number.isFinite(score) ? Number(score.toFixed(4)) : null,
+        confidence: Number.isFinite(confidence) ? Number(confidence.toFixed(4)) : null,
+        emotion: emotion ?? null,
+        reason: reason ?? null,
+        aisummary: aisummary ?? null,
+      });
+    }
+
+    //  Sort by newest first
+    allItems.sort((a, b) => {
+      const ta = Date.parse(a.pubDate || '') || 0;
+      const tb = Date.parse(b.pubDate || '') || 0;
+      return tb - ta;
+    });
+
+    // Build overall summary
+    const overallSummary = (() => {
+      const n = allItems.length || 1;
+      const avgScore = allItems.reduce((sum, r) => sum + (r.sentimentScore || 0), 0) / n;
+      const emotions = {};
+      for (const r of allItems) {
+        const e = r.emotion?.toLowerCase() || "unknown";
+        emotions[e] = (emotions[e] || 0) + 1;
+      }
+      return {
+        stats: {
+          count: n,
+          avgScore: Number(avgScore.toFixed(3)),
+          emotions
+        },
+        generatedAt: new Date().toISOString()
+      };
+    })();
+
+    // Cache the results
+    cache = {
+      data: allItems,
+      overall: overallSummary,
+      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
+    };
+
+    //  Send response
+    res.json({
+      data: allItems.slice(0, limit),
+      overall: overallSummary
+    });
+
+  } catch (err) {
+    console.error("❌ RSS processing failed:", err.stack || err.message || err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "RSS error" });
+    }
+  }
+});
+
 
     //updated 
     // ...everything above stays the same
