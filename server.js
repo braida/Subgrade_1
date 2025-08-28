@@ -103,6 +103,7 @@ function localSentimentScore(text) {
 
 
 // updated 
+
 async function getSentimentScore(text) {
   if (text.length < 20 || openaiCallCount >= MAX_OPENAI_CALLS) {
     return localSentimentScore(text);
@@ -113,12 +114,10 @@ async function getSentimentScore(text) {
     console.log(`OpenAI scoring (call #${openaiCallCount})`);
 
     const aiResponse = await openai.chat.completions.create({
-      
       model: "gpt-4o-mini",
       temperature: 0,
-      // Force JSON
-      response_format: { type: "json_object" },
-    /*
+      response_format: "json",
+        /*
     note:
     You are a bilingual assistant (English & French) that detects bias framing in news text and have two tasks.
 Each task is independent.
@@ -167,19 +166,19 @@ Return ONLY valid JSON in this schema:
     });
 
     const content = aiResponse.choices[0].message.content;
-    const parsed = JSON.parse(content);
+    const parsed = safeParseJSON(content);
 
     return {
       score: Number(parsed.bias_score),
       emotion: String(parsed.framing_type),
       reason: String(parsed.reason_summary),
       confidence: Number(parsed.confidence_pct),
-      aisummary:String(parsed.aisummary)
+      aisummary: String(parsed.aisummary)
     };
 
   } catch (err) {
-    console.error("❌ OpenAI scoring failed:", err.message);
-    return localSentimentScore(text);
+    console.error("❌ OpenAI scoring failed:", err.stack || err.message || err);
+    return localSentimentScore(text); // fallback
   }
 }
 
