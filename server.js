@@ -183,6 +183,41 @@ Return ONLY valid JSON in this schema:
   }
 }
 
+async function getRecentArticlesSummary(articles = []) {
+  if (!Array.isArray(articles) || articles.length === 0) {
+    throw new Error("No articles provided for summary.");
+  }
+
+  const summaryText = articles.map((item, idx) =>
+    `${idx + 1}. ${item.title}: ${item.description}`
+  ).join('\n\n');
+
+  try {
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      temperature: 0.5,
+      messages: [
+        {
+          role: "system",
+          content: `You are a summarization assistant. Read the 5 latest science-related articles and summarize the main themes, breakthroughs, and implications. Group similar ideas. Highlight patterns, trends, or any key discoveries. Be concise, objective, and insightful.`
+        },
+        {
+          role: "user",
+          content: summaryText
+        }
+      ]
+    });
+
+    const content = aiResponse.choices?.[0]?.message?.content?.trim();
+    return content || "No summary available.";
+
+  } catch (err) {
+    console.error("❌ GPT-4o Mini summary failed:", err.message || err);
+    return "Summary generation failed.";
+  }
+}
+
+
 function safeParseJSON(s) {
   try { return JSON.parse(s); } catch {}
   // try to pull the first {...} block
@@ -360,6 +395,27 @@ app.get('/bbc/rss', async (req, res) => {
   catch (err) {
     console.error("❌ RSS processing failed:", err.message || err);
     res.status(500).json({ error: "RSS error" });
+  }
+});
+
+app.get('/bbc/rss/summary', async (req, res) => {
+  try {
+    const articles = cache?.data || [];
+    if (articles.length === 0) {
+      return res.status(503).json({ error: "No cached data available. Please fetch /bbc/rss first." });
+    }
+
+    const top5 = articles.slice(0, 5); // Most recent 5 articles
+    const summary = await getRecentArticlesSummary(top5);
+
+    res.json({
+      summary,
+      basedOn: top5.map(({ title, link }) => ({ title, link }))
+    });
+
+  } catch (err) {
+    console.error("❌ Summary route error:", err.message || err);
+    res.status(500).json({ error: "Failed to generate summary." });
   }
 });
 
