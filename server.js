@@ -158,7 +158,7 @@ Return ONLY valid JSON in this schema:
  "framing_type": string, // your blunt unfiltered opinion on why the topic is interesting or not so much interesting if it's redundant and depending on the breakthrough and progress discussed **be concise**. 
  "confidence_pct": number, // 0-100 confidence rate
  "reason_summary": string, // give min 1 maximum examples of high impact projects if any. 
- "aisummary": string, // also explain briefly like I'm 5 what's the impact of this type of research on society, on technologie or any specific field. **fpcus on impact and be concise**
+ "aisummary": string, // also explain briefly like I'm 5 what's the impact of this topic on society, on technology or any specific field. **focus on potential impact and be concise**
   }
  `
         },
