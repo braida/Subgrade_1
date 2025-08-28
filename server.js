@@ -237,7 +237,7 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.frontiersin.org/journals/artificial-intelligence/rss',
     'https://phys.org/rss-feed/science-news/',
     'https://nautil.us/feed/',
-    'https://feeds.feedburner.com/TodayIFoundOut',
+    'https://xkcd.com/atom.xml',
     'https://www.geekwire.com/feed/'
     
 
