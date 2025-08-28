@@ -147,7 +147,7 @@ Return ONLY valid JSON in this schema:
       messages: [
         {
           role: "system",
-          content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess between 1 neutral to 3 good read.
+          content: `You are a bilingual French and English assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess between 1 neutral to 3 good read.
           Explain your opinion on why the topic is interesting or not so much interesting, depending on the breakthrough and progress discussed **be concise**.
           Give a 1 to 3 examples of key impact area related to this news.
           Explain briefly like I'm 5 what's the impact of this type of research on society or life or a specific field of study. **be concise**
@@ -234,12 +234,14 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.sciencedaily.com/rss/top/science.xml',
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
-    'https://www.frontiersin.org/journals/artificial-intelligence/rss',
+    // 'https://www.frontiersin.org/journals/artificial-intelligence/rss',
     'https://phys.org/rss-feed/science-news/',
     'https://nautil.us/feed/',
     'https://xkcd.com/atom.xml',
     'https://www.geekwire.com/feed/',
-    'https://www.futilitycloset.com/feed/'
+    'https://www.futilitycloset.com/feed/',
+    'https://www.journaldugeek.com/feed/',
+    'https://korben.info/feed.xml'
     
 
   //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
