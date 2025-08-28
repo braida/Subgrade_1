@@ -154,7 +154,7 @@ Return ONLY valid JSON in this schema:
           
 Return ONLY valid JSON in this schema: 
  { 
- "bias_score": number, // score 1 = relevant , 2 = interesting , 3 = good read, based on science breakthrough, innovation, impact on society and/or other key elements.**be concise**
+ "bias_score": number, // give your blunt very honest neutral opinion for score 1 = relevant , 2 = interesting , 3 = good read  basing your scoring on the impact of this post in the science.
  "framing_type": string, // your blunt unfiltered opinion on why the topic is interesting or not so much interesting if it's redundant and depending on the breakthrough and progress discussed **be concise**. 
  "confidence_pct": number, // 0-100 confidence rate
  "reason_summary": string, // give from 1 to 3 examples of the impact of the related news. 
@@ -238,7 +238,8 @@ app.get('/bbc/rss', async (req, res) => {
     'https://phys.org/rss-feed/science-news/',
     'https://nautil.us/feed/',
     'https://xkcd.com/atom.xml',
-    'https://www.geekwire.com/feed/'
+    'https://www.geekwire.com/feed/',
+    'https://www.futilitycloset.com/feed/'
     
 
   //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
@@ -294,7 +295,7 @@ app.get('/bbc/rss', async (req, res) => {
     }
     allItems = Array.from(dedupMap.values());
 
-    // Get sentiment 
+    // Get review 
     const chunkSize = 10;
     const chunks = [];
     for (let i = 0; i < allItems.length; i += chunkSize) {
