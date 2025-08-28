@@ -344,25 +344,7 @@ app.get('/bbc/rss', async (req, res) => {
       expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
     };
 
-    //  Send response
-    res.json({
-      data: allItems.slice(0, limit),
-      overall: overallSummary
-    });
-
-  } catch (err) {
-    console.error("❌ RSS processing failed:", err.stack || err.message || err);
-    if (!res.headersSent) {
-      res.status(500).json({ error: "RSS error" });
-    }
-  }
-});
-
-
-    //updated 
-    // ...everything above stays the same
-
-// Get review 
+    // Get review 
 const chunkSize = 10;
 const chunks = [];
 for (let i = 0; i < allItems.length; i += chunkSize) {
@@ -388,6 +370,26 @@ for (const chunk of chunks) {
       };
     })
   );
+
+
+    //  Send response
+    res.json({
+      data: allItems.slice(0, limit),
+      overall: overallSummary
+    });
+
+  } catch (err) {
+    console.error("❌ RSS processing failed:", err.stack || err.message || err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "RSS error" });
+    }
+  }
+});
+
+
+    //updated 
+    // ...everything above stays the same
+
 
   //  overall aggregation
   settledArrays.push(scored);
