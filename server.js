@@ -147,14 +147,14 @@ Return ONLY valid JSON in this schema:
       messages: [
         {
           role: "system",
-          content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess from 1 relevant to 3 good read.
+          content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess between 1 neutral to 3 good read.
           Explain your opinion on why the topic is interesting or not so much interesting, depending on the breakthrough and progress discussed **be concise**.
           Give a 1 to 3 examples of key impact area related to this news.
           Explain briefly like I'm 5 what's the impact of this type of research on society or life or a specific field of study. **be concise**
           
 Return ONLY valid JSON in this schema: 
- { 
- "bias_score": number, // give your blunt very honest neutral opinion for score 1 = relevant , 2 = interesting , 3 = good read  basing your scoring on the impact of this post in the science.
+ {
+ "bias_score": number, // give your blunt very honest to score how much this topic is interesting from 1 = neutral  to 3 =  good read 
  "framing_type": string, // your blunt unfiltered opinion on why the topic is interesting or not so much interesting if it's redundant and depending on the breakthrough and progress discussed **be concise**. 
  "confidence_pct": number, // 0-100 confidence rate
  "reason_summary": string, // give from 1 to 3 examples of the impact of the related news. 
