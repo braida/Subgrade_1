@@ -220,15 +220,46 @@ function stripHtml(s = "") {
 let cache = { data: null, expiresAt: 0 };
 
 app.get('/bbc/rss', async (req, res) => {
-  // Query params: ?days=1&perSource=3&limit=15
   const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
   const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
   const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 25);
 
-  // cache
-  if (cache.data && cache.expiresAt > Date.now()) {
-    return res.json(cache.data.slice(0, limit));
+  //  Serve cached version if fresh
+  if (cache.data && cache.overall && cache.expiresAt > Date.now()) {
+    return res.json({
+      data: cache.data.slice(0, limit),
+      overall: cache.overall
+    });
   }
+
+  try {
+    // fetch, parse, dedupe.
+    const payload = allItems.slice(0, limit); //  scored articles
+    const overallSummary = synthesisInput;    //  aggregated stats
+
+    // Update cache
+    cache = {
+      data: payload,
+      overall: overallSummary,
+      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
+    };
+
+    // Send response
+    res.json({
+      data: payload.slice(0, limit),
+      overall: overallSummary
+    });
+
+  } catch (err) {
+    console.error("❌ RSS processing failed:");
+    console.error(err.stack || err.message || err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "RSS error" });
+    }
+  }
+});
+
+
 
   const sources = [
     'https://www.sciencedaily.com/rss/top/science.xml',
@@ -389,7 +420,8 @@ async function getOverallRead(summaries) {
   return {
     tl_dr: "Overall synthesis not enabled.",
     themes: [],
-    sentiment_overall: overallStats.wAvgScore > 0.1 ? "positive"
+    sentiment_overall
+      : overallStats.wAvgScore > 0.1 ? "positive"
                       : overallStats.wAvgScore < -0.1 ? "negative"
                       : "neutral",
     evidence_snippets: [],
