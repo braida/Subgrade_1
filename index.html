@@ -354,34 +354,7 @@ function renderOverall(overall) {
 
 
 
-     // from here 28.08
-     async function fetchData() {
-  const tableBody = document.getElementById("newsTableBody");
-  const loadingSpinner = document.getElementById("loading");
-  loadingSpinner.style.display = 'flex';
-
-  try {
-    const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
-    const response = await res.json();
-
-    // Split the response into data and overall
-    const articles = response.data || [];
-    const overall = response.overall || null;
-
-    renderTable(articles);
-    if (overall) renderOverall(overall);
-
-  } catch (error) {
-    tableBody.innerHTML = '<tr><td colspan="8">❌ Failed to load news data.</td></tr>';
-    console.error("Error:", error);
-  }
-
-  loadingSpinner.style.display = 'none';
-}
-
-
-     // till here new 28.08
-     
+          
   //  async function fetchData() {
      ////  document.getElementById("loading").style.display = 'block';
    //   const tableBody = document.getElementById("newsTableBody");
@@ -447,8 +420,40 @@ document.getElementById("toggleSort").addEventListener("click", () => {
 
 
     window.addEventListener("DOMContentLoaded", fetchData);
+ 
+        // from here 28.08
+     async function fetchData() {
+  const tableBody = document.getElementById("newsTableBody");
+  const loadingSpinner = document.getElementById("loading");
+  loadingSpinner.style.display = 'flex';
+
+  try {
+    const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
+    const response = await res.json();
+
+    // Split the response into data and overall
+    const articles = response.data || [];
+    const overall = response.overall || null;
+
+    renderTable(articles);
+    if (overall) renderOverall(overall);
+
+  } catch (error) {
+    tableBody.innerHTML = '<tr><td colspan="8">❌ Failed to load news data.</td></tr>';
+    console.error("Error:", error);
+  }
+
+  loadingSpinner.style.display = 'none';
+}
+
+
+     // till here new 28.08
+
+  
   </script>
-   
+
+      
+      
  <!-- Click C on the keyboard -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -486,6 +491,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <div onclick="alert('I carry no badge, yet I’m great at directions;\nI’m the compass, not the captain.\n\nI set the stage, you play the scene.\n\nI bring the map, you choose the journey.\n\nI can prompt, but you perform. ^_^')" 
      style="position: absolute; bottom: 10; left: 10; width: 50px; height: 50px; cursor: pointer;"></div>
 
+
+
+      
 </body>
 </html>      
 
