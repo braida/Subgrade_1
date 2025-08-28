@@ -86,7 +86,7 @@
   <!-- Sort button -->
   <button id="toggleSort" class="btn-preview">⬆️ Sort by Date</button>
 
-  <!-- NEW: Overall stats block (will be filled in later) -->
+  <!-- Overall stats block (will be filled in later) -->
   <div id="overallStats"></div>
 
   <!-- News Table -->
@@ -131,117 +131,137 @@
       }
     }
 
-    // ✅ TABLE RENDERING FUNCTION (KEEP THIS IN HTML)
+    // TABLE RENDERING 
     function renderTable(data) {
-      const tableBody = document.getElementById("newsTableBody");
-      tableBody.innerHTML = '';
+    const tableBody = document.getElementById("newsTableBody");
+    tableBody.innerHTML = '';
 
-      data.forEach((item, i) => {
-        const row = document.createElement("tr");
+    data.forEach((item, i) => {
+      const row = document.createElement("tr");
 
-        const emotionLabel = typeof item.emotion === 'string' ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1) : '—';
-        const reasonLabel = typeof item.reason === 'string' ? item.reason.charAt(0).toUpperCase() + item.reason.slice(1) : '—';
-        const summaryLabel = typeof item.aisummary === 'string' ? item.aisummary.charAt(0).toUpperCase() + item.aisummary.slice(1) : '—';
+      const emotionLabel = typeof item.emotion === 'string' ? item.emotion.charAt(0).toUpperCase() + item.emotion.slice(1) : '—';
+      const reasonLabel = typeof item.reason === 'string' ? item.reason.charAt(0).toUpperCase() + item.reason.slice(1) : '—';
+      const summaryLabel = typeof item.aisummary === 'string' ? item.aisummary.charAt(0).toUpperCase() + item.aisummary.slice(1) : '—';
 
-        row.innerHTML = `
-          <td>${i + 1}</td>
-          <td><a href="${item.link}" target="_blank">${item.title}</a><br>
-            <button class="btn-preview" onclick="togglePreview(${i})">🔍 Description</button>
-          </td>
-          <td>${item.sentimentScore?.toFixed(2) ?? '—'}</td>
-          <td>${emotionLabel}</td>
-          <td>${reasonLabel}</td>
-          <td>${summaryLabel}</td>
-          <td>${new Date(item.pubDate).toLocaleString()}</td>
-          <td>${item.source || 'Unknown'}</td>
-          <td>${item.confidence !== undefined ? item.confidence.toFixed(0) + '%' : '—'}</td>
-        `;
-
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td><a href="${item.link}" target="_blank">${item.title}</a><br>
+          <button class="btn-preview" onclick="togglePreview(${i})">🔍 Description</button>
+        </td>
+        <td>${item.sentimentScore?.toFixed(2) ?? '—'}</td>
+        <td>${emotionLabel}</td>
+        <td>${reasonLabel}</td>
+        <td>${summaryLabel}</td>
+        <td>${new Date(item.pubDate).toLocaleString()}</td>
+        <td>${item.source || 'Unknown'}</td>
+        <td>${item.confidence !== undefined ? item.confidence.toFixed(0) + '%' : '—'}</td>
+      `;
+      
         const preview = document.createElement("tr");
-        preview.id = `preview-${i}`;
-        preview.className = 'preview-row';
-        preview.innerHTML = `
-          <td colspan="9">
-            <div class="preview-content">
-              <strong>Summary:</strong><br>${item.description || "No description available."}
-            </div>
-          </td>
-        `;
+      preview.id = `preview-${i}`;
+      preview.className = 'preview-row';
+      preview.innerHTML = `
+        <td colspan="9">
+          <div class="preview-content">
+            <strong>Summary:</strong><br>${item.description || "No description available."}
+          </div>
+        </td>
+      `;
 
-        tableBody.appendChild(row);
-        tableBody.appendChild(preview);
-      });
-    }
-
+      tableBody.appendChild(row);
+      tableBody.appendChild(preview);
+    });
+                 }
     // PLACEHOLDER: Overall rendering is PAUSED (will not run)
     function renderOverall(overall) {
-      console.log("🤚 Skipping renderOverall() – currently paused.");
-      return;
-    }
+    const container = document.getElementById("overallStats");
+    if (!overall || !overall.stats) return;
+
+    const { avgScore, count, emotions } = overall.stats;
+    const sentiment = overall.synthesis?.sentiment_overall ?? "—";
+    const tldr = overall.synthesis?.tl_dr ?? "No summary yet.";
+
+    const emotionList = Object.entries(emotions)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(', ');
+
+    container.innerHTML = `
+      <div class="overall-box">
+        <strong>📊 Overall Stats</strong><br>
+        <b>Articles:</b> ${count} <br>
+        <b>Avg Score:</b> ${avgScore.toFixed(2)} <br>
+        <b>Overall Sentiment:</b> ${sentiment} <br>
+        <b>Emotions:</b> ${emotionList} <br>
+        <b>Synthesis:</b> ${tldr}
+      </div>
+    `;
+  }
+
 
     //  FETCH + RENDER FUNCTION 
     async function fetchData() {
-      const tableBody = document.getElementById("newsTableBody");
-      const loadingSpinner = document.getElementById("loading");
-      loadingSpinner.style.display = 'flex';
+    const tableBody = document.getElementById("newsTableBody");
+    const loadingSpinner = document.getElementById("loading");
+    loadingSpinner.style.display = 'flex';
 
-      try {
-        const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
-        const response = await res.json();
+    try {
+      const res = await fetch("https://subgrade-1.onrender.com/bbc/rss");
+      const response = await res.json();
 
-        const articles = response.data || [];
-        const overall = response.overall || null;
+      const articles = response.data || [];
+      const overall = response.overall || null;
 
-        newsData = [...articles]; // for sorting
-        renderTable(articles);
-        if (overall) renderOverall(overall); // currently a no-op
+      newsData = [...articles]; // for sorting
+      renderTable(articles);
+      if (overall) renderOverall(overall);
 
-      } catch (error) {
-        tableBody.innerHTML = '<tr><td colspan="9">❌ Failed to load news data.</td></tr>';
-        console.error("Error:", error);
-      }
-
-      loadingSpinner.style.display = 'none';
+    } catch (error) {
+      tableBody.innerHTML = '<tr><td colspan="9">❌ Failed to load news data.</td></tr>';
+      console.error("Error:", error);
     }
 
+    loadingSpinner.style.display = 'none';
+  }
+    
     //  SORTING LOGIC
     const comparator = (a, b) => {
-      if (sortMode === "date") {
-        const ta = Date.parse(a.pubDate);
-        const tb = Date.parse(b.pubDate);
-        return ascending ? ta - tb : tb - ta;
-      } else {
-        const sa = Number(a.sentimentScore ?? 0);
-        const sb = Number(b.sentimentScore ?? 0);
-        return ascending ? sa - sb : sb - sa;
-      }
-    };
+    if (sortMode === "date") {
+      const ta = Date.parse(a.pubDate);
+      const tb = Date.parse(b.pubDate);
+      return ascending ? ta - tb : tb - ta;
+    } else {
+      const sa = Number(a.sentimentScore ?? 0);
+      const sb = Number(b.sentimentScore ?? 0);
+      return ascending ? sa - sb : sb - sa;
+    }
+  };
 
-    document.getElementById("toggleSort").addEventListener("click", () => {
-      if (sortMode === "date" && ascending) {
-        ascending = false;
-      } else if (sortMode === "date" && !ascending) {
-        sortMode = "score";
-        ascending = true;
-      } else if (sortMode === "score" && ascending) {
-        ascending = false;
-      } else {
-        sortMode = "date";
-        ascending = true;
-      }
+  document.getElementById("toggleSort").addEventListener("click", () => {
+    if (sortMode === "date" && ascending) {
+      ascending = false;
+    } else if (sortMode === "date" && !ascending) {
+      sortMode = "score";
+      ascending = true;
+    } else if (sortMode === "score" && ascending) {
+      ascending = false;
+    } else {
+      sortMode = "date";
+      ascending = true;
+    }
 
       const sorted = [...newsData].sort(comparator);
-      document.getElementById("toggleSort").innerText =
-        ascending
-          ? (sortMode === "date" ? "⬆️ Sort by Date" : "⬆️ Sort by Score")
-          : (sortMode === "date" ? "⬇️ Sort by Date" : "⬇️ Sort by Score");
+    document.getElementById("toggleSort").innerText =
+      ascending
+        ? (sortMode === "date" ? "⬆️ Sort by Date" : "⬆️ Sort by Score")
+        : (sortMode === "date" ? "⬇️ Sort by Date" : "⬇️ Sort by Score");
 
-      renderTable(sorted);
-    });
+    renderTable(sorted);
+  });
 
-    //  FETCH
-    window.addEventListener("DOMContentLoaded", fetchData);
-  </script>
+  //  FETCH
+  window.addEventListener("DOMContentLoaded", fetchData);
+</script>
+
 
          
  <!-- Click C on the keyboard -->
