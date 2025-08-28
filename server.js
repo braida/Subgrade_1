@@ -297,6 +297,147 @@ app.get('/bbc/rss', async (req, res) => {
     }
     allItems = Array.from(dedupMap.values());
 
+    //updated 
+    // ...everything above stays the same
+
+// Get review 
+const chunkSize = 10;
+const chunks = [];
+for (let i = 0; i < allItems.length; i += chunkSize) {
+  chunks.push(allItems.slice(i, i + chunkSize));
+}
+
+// collect per-chunk settled results for aggregation
+const settledArrays = [];
+
+for (const chunk of chunks) {
+  const scored = await Promise.allSettled(
+    chunk.map(async (item) => {
+      const { score, reason, emotion, confidence, aisummary } =
+        await getSentimentScore(item._combinedText);
+
+      return {
+        ...item,
+        sentimentScore: Number.isFinite(score) ? Number(score.toFixed(4)) : null,
+        confidence: Number.isFinite(confidence) ? Number(confidence.toFixed(4)) : null,
+        emotion: emotion ?? null,
+        reason: reason ?? null,
+        aisummary: aisummary ?? null,
+      };
+    })
+  );
+
+  //  overall aggregation
+  settledArrays.push(scored);
+
+  // logic unchanged
+  for (let i = 0; i < scored.length; i++) {
+    if (scored[i].status === 'fulfilled') {
+      const idx = allItems.indexOf(chunk[i]);
+      allItems[idx] = scored[i].value;
+    } else {
+      console.error('❌ Sentiment failed:', scored[i].reason?.message || scored[i].reason);
+      const idx = allItems.indexOf(chunk[i]);
+      allItems[idx] = {
+        ...chunk[i],
+        sentimentScore: null,
+        confidence: null,
+        emotion: null,
+        reason: null,
+        aisummary: null,
+      };
+    }
+  }
+}
+
+// overall aggregation
+const settled = settledArrays.flat();
+const articles = settled
+  .filter(r => r.status === "fulfilled")
+  .map(r => r.value);
+
+function aggregateMetrics(rows) {
+  const n = rows.length || 1;
+  const sumScore = rows.reduce((a, r) => a + (Number(r.sentimentScore) || 0), 0);
+  const avgScore = sumScore / n;
+
+  const sumConf = rows.reduce((a, r) => a + (Number(r.confidence) || 0), 0);
+  const wAvgScore = rows.reduce(
+    (a, r) => a + (Number(r.sentimentScore) || 0) * (Number(r.confidence) || 0),
+    0
+  ) / (sumConf || 1);
+
+  const emotions = {};
+  for (const r of rows) {
+    const e = String(r.emotion || "unknown").toLowerCase();
+    emotions[e] = (emotions[e] || 0) + 1;
+  }
+
+  const topPositive = [...rows].sort((a, b) => (b.sentimentScore ?? 0) - (a.sentimentScore ?? 0)).slice(0, 5)
+    .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
+  const topNegative = [...rows].sort((a, b) => (a.sentimentScore ?? 0) - (b.sentimentScore ?? 0)).slice(0, 5)
+    .map(({ title, link, sentimentScore }) => ({ title, link, sentimentScore }));
+
+  return { count: n, avgScore, wAvgScore, emotions, topPositive, topNegative };
+}
+
+const overallStats = aggregateMetrics(articles);
+
+// call for a crossarticle 
+async function getOverallRead(summaries) {
+  // Keeping this as a noop placeholder prevents breaking anything.
+  return {
+    tl_dr: "Overall synthesis not enabled.",
+    themes: [],
+    sentiment_overall: overallStats.wAvgScore > 0.1 ? "positive"
+                      : overallStats.wAvgScore < -0.1 ? "negative"
+                      : "neutral",
+    evidence_snippets: [],
+    risks: [],
+    opportunities: []
+  };
+}
+
+const synthesisInput = articles.map(a => ({
+  title: a.title ?? a.link ?? "(untitled)",
+  score: a.sentimentScore,
+  emotion: a.emotion,
+  confidence: a.confidence,
+  summary: a.aisummary ?? (a._combinedText || "").slice(0, 400)
+}));
+
+const overallSynthesis = await getOverallRead(synthesisInput);
+//  overall aggregation
+// Sort newest first (unchanged)
+allItems.sort((a, b) => {
+  const ta = Date.parse(a.pubDate || '') || 0;
+  const tb = Date.parse(b.pubDate || '') || 0;
+  return tb - ta;
+});
+
+const payload = allItems.slice(0, limit).map(({ _combinedText, ...rest }) => rest);
+
+// Update cache add overall
+cache = {
+  data: payload,
+  overall: {
+    stats: overallStats,
+    synthesis: overallSynthesis,
+    generatedAt: new Date().toISOString()
+  },
+  expiresAt: Date.now() + 5 * MS.minute,
+};
+
+// response
+res.json(payload);
+
+// ...catch stays the same
+
+
+    //end updated
+    
+   /*
+    // for here 28.08 1530
     // Get review 
     const chunkSize = 10;
     const chunks = [];
@@ -356,6 +497,8 @@ app.get('/bbc/rss', async (req, res) => {
     };
 
     res.json(payload);
+    // till here 28.08. 1530
+    */
   } 
   catch (err) {
     console.error("❌ RSS processing failed:", err.message || err);
