@@ -196,11 +196,11 @@ const MS = {
   minute: 60_000, 
   hour: 3_600_000, 
   day: 86_400_000, // 1 day
-  days3: 86_400_000 * 3 // 3 days
+  days3: 86_400_000 * 2 // 3 days
 };
 
 // recent check
-function isRecent(dateLike, days = 3) {
+function isRecent(dateLike, days = 2) {
   if (!dateLike) return false;
   const t = Date.parse(dateLike);
   if (Number.isNaN(t)) return false;
@@ -234,8 +234,8 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.sciencedaily.com/rss/top/science.xml',
     'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
-    // 'https://www.frontiersin.org/journals/artificial-intelligence/rss',
-    'https://phys.org/rss-feed/science-news/',
+    'https://www.nasa.gov/news-release/feed/',
+   // 'https://phys.org/rss-feed/science-news/',
     'https://nautil.us/feed/',
     'https://xkcd.com/atom.xml',
     'https://www.geekwire.com/feed/',
