@@ -196,8 +196,7 @@ async function getRecentArticlesSummary(articles = []) {
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       temperature: 0.5,
-      response_format: { type: "json_object" },
-
+      
       messages: [
         {
           role: "system",
