@@ -153,7 +153,6 @@ Return ONLY valid JSON in this schema:
 }
     */
       messages: [
-            messages: [
         {
           role: "system",
           content: `You are an assistant AI to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess from 1 relevant to 3 good read.
