@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
  
    <!--  summary -->
-<div id="summary" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; cursor: pointer;">
+<div id="summary"
+     style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; cursor: not-allowed; opacity: 0.6;">
   <h4>Summary of Latest Articles</h4>
-  <p id="summary-content">Click here to load summary</p>
+  <p id="summary-content">Summary will be available shortly…</p>
 </div>
+
 
    
    <title>🌍 Dashboard</title>
@@ -420,22 +422,31 @@ document.getElementById("toggleSort").addEventListener("click", () => {
 });
 
 
-    window.addEventListener("DOMContentLoaded", () => {
-  fetchData();
- // loadSummary();
-});
+let isDataReady = false;
+let summaryLoaded = false;
 
-    document.addEventListener('DOMContentLoaded', () => {
-  const summaryDiv = document.getElementById('summary');
-  let summaryLoaded = false;
-  summaryDiv.addEventListener('click', async () => {
-    if (summaryLoaded) return; // stop multiple load
+document.addEventListener('DOMContentLoaded', () => {
+  fetchData().then(() => {
+    isDataReady = true;
+
+    const summary = document.getElementById('summary');
+    summary.style.cursor = 'pointer';
+    summary.style.opacity = '1';
+    document.getElementById('summary-content').textContent = 'Click to load summary';
+  });
+
+
+  document.getElementById('summary').addEventListener('click', async () => {
+    if (!isDataReady || summaryLoaded) return;
+
     const content = document.getElementById('summary-content');
     content.textContent = "Loading summary...";
+
     await loadSummary();
     summaryLoaded = true;
   });
 });
+
 
       </script>
    
