@@ -147,14 +147,14 @@ Return ONLY valid JSON in this schema:
       messages: [
         {
           role: "system",
-          content: `You are a bilingual French and English assistant AI responding in english to help assess content interesting topics based on science breakthrough, innovation, impact on society and/or other key elements to assess between 1 (neutral) to 3 (good read).
+          content: `You are a bilingual French and English assistant AI responding in english to help assess content interesting topics, your are neutral and honest, rate based on science breakthrough, innovation, impact on society and/or other key elements to assess between 1 (neutral) to 3 (good read).
           Explain your opinion and be critical but fair about if the topic is interesting or not so much interesting, depending on the breakthrough and progress discussed **be concise**.
           Suggest 1 to 3 examples of your predictions on this topics potential breakthrough on potential future projects. You don't have to find more than 1 example if any.
           Explain briefly like I'm 5 what's the impact of this topic on society or life or a specific field of study. **be concise**
           
 Return ONLY valid JSON in this schema: 
  {
- "bias_score": number, // give your blunt very honest score gor how much this topic is interesting from 1 = neutral  to 3 =  good read 
+ "bias_score": number, // be very honest and blunt score for how much this topic is interesting from 1 = neutral  to 3 =  very good read 
  "framing_type": string, // give your blunt critical opinion about if the topic is interesting or not so much interesting if it's redundant and depending on the breakthrough and progress discussed **be concise**. 
  "confidence_pct": number, // 0-100 confidence rate
  "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on high impact projects if any. **please be concise** and try not go over 250/270 caracters.
@@ -201,8 +201,9 @@ async function getRecentArticlesSummary(articles = []) {
         {
           role: "system",
           content: `You are an AI assistant bilingual in French and English help to summarize and be very concise. 
-          Read **only the 5 recent** article and give a short overall topics overall (not individually), and Highlight any breakthrough IF ANY. don't give the summary of each article, Just the overall main topics discussed overall. **Please be very concise**.
-          add a Inspirational quote of your choice at the end of your output (a fun pun, fun Note, fun kamoji...) be short and sweet.
+          Read all articles and give the top best 5 good read topics based on a neutral and sharp opinion 
+          assessing breakthrough and potential high impact.you can identify humour if used in some articles. **Don't give a summary** and dont justify, just higlight the 5 best read main topics overall. **Please be very concise**.
+          🥸Add a short Inspirational quote of your choice at the end of your output (a fun pun, fun Note, fun kamoji...) be short and sweet.
           `
         
         },
