@@ -415,8 +415,12 @@ document.getElementById("toggleSort").addEventListener("click", () => {
 });
 
 
-    window.addEventListener("DOMContentLoaded", fetchData);
-  </script>
+    window.addEventListener("DOMContentLoaded", () => {
+  fetchData();
+  loadSummary(); 
+    });
+
+      </script>
    
  <!-- Click C on the keyboard -->
 <script>
@@ -456,11 +460,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <div onclick="alert('I carry no badge, yet I’m great at directions;\nI’m the compass, not the captain.\n\nI set the stage, you play the scene.\n\nI bring the map, you choose the journey.\n\nI can prompt, but you perform. ^_^')" 
      style="position: absolute; bottom: 10; left: 10; width: 50px; height: 50px; cursor: pointer;"></div>
 
-      <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    loadSummary();
-  });
-</script>
 
 </body>
 </html>      
