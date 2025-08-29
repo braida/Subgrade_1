@@ -201,7 +201,7 @@ async function getRecentArticlesSummary(articles = []) {
         {
           role: "system",
           content: `You are an AI assistant bilingual in French and English help to summarize and be very concise. 
-          Read **only the 5 recent** article and summarize the overall topics and relations between each topic discussed IF ANY. don't reference the article, Just give me summary of text. **Please be very concise**.
+          Read **only the 5 recent** article and give a short overall topics. Highlight any breakthrough IF ANY. don't give the summary of each article, Just the overall main topic discussed. **Please be very concise**.
           `
         
         },
