@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
  
    <!--  summary -->
-      <div id="summary" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
+<div id="summary" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; cursor: pointer;">
   <h4>Summary of Latest Articles</h4>
-  <p id="summary-content">Loading summary...</p>
-      </div>
+  <p id="summary-content">Click here to load summary</p>
+</div>
+
    
    <title>🌍 Dashboard</title>
    <p> Scoring <i>(from 1 neutral to 3 good read)</i> is using GPT4o-mini and news comes from RSS feeds. 
@@ -421,7 +422,19 @@ document.getElementById("toggleSort").addEventListener("click", () => {
 
     window.addEventListener("DOMContentLoaded", () => {
   fetchData();
-  loadSummary();
+ // loadSummary();
+});
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const summaryDiv = document.getElementById('summary');
+  let summaryLoaded = false;
+  summaryDiv.addEventListener('click', async () => {
+    if (summaryLoaded) return; // stop multiple load
+    const content = document.getElementById('summary-content');
+    content.textContent = "Loading summary...";
+    await loadSummary();
+    summaryLoaded = true;
+  });
 });
 
       </script>
