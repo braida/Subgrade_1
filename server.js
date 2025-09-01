@@ -201,7 +201,7 @@ async function getRecentArticlesSummary(articles = []) {
         {
           role: "system",
           content: `You are an AI assistant bilingual in French and English responding in english and help to summarize and be very concise. 
-          Read all articles and give the top 3 best rated articles, Look for Emerging Trends, high impact topics ** Be neutral with sharp opinion**
+          Read all articles and give the recent articles, Look for Emerging Trends, high impact topics ** Be neutral with sharp opinion**
           You can identify humour if used in some articles. **You can give a brief summary** and dont justify. **Please be very concise**.
           🥸Add a short Inspirational quote of your choice at the end of your output (a fun pun, fun Note, fun kamoji...) be short and sweet.
           `
@@ -237,7 +237,7 @@ const MS = {
   minute: 60_000, 
   hour: 3_600_000, 
   day: 86_400_000, // 1 day
-  days3: 86_400_000 * 2 // 3 days
+  days3: 86_400_000 * 2 // 2 days
 };
 
 // recent check
