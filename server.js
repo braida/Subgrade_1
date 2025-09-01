@@ -147,18 +147,18 @@ Return ONLY valid JSON in this schema:
       messages: [
         {
           role: "system",
-          content: `You are a bilingual French and English assistant AI responding in english to help assess content interesting topics, your are neutral and honest, rate based on science breakthrough, innovation and/or other key elements to assess between 1 (neutral) to 3 (good read).
-          Explain your opinion and be critical but fair about if the topic is interesting or not so much interesting, depending on the breakthrough and progress discussed **be concise**.
-          Suggest 1 to 3 examples of your predictions on this topics potential breakthrough on potential future projects. You don't have to find more than 1 example if any.
-          Explain briefly like I'm 5 what's the impact of this topic on society or life or a specific field of study. **be concise**
+          content: `You are a bilingual French and English assistant AI responding in english to help assess content interesting topics, your are neutral and honest, rate based on: [general knowledge, science or social breakthrough, innovation] and/or other key elements to assess between 1 (neutral) to 3 (good read).
+          Explain your opinion and be critical but fair about if the topic is interesting or not so much interesting, depending on the topic discussed. **Please be concise**.
+          Suggest 1 to 3 examples of your predictions on this topic's potential social and or science impact. You don't have to find more than 1 example if any.
+          Explain briefly like I'm 5 what's the article about. **Please be concise**
           
 Return ONLY valid JSON in this schema: 
  {
- "bias_score": number, // be very honest and blunt score for how much this topic is interesting from 1 = neutral  to 3 =  very good read 
- "framing_type": string, // give your blunt critical opinion about if the topic is interesting or not so much interesting if it's redundant and depending on the breakthrough and progress discussed **be concise**. 
+ "bias_score": number, //  be very honest and blunt score for how much this topic is interesting from 1 = neutral  to 3 =  very good read 
+ "framing_type": string, // give your blunt critical opinion about if the topic is interesting or not so much interesting  **be concise**. rate based on: [general knowledge, science or social breakthrough, innovation] 
  "confidence_pct": number, // 0-100 confidence rate
- "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on high impact projects if any. **please be concise** and try not go over 250/270 caracters.
- "aisummary": string, // explain briefly like I'm 5 what's the impact of this topic on society, on technology or any specific field. **focus on potential impact and be concise**
+ "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on this topic's impact if any. **please be concise** and try not go over 250/270 caracters.
+ "aisummary": string, // explain briefly like I'm 5 what's this article about and impact on society or related field **Please be concise**
   }
  `
         },
@@ -200,9 +200,9 @@ async function getRecentArticlesSummary(articles = []) {
       messages: [
         {
           role: "system",
-          content: `You are an AI assistant bilingual in French and English help to summarize and be very concise. 
-          Read all articles and give the top best 5 good read topics, Look for Emerging Trends, high impact topics ** Be neutral with sharp opinion**
-          You can identify humour if used in some articles. **Don't give a summary** and dont justify, just higlight the 5 best read main topics overall. **Please be very concise**.
+          content: `You are an AI assistant bilingual in French and English responding in english and help to summarize and be very concise. 
+          Read all articles and give the top 3 best rated articles, Look for Emerging Trends, high impact topics ** Be neutral with sharp opinion**
+          You can identify humour if used in some articles. **You can give a brief summary** and dont justify. **Please be very concise**.
           🥸Add a short Inspirational quote of your choice at the end of your output (a fun pun, fun Note, fun kamoji...) be short and sweet.
           `
         
@@ -264,7 +264,7 @@ app.get('/bbc/rss', async (req, res) => {
   // Query params: ?days=1&perSource=3&limit=15
   const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
   const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
-  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 25);
+  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 30);
 
   // cache
   if (cache.data && cache.expiresAt > Date.now()) {
@@ -282,10 +282,10 @@ app.get('/bbc/rss', async (req, res) => {
     'https://www.geekwire.com/feed/',
     'https://www.futilitycloset.com/feed/',
     'https://www.journaldugeek.com/feed/',
-    'https://korben.info/feed.xml'
+  //  'https://korben.info/feed.xml',
     
 
-  //  'https://feeds.bbci.co.uk/news/world/rss.xml', 
+    'https://feeds.bbci.co.uk/news/world/rss.xml', 
  //   'https://feeds.skynews.com/feeds/rss/world.xml',
   //  'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
     // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
@@ -293,7 +293,7 @@ app.get('/bbc/rss', async (req, res) => {
     // 'https://www.icc-cpi.int/rss/news/all', 
   //  'https://www.rsfjournal.org/rss/current.xml',
   //  'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
-  //  'https://www.lemonde.fr/rss/une.xml'
+   'https://www.lemonde.fr/rss/une.xml'
   ];
 
   try {
@@ -411,7 +411,7 @@ app.get('/bbc/rss/summary', async (req, res) => {
       return res.status(503).json({ error: "No cached data available. Please fetch /bbc/rss first." });
     }
 
-    const top5 = articles.slice(0, 5); // Most recent 5 articles
+    const top5 = articles.slice(0, 3); // updated 3 articles
     const summary = await getRecentArticlesSummary(top5);
 
     res.json({
