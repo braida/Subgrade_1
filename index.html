@@ -470,15 +470,14 @@ document.addEventListener('DOMContentLoaded', () => {
       summary.style.opacity = '1';
       summaryContent.textContent = 'Click to load summary';
 
-      //   fetchTrend() on click
+      // 👉 Only call fetchTrend() on click, after fetchData is done
       summary.addEventListener('click', fetchTrend);
     }
 
-    //   to load trend immediately after fetchData 
+    // to load trend immediately after fetchData finishes
     // fetchTrend();
   });
 });
-
 //
 
   document.getElementById('summary').addEventListener('click', async () => {
@@ -490,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     await loadSummary();
     summaryLoaded = true;
   });
-});
+
 
 
       </script>
