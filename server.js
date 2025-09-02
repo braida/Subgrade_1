@@ -497,7 +497,7 @@ app.get('/bbc/rss/summary', async (req, res) => {
 
 
 //store root
-app.get('/bbc/trends', (req, res) => {
+app.get('/bbc/rss/trends', (req, res) => {
   const sinceDate = new Date(Date.now() - 7 * 86400 * 1000).toISOString(); // last 7 days
 
   db.all(
@@ -534,7 +534,7 @@ app.get('/bbc/trends', (req, res) => {
 //
 
     // trend analysis + cache
-app.get('/bbc/trends/gpt', async (req, res) => {
+app.get('/bbc/rss/trends/gpt', async (req, res) => {
   const today = new Date().toISOString().slice(0, 10); // yyyy-mm-dd
 
   // Check cache for today's summary
