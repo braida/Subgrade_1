@@ -17,7 +17,7 @@ const parser = new Parser({
 
 //store
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./articles.db');
+const db = new sqlite3.Database('./trend_summaries.db');
 
 // Trend summary cache
 db.run(`
