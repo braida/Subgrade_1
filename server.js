@@ -519,6 +519,77 @@ app.get('/bbc/trends', (req, res) => {
 });
 //
 
+// trend analysis 
+
+app.get('/bbc/trends/gpt', async (req, res) => {
+  const sinceDate = new Date(Date.now() - 7 * 86400 * 1000).toISOString(); // past 7 days
+
+  db.all(
+    `SELECT title, sentimentScore, reason, aisummary FROM articles WHERE savedAt >= ?`,
+    [sinceDate],
+    async (err, rows) => {
+      if (err) {
+        console.error("❌ DB error:", err.message);
+        return res.status(500).json({ error: "Trend query failed" });
+      }
+
+      if (!rows.length) {
+        return res.status(404).json({ error: "No data for past 7 days." });
+      }
+
+      const summaries = rows.map(r => {
+        return `• ${r.title} — Summary: ${r.aisummary ?? 'N/A'} | Reason: ${r.reason ?? '—'}`;
+      }).slice(0, 25); // Limit context size
+
+      const prompt = `
+You are an AI assistant bilingual in French and English responding in english that identifies **weekly trends in the news**. 
+From the list of article summaries below, do the following:
+- Detect **recurring themes or topics**
+- Summarize the **top 3 discussed topics**
+- Give a short insight into **why people may care**
+- Optional: list notable examples 
+
+Return your answer in the following JSON format:
+{
+  "summary": "Short summary in 2-3 sentences",
+  "topics": ["Topic A", "Topic B", "Topic C"],
+  "insight": "Why are these topics trending?",
+  "examples": ["Optional notable article or project"]
+}
+
+Articles:
+${summaries.join('\n')}
+`;
+
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          temperature: 0.4,
+          response_format: "json",
+          messages: [
+            { role: "system", content: "You are a trend analyst for weekly science articles." },
+            { role: "user", content: prompt }
+          ]
+        });
+
+        const response = completion.choices[0].message.content;
+        const parsed = JSON.parse(response);
+
+        res.json({
+          generatedAt: new Date().toISOString(),
+          ...parsed
+        });
+
+      } catch (err) {
+        console.error("❌ GPT trend analysis failed:", err.message || err);
+        res.status(500).json({ error: "Trend summary failed." });
+      }
+    }
+  );
+});
+
+//end trend review
+        
 // Test + info routes
 app.get('/test', async (req, res) => {
   const input = req.query.q || 'This is a peaceful and hopeful message.';
