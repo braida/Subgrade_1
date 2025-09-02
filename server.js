@@ -575,14 +575,14 @@ app.get('/bbc/rss/trends/gpt', async (req, res) => {
           const prompt = `
 You are an AI assistant bilingual in French and English responding in english that identifies **weekly trends in the news**. 
 From the list of article summaries below, do the following:
-- Detect **recurring themes or topics**
-- Summarize the **top 3 discussed topics**
+- Detect **recurring themes or topics** amd give a few titles over the week and pubdate
+- Summarize the **top 3 discussed topics** and give example of the title article and pubdate 
 - Give a short insight into **why people may care**
 - Optional: list notable examples or projects
 
 Return JSON like:
 {
-  "summary": "identify trends in the articles and highlight the most interesting topics.",
+  "summary": "identify trends in the articles and highlight the most interesting topics,with title articles,  the number of times the topic is mentioned in reason and publication dates",
   "topics": ["Topic A", "Topic B", "Topic C"],
   "insight": "Why are these topics trending? is there repeated mentions of this topic. give your blunt opinion and be concise",
   "examples": ["Optional notable article or project"]
