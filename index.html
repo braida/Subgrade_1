@@ -455,43 +455,30 @@ document.getElementById("toggleSort").addEventListener("click", () => {
 
 let isDataReady = false;
 let summaryLoaded = false;
-let summaryContent = false;
+//let summaryContent = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchData().then(() => {
     isDataReady = true;
 
+    // Enable manual click trigger
     const summary = document.getElementById('summary');
-    if (summary) {
+    const summaryContent = document.getElementById('summary-content');
+
+    if (summary && summaryContent) {
       summary.style.cursor = 'pointer';
       summary.style.opacity = '1';
+      summaryContent.textContent = 'Click to load summary';
 
-      const summaryContent = document.getElementById('summary-content');
-      if (summaryContent) {
-        summaryContent.textContent = 'Click to load summary';
-      }
-       summary.addEventListener('click', async () => {
-        if (!isDataReady) return;
-
-        summaryContent.textContent = '🔄 Loading trends...';
-
-        try {
-          const res = await fetch("https://subgrade-1.onrender.com/bbc/trends");
-          const trendData = await res.json();
-
-          if (trendData.summary) {
-            summaryContent.textContent = trendData.summary;
-          } else {
-            summaryContent.textContent = ' 👎 No summary available.';
-          }
-        } catch (err) {
-          console.error("❌ Trend fetch failed:", err);
-          summaryContent.textContent = '❌ Failed to load trends.';
-        }
-      });
+      //   fetchTrend() on click
+      summary.addEventListener('click', fetchTrend);
     }
+
+    //   to load trend immediately after fetchData 
+    // fetchTrend();
   });
 });
+
 //
 
   document.getElementById('summary').addEventListener('click', async () => {
