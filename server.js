@@ -17,7 +17,24 @@ const parser = new Parser({
 
 //store
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./trend_summaries.db');
+const db = new sqlite3.Database('./articles.db');
+
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    link TEXT UNIQUE,
+    pubDate TEXT,
+    description TEXT,
+    sentimentScore REAL,
+    confidence REAL,
+    emotion TEXT,
+    reason TEXT,
+    aisummary TEXT,
+    source TEXT
+  )
+`);
 
 // Trend summary cache
 db.run(`
