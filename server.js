@@ -582,9 +582,9 @@ From the list of article summaries below, do the following:
 
 Return JSON like:
 {
-  "summary": "Short summary in 2-3 sentences",
+  "summary": "identify trends in the articles and highlight the most interesting topics.",
   "topics": ["Topic A", "Topic B", "Topic C"],
-  "insight": "Why are these topics trending?",
+  "insight": "Why are these topics trending? is there repeated mentions of this topic. give your blunt opinion and be concise",
   "examples": ["Optional notable article or project"]
 }
 Articles:
