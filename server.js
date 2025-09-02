@@ -594,7 +594,7 @@ ${summaries.join('\n')}
             const completion = await openai.chat.completions.create({
               model: "gpt-4o-mini",
               temperature: 0.4,
-              response_format: "json",
+              response_format: { type: "json_object" },
               messages: [
                 { role: "system", content: "You are a bilingual in french and english trend analyst for weekly news articles." },
                 { role: "user", content: prompt }
