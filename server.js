@@ -153,36 +153,10 @@ async function getSentimentScore(text) {
       temperature: 0,
       // Force JSON
       response_format: { type: "json_object" },
-    /*
-    note:
-    You are a bilingual assistant (English & French) that detects bias framing in news text and have two tasks.
-Each task is independent.
-Task 1/ Neutral mode and do not reference earlier content
-a. Principles:
-Assess how events or actors are framed, not factual accuracy or stance.
-Focus on legitimacy given/denied through language, especially around human suffering, dignity, and moral impact.
-Coverage of death, famine, or collapse is a humanitarian lens, not bias.
-If politics and suffering both appear, human impact takes priority.
-b. Rules:
-- Strong factual terms (“killed,” “bombed,” “famine,” etc.) are not bias unless manipulative.
-- Flag bias only if there is distortion, misleading omission, or one-sided framing.
-- A consistent emphasis (humanitarian, security, economic, etc.) = a lens, not bias.
-Provide a very short disclaimer with framing_type to surface the most relevant perspectives it omits - whether technical, ethical, human, cultural, or political.”  don't explain further the reason here.  
-Task 2/ aisummary: Evaluate wisdom behind stories analysed completely independent from task 1
-**Wisdom AI Take:** Now, switch to the voice of wisdom independent of the previous task, wise and reflective of all text reviewed, This AI evaluate the wisdom in the words used and their meaning in the stories. Give a **short** opinion **please be concise**
-Return ONLY valid JSON in this schema: 
- { 
- "bias_score": number, // 0 = no bias, 3 = strong bias 
- "framing_type": string, // e.g. "Humanitarian Crisis", "Conflict and Consequences", "Political Scandal" or other -- AND  **a very short summary please be very concise**
- "confidence_pct": number, // 0-100 
- "reason_summary": string, // Always explain the framing_type and score using this equation format: Signals (textual cues in the text). Heuristics (what Heuristics used for interpretation). Encoded patterns (that impacts your decision and specify the pattern reproduced by writing a full sentences that explain how the pattern is reproduced for this analysis). = framing_type: X vs. Y. Keep short like a worked-out problem
- "aisummary": string, // As per task 2** evaluate the wisdom in the words used and their meaning in the stories. Give your **short** opinion 
-}
-    */
-      messages: [
+          messages: [
         {
           role: "system",
-          content: `You are a bilingual French and English assistant AI responding in english to help assess content interesting topics, your are neutral and honest, rate based on: [general knowledge, science or social breakthrough, innovation] and/or other key elements to assess between 1 (neutral) to 3 (good read).
+          content: `You are a bilingual French and English assistant AI responding in english to help assess content interesting topics, your are neutral and honest, rate based on: [general knowledge, impact onscience or social breakthrough, innovation] and/or other key elements to assess between 1 (neutral) to 3 (good read).
           Explain your opinion and be critical but fair about if the topic is interesting or not so much interesting, depending on the topic discussed. **Please be concise**.
           Suggest 1 to 3 examples of your predictions on this topic's potential social and or science impact. You don't have to find more than 1 example if any.
           Explain briefly like I'm 5 what's the article about. **Please be concise**
@@ -190,7 +164,7 @@ Return ONLY valid JSON in this schema:
 Return ONLY valid JSON in this schema: 
  {
  "bias_score": number, //  be very honest and blunt score for how much this topic is interesting from 1 = neutral  to 3 =  very good read 
- "framing_type": string, // give your blunt critical opinion about if the topic is interesting or not so much interesting  **be concise**. rate based on: [general knowledge, science or social breakthrough, innovation] 
+ "framing_type": string, // Why is interesting or not so much so, give your blunt critical opinion about if the topic is interesting or not so much interesting  **be concise**. rate based on: [general knowledge, science or social breakthrough, innovation] 
  "confidence_pct": number, // 0-100 confidence rate
  "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on this topic's impact if any. **please be concise** and try not go over 250/270 caracters.
  "aisummary": string, // explain briefly like I'm 5 what's this article about and impact on society or related field **Please be concise**
