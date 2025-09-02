@@ -349,18 +349,18 @@ app.get('/bbc/rss', async (req, res) => {
     'https://xkcd.com/atom.xml',
     'https://www.geekwire.com/feed/',
     'https://www.futilitycloset.com/feed/',
-    'https://www.journaldugeek.com/feed/',
+  //  'https://www.journaldugeek.com/feed/',
   //  'https://korben.info/feed.xml',
     
 
     'https://feeds.bbci.co.uk/news/world/rss.xml', 
- //   'https://feeds.skynews.com/feeds/rss/world.xml',
+    'https://feeds.skynews.com/feeds/rss/world.xml',
   //  'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
     // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
-  //  'https://www.aljazeera.com/xml/rss/all.xml', 
+    'https://www.aljazeera.com/xml/rss/all.xml', 
     // 'https://www.icc-cpi.int/rss/news/all', 
   //  'https://www.rsfjournal.org/rss/current.xml',
-  //  'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+   'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
    'https://www.lemonde.fr/rss/une.xml'
   ];
 
@@ -575,14 +575,14 @@ app.get('/bbc/rss/trends/gpt', async (req, res) => {
           const prompt = `
 You are an AI assistant bilingual in French and English responding in english that identifies **weekly trends in the news**. 
 From the list of article summaries below, do the following:
-- Detect **recurring themes or topics** amd give a few titles over the week and pubdate
+- Identify trends in the articles and highlight the most interesting topics with title articles, the number of times the topic is mentioned and **Context if you have any**",
 - Summarize the **top 3 discussed topics** and give example of the title article and pubdate 
 - Give a short insight into **why people may care**
 - Optional: list notable examples or projects
 
 Return JSON like:
 {
-  "summary": "identify trends in the articles and highlight the most interesting topics,with title articles,  the number of times the topic is mentioned in reason and publication dates",
+  "summary": "identify trends in the articles and highlight the most interesting topics,with title articles, the number of times the topic is mentioned and Context if you have any",
   "topics": ["Topic A", "Topic B", "Topic C"],
   "insight": "Why are these topics trending? is there repeated mentions of this topic. give your blunt opinion and be concise",
   "examples": ["Optional notable article or project"]
@@ -596,7 +596,7 @@ ${summaries.join('\n')}
               temperature: 0.4,
               response_format: { type: "json_object" },
               messages: [
-                { role: "system", content: "You are a bilingual in french and english trend analyst for weekly news articles." },
+                { role: "system", content: "You are a bilingual in french and english trend analyst for weekly news articles.Be impartial and blunt to Detect **recurring themes and topics** amd give a few titles over the week" },
                 { role: "user", content: prompt }
               ]
             });
