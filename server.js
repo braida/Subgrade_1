@@ -19,22 +19,22 @@ const parser = new Parser({
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./articles.db');
 
-
-db.run(`
-  CREATE TABLE IF NOT EXISTS articles (
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS articles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT,
-    link TEXT UNIQUE,
+    link TEXT,
     pubDate TEXT,
-    description TEXT,
+    source TEXT,
     sentimentScore REAL,
     confidence REAL,
     emotion TEXT,
     reason TEXT,
     aisummary TEXT,
-    source TEXT
-  )
-`);
+    savedAt TEXT
+  )`);
+});
+
 
 // Trend summary cache
 db.run(`
