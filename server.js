@@ -15,6 +15,27 @@ const parser = new Parser({
   timeout: 10000
 });
 
+//store
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./articles.db');
+
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    link TEXT,
+    pubDate TEXT,
+    source TEXT,
+    sentimentScore REAL,
+    confidence REAL,
+    emotion TEXT,
+    reason TEXT,
+    aisummary TEXT,
+    savedAt TEXT
+  )`);
+});
+//
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const sentimentCache = new Map();
 
@@ -260,6 +281,39 @@ function stripHtml(s = "") {
 // memory cache 
 let cache = { data: null, expiresAt: 0 };
 
+
+// store review 
+ function saveArticlesToDatabase(articles) {
+  const stmt = db.prepare(`
+    INSERT INTO articles 
+    (title, link, pubDate, source, sentimentScore, confidence, emotion, reason, aisummary, savedAt)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  const now = new Date().toISOString();
+
+  for (const a of articles) {
+    stmt.run([
+      a.title,
+      a.link,
+      a.pubDate,
+      a.source,
+      a.sentimentScore ?? null,
+      a.confidence ?? null,
+      a.emotion ?? null,
+      a.reason ?? null,
+      a.aisummary ?? null,
+      now
+    ]);
+  }
+
+  stmt.finalize();
+  console.log(` 👍🏻Saved ${articles.length} articles to DB.`);
+}
+//
+
+
+
 app.get('/bbc/rss', async (req, res) => {
   // Query params: ?days=1&perSource=3&limit=15
   const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
@@ -389,7 +443,9 @@ app.get('/bbc/rss', async (req, res) => {
     });
 
     const payload = allItems.slice(0, limit).map(({ _combinedText, ...rest }) => rest);
-
+//store
+    saveArticlesToDatabase(payload);
+    
     // Update cache
     cache = {
       data: payload,
@@ -425,6 +481,43 @@ app.get('/bbc/rss/summary', async (req, res) => {
   }
 });
 
+
+//store root
+app.get('/bbc/trends', (req, res) => {
+  const sinceDate = new Date(Date.now() - 7 * 86400 * 1000).toISOString(); // last 7 days
+
+  db.all(
+    `SELECT title FROM articles WHERE savedAt >= ?`,
+    [sinceDate],
+    (err, rows) => {
+      if (err) {
+        console.error("❌ DB error:", err.message);
+        return res.status(500).json({ error: "Trend query failed" });
+      }
+
+      const wordCounts = {};
+      rows.forEach(row => {
+        const words = (row.title || '').toLowerCase().split(/\W+/);
+        for (const word of words) {
+          if (word.length < 4) continue;
+          wordCounts[word] = (wordCounts[word] || 0) + 1;
+        }
+      });
+
+      const topWords = Object.entries(wordCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10)
+        .map(([word, count]) => ({ word, count }));
+
+      res.json({
+        total_titles: rows.length,
+        top_words: topWords,
+        generatedAt: new Date().toISOString()
+      });
+    }
+  );
+});
+//
 
 // Test + info routes
 app.get('/test', async (req, res) => {
