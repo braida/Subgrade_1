@@ -549,7 +549,7 @@ app.get('/bbc/rss/trends/gpt', async (req, res) => {
 You are an AI assistant bilingual in French and English responding in english that identifies **weekly trends in the news**. 
 From the list of article summaries below, do the following:
 - Identify trends in the articles and highlight the most interesting topics with title articles, the number of times the topic is mentioned and **Context if you have any**",
-- Summarize the **top 3 discussed topics** and give example of the title article and publication date if known. 
+- Summarize the **top 3 discussed topics** and give example of the title article and publication time (is it this week?) . 
 - Give a short insight into **why people may care**
 - Optional: list notable examples or projects
 
