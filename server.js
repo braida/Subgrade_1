@@ -536,20 +536,20 @@ app.get('/bbc/rss/trends/gpt', async (req, res) => {
       const sinceDate = new Date(Date.now() - 7 * 86400 * 1000).toISOString();
 
       db.all(
-        `SELECT title, sentimentScore, reason, aisummary FROM articles WHERE savedAt >= ?`,
+        `SELECT title, sentimentScore, reason, aisummary,pubDate FROM articles WHERE savedAt >= ?`,
         [sinceDate],
         async (err, rows) => {
           if (err || !rows.length) {
             return res.status(500).json({ error: "No data for trend summary." });
           }
 
-          const summaries = rows.map(r => `• ${r.title} — ${r.aisummary ?? 'N/A'} | ${r.reason ?? ''}`).slice(0, 25);
+          const summaries = rows.map(r => `• ${r.title} — ${r.aisummary ?? 'N/A'} | ${r.reason ?? ''} | ${r.pubDate ?? ''}`).slice(0, 25);
 
           const prompt = `
 You are an AI assistant bilingual in French and English responding in english that identifies **weekly trends in the news**. 
 From the list of article summaries below, do the following:
 - Identify trends in the articles and highlight the most interesting topics with title articles, the number of times the topic is mentioned and **Context if you have any**",
-- Summarize the **top 3 discussed topics** and give example of the title article and publication time (is it this week?) . 
+- Summarize the **top 3 discussed topics** and give example of the title article published this week and publication date (if any). 
 - Give a short insight into **why people may care**
 - Optional: list notable examples or projects
 
