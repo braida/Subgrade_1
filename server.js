@@ -321,9 +321,9 @@ app.get('/bbc/rss', async (req, res) => {
     'https://nautil.us/feed/',
     'https://xkcd.com/atom.xml',
     'https://www.geekwire.com/feed/',
-    'https://www.futilitycloset.com/feed/',
+//  'https://www.futilitycloset.com/feed/',
   // 'https://www.journaldugeek.com/feed/',
-  //  'https://korben.info/feed.xml',
+    'https://korben.info/feed.xml',
     
 
     'https://feeds.bbci.co.uk/news/world/rss.xml', 
@@ -380,7 +380,7 @@ app.get('/bbc/rss', async (req, res) => {
     allItems = Array.from(dedupMap.values());
 
     // Get review 
-    const chunkSize = 10;
+    const chunkSize = 15;
     const chunks = [];
     for (let i = 0; i < allItems.length; i += chunkSize) {
       chunks.push(allItems.slice(i, i + chunkSize));
