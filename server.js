@@ -380,7 +380,7 @@ app.get('/bbc/rss', async (req, res) => {
     allItems = Array.from(dedupMap.values());
 
     // Get review 
-    const chunkSize = 15;
+    const chunkSize = 8;
     const chunks = [];
     for (let i = 0; i < allItems.length; i += chunkSize) {
       chunks.push(allItems.slice(i, i + chunkSize));
