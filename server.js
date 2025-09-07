@@ -315,7 +315,7 @@ app.get('/bbc/rss', async (req, res) => {
   const sources = [
     'https://www.sciencedaily.com/rss/top/science.xml',
     'https://www.newscientist.com/feed/home/',
-    'https://news.mit.edu/rss/topic/artificial-intelligence2',
+   // 'https://news.mit.edu/rss/topic/artificial-intelligence2',
     'https://www.nasa.gov/news-release/feed/',
    // 'https://phys.org/rss-feed/science-news/',
     'https://nautil.us/feed/',
@@ -330,8 +330,8 @@ app.get('/bbc/rss', async (req, res) => {
    // 'https://feeds.skynews.com/feeds/rss/world.xml',
   //  'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
     // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
- //   'https://www.aljazeera.com/xml/rss/all.xml', 
-     'https://www.icc-cpi.int/rss/news/all', 
+    'https://www.aljazeera.com/xml/rss/all.xml', 
+    // 'https://www.icc-cpi.int/rss/news/all', 
   //  'https://www.rsfjournal.org/rss/current.xml',
    'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
    'https://www.lemonde.fr/rss/une.xml'
