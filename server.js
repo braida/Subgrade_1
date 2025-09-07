@@ -321,7 +321,7 @@ app.get('/bbc/rss', async (req, res) => {
     'https://nautil.us/feed/',
     'https://xkcd.com/atom.xml',
     'https://www.geekwire.com/feed/',
-//  'https://www.futilitycloset.com/feed/',
+    'https://www.futilitycloset.com/feed/',
   // 'https://www.journaldugeek.com/feed/',
     'https://korben.info/feed.xml',
     
@@ -331,7 +331,7 @@ app.get('/bbc/rss', async (req, res) => {
   //  'https://news.un.org/feed/subscribe/en/news/all/rss.xml', 
     // 'https://ir.thomsonreuters.com/rss/sec-filings.xml?items=15', 
  //   'https://www.aljazeera.com/xml/rss/all.xml', 
-    // 'https://www.icc-cpi.int/rss/news/all', 
+     'https://www.icc-cpi.int/rss/news/all', 
   //  'https://www.rsfjournal.org/rss/current.xml',
    'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
    'https://www.lemonde.fr/rss/une.xml'
