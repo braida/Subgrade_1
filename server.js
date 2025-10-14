@@ -305,7 +305,7 @@ app.get('/bbc/rss', async (req, res) => {
   // Query params: ?days=1&perSource=3&limit=15
   const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
   const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
-  const limit = Math.max(1, parseInt(req.query.limit ?? "25", 10) || 30);
+  const limit = Math.max(1, parseInt(req.query.limit ?? "15", 10) || 30);
 
   // cache
   if (cache.data && cache.expiresAt > Date.now()) {
