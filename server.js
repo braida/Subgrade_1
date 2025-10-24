@@ -320,8 +320,7 @@ app.get('/bbc/rss', async (req, res) => {
    // 'https://phys.org/rss-feed/science-news/',
     'https://nautil.us/feed/',
     //'https://xkcd.com/atom.xml',
-    'https://www.geekwire.com/feed/',
-    'https://www.futilitycloset.com/feed/',
+    'https://www.gilesthomas.com/feed/rss.xml',
   // 'https://www.journaldugeek.com/feed/',
     'https://korben.info/feed.xml',
     
