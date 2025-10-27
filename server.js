@@ -318,7 +318,7 @@ app.get('/bbc/rss', async (req, res) => {
    // 'https://news.mit.edu/rss/topic/artificial-intelligence2',
    // 'https://www.nasa.gov/news-release/feed/',
    // 'https://phys.org/rss-feed/science-news/',
-    'https://nautil.us/feed/',
+    'https://karpathy.github.io/feed.xml',
     //'https://xkcd.com/atom.xml',
     'https://www.gilesthomas.com/feed/rss.xml',
   // 'https://www.journaldugeek.com/feed/',
