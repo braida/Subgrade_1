@@ -166,7 +166,7 @@ Return ONLY valid JSON in this schema:
  "bias_score": number, //  be very honest and blunt score for how much this topic is interesting from 1 = neutral  to 3 =  very good read 
  "framing_type": string, // Why is interesting or not so much so, give your blunt critical opinion about if the topic is interesting or not so much interesting  **be concise**. rate based on: [general knowledge, science or social breakthrough, innovation] 
  "confidence_pct": number, // 0-100 confidence rate
- "reason_summary": string, // give 1 to maximum = 3 examples of your predictions on this topic's impact if any. **please be concise** and try not go over 250/270 caracters.
+ "reason_summary": string, // interpret and give an insightful higlight for the main idea of the post. **please be concise** and try not go over 250/270 caracters.
  "aisummary": string, // explain briefly like I'm 5 what's this article about and impact on society or related field **Please be concise**
   }
  `
