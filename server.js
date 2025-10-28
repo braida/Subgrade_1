@@ -322,7 +322,7 @@ app.get('/bbc/rss', async (req, res) => {
     //'https://xkcd.com/atom.xml',
     'https://www.gilesthomas.com/feed/rss.xml',
    'https://www.journaldugeek.com/feed/',
-    'https://korben.info/feed.xml',
+  //  'https://korben.info/feed.xml',
     
 
 //    'https://feeds.bbci.co.uk/news/world/rss.xml', 
