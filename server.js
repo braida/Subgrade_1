@@ -314,14 +314,15 @@ app.get('/bbc/rss', async (req, res) => {
 
   const sources = [
     'https://www.sciencedaily.com/rss/top/science.xml',
-    'https://www.newscientist.com/feed/home/',
+   // 'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
-   // 'https://www.nasa.gov/news-release/feed/',
-   'https://phys.org/rss-feed/science-news/',
-    'https://karpathy.github.io/feed.xml',
+   'https://www.techradar.com/feeds.xml',
+    // 'https://www.nasa.gov/news-release/feed/',
+  // 'https://phys.org/rss-feed/science-news/',
+   // 'https://karpathy.github.io/feed.xml',
     //'https://xkcd.com/atom.xml',
     'https://www.gilesthomas.com/feed/rss.xml',
-   'https://www.journaldugeek.com/feed/',
+   //'https://www.journaldugeek.com/feed/',
     'https://korben.info/feed.xml'
   
 
