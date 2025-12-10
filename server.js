@@ -166,7 +166,7 @@ Return ONLY valid JSON in this schema:
  "bias_score": number, //  be very honest and blunt score for how much this topic is interesting from 1 = neutral  to 3 =  very good read 
  "framing_type": string, // Why is interesting or not so much so, give your blunt critical opinion about if the topic is interesting or not so much interesting  **be concise**. rate based on: [general knowledge, science or social breakthrough, innovation] 
  "confidence_pct": number, // 0-100 confidence rate
- "reason_summary": string, // reframe and write a summary from a diffrent perspective **please be concise** and try not go over 250/270 caracters.
+ "reason_summary": string, // reframe and write a summary from a diffrent perspective, be blunt and give your predictions on the trend discussed **please be concise** and try not go over 450/500 caracters. longer text for complex topics is appreciated.
  "aisummary": string, // explain briefly like I'm 5 what's this article about and impact on society or related field **Please be concise**
   }
  `
@@ -204,13 +204,13 @@ async function getRecentArticlesSummary(articles = []) {
   try {
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      temperature: 0.5,
+      temperature: 0.7,
       
       messages: [
         {
           role: "system",
-          content: `You are a smart AI assistant bilingual in French and English responding in english and help to summarize and be very concise. 
-          Read all articles and give the recent articles, Look for Emerging Trends, high impact topics ** Be neutral with sharp opinion**
+          content: `You are a sharpe and smart AI assistant bilingual in French and English responding in english and help to understand and be very concise. 
+          Read all articles and give the recent trends, Look for Emerging Trends, high impact topics ** Be neutral with sharp opinion**
           You can identify humour and sadness and emergency in articles. **You can give a brief summary** . **Please be very concise**.
           `
         
@@ -323,7 +323,7 @@ app.get('/bbc/rss', async (req, res) => {
     //'https://xkcd.com/atom.xml',
     'https://www.gilesthomas.com/feed/rss.xml',
    //'https://www.journaldugeek.com/feed/',
-    'https://korben.info/feed.xml'
+    'https://korben.info/feed.xml',
   
 
 //    'https://feeds.bbci.co.uk/news/world/rss.xml', 
@@ -333,7 +333,7 @@ app.get('/bbc/rss', async (req, res) => {
    // 'https://www.aljazeera.com/xml/rss/all.xml', 
     // 'https://www.icc-cpi.int/rss/news/all', 
   //  'https://www.rsfjournal.org/rss/current.xml',
- //  'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+  'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
   // 'https://www.lemonde.fr/rss/une.xml'
   ];
 
