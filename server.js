@@ -245,11 +245,11 @@ const MS = {
   minute: 60_000, 
   hour: 3_600_000, 
   day: 86_400_000, // 1 day
-  days3: 86_400_000 * 2 // 2 days
+  days3: 86_400_000 * 1 // 2 days
 };
 
 // recent check
-function isRecent(dateLike, days = 2) {
+function isRecent(dateLike, days = 1) {
   if (!dateLike) return false;
   const t = Date.parse(dateLike);
   if (Number.isNaN(t)) return false;
