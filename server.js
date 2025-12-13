@@ -317,13 +317,13 @@ app.get('/bbc/rss', async (req, res) => {
    // 'https://www.newscientist.com/feed/home/',
     'https://news.mit.edu/rss/topic/artificial-intelligence2',
    'https://www.techradar.com/feeds.xml',
-    // 'https://www.nasa.gov/news-release/feed/',
+     'https://www.nasa.gov/news-release/feed/',
   // 'https://phys.org/rss-feed/science-news/',
    // 'https://karpathy.github.io/feed.xml',
     //'https://xkcd.com/atom.xml',
     'https://www.gilesthomas.com/feed/rss.xml',
    //'https://www.journaldugeek.com/feed/',
-    'https://korben.info/feed.xml',
+    'https://korben.info/feed.xml'
   
 
 //    'https://feeds.bbci.co.uk/news/world/rss.xml', 
@@ -333,7 +333,7 @@ app.get('/bbc/rss', async (req, res) => {
    // 'https://www.aljazeera.com/xml/rss/all.xml', 
     // 'https://www.icc-cpi.int/rss/news/all', 
   //  'https://www.rsfjournal.org/rss/current.xml',
-  'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
+ // 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
   // 'https://www.lemonde.fr/rss/une.xml'
   ];
 
