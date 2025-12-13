@@ -245,7 +245,7 @@ const MS = {
   minute: 60_000, 
   hour: 3_600_000, 
   day: 86_400_000, // 1 day
-  days3: 86_400_000 * 1 // 2 days
+  days3: 86_400_000 * 1 // 1 days
 };
 
 // recent check
@@ -303,9 +303,9 @@ let cache = { data: null, expiresAt: 0 };
 
 app.get('/bbc/rss', async (req, res) => {
   // Query params: ?days=1&perSource=3&limit=15
-  const days = Math.max(0, parseInt(req.query.days ?? "3", 10) || 3);
+  const days = Math.max(0, parseInt(req.query.days ?? "2", 10) || 2);
   const perSource = Math.max(1, parseInt(req.query.perSource ?? "3", 10) || 3);
-  const limit = Math.max(1, parseInt(req.query.limit ?? "15", 10) || 30);
+  const limit = Math.max(1, parseInt(req.query.limit ?? "5", 10) || 30);
 
   // cache
   if (cache.data && cache.expiresAt > Date.now()) {
